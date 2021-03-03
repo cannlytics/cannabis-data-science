@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <title>WA County Boundaries</title>
+                <onlink>https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/11</onlink>
+                <onlink>https://fortress.wa.gov/dnr/adminsa/gisdata/datadownload/WA_County_Bndys.zip</onlink>
+                <onlink>https://fortress.wa.gov/dnr/adminsa/GisData/metadata/cadastre_jurisdiction.htm</onlink>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>Washington State County Boundaries including Department of Natural Resources (DNR) county codes. This data is created from the WA Public Land Survey source data maintained by the DNR.WA County Boundaries Metadata</abstract>
+        </descript>
+        <keywords>
+            <theme>
+                <themekt>None</themekt>
+                <themekey>WA</themekey>
+                <themekey>Washington</themekey>
+                <themekey>County</themekey>
+                <themekey>boundaries</themekey>
+                <themekey>Cadastre</themekey>
+                <themekey>public land survey</themekey>
+            </theme>
+        </keywords>
+        <accconst>None</accconst>
+        <useconst>Liability Disclaimer:
+The Washington State Department of Natural Resources (DNR) provides these geographic data &amp;quot;as is.&amp;quot;  DNR makes no guarantee or warranty concerning the accuracy of information contained in the geographic data.  DNR further makes no warranties, either expressed or implied as to any other matter whatsoever, including, without limitation, the condition of the product, or its fitness for any particular purpose. The burden for determining fitness for use lies entirely with the user.  Although these data have been processed successfully on computers of DNR, no warranty, expressed or implied, is made by DNR regarding the use of these data on any other system, nor does the fact of distribution constitute or imply any such warranty.
+In no event shall the DNR have any liability whatsoever for payment of any consequential, incidental, indirect, special, or tort damages of any kind, including, but not limited to, any loss of profits arising out of use of or reliance on the geographic data or arising out of the delivery, installation, operation, or support by DNR.</useconst>
+        <datacred>Washington State Department of Natural Resources</datacred>
+    </idinfo>
+    <metainfo>
+        <metd>20170314</metd>
+        <metc>
+            <cntinfo>
+                <!--no contact person or organization name available-->
+            </cntinfo>
+        </metc>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>

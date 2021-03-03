@@ -1,0 +1,5 @@
+# Ignore dotenv environment variables file.
+*.env
+
+# Ignore admin tokens.
+*.admin/tokens

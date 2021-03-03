@@ -24,15 +24,15 @@ import seaborn as sns
 
 # Density plot
 # tips = pd.Series([randrange(100) for x in range(0, 100)])
-# sns.kdeplot(
-#    data=tips,
-#    # hue="size",
-#    # fill=True,
-#    # common_norm=False,
-#    # palette="crest",
-#    # alpha=.5,
-#    # linewidth=0,
-# )
+sns.kdeplot(
+    data=tips,
+    # hue="size",
+    # fill=True,
+    # common_norm=False,
+    # palette="crest",
+    # alpha=.5,
+    # linewidth=0,
+)
 
 # Regression scatter plot
 df = sns.load_dataset('iris')

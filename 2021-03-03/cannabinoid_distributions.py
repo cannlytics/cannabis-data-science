@@ -15,6 +15,8 @@ Resources:
     https://lcb.wa.gov/sites/default/files/publications/Marijuana/traceability/WALeafDataSystems_UserManual_v1.37.5_AddendumC_LicenseeUser.pdf
 """
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 #-----------------------------------------------------------------------------#
@@ -33,8 +35,19 @@ data = pd.read_csv(
 print("Number of observations:", len(data))
 
 
-
 # Plot a histogram.
-# sns.displot(penguins, x="flipper_length_mm")
+sample = data.sample(1000)
+analyte = "cannabinoid_d9_thca_percent"
+# sns.displot(data, x="cannabinoid_d9_thca_percent")
+sns.kdeplot(
+    data=sample[analyte],
+    hue="intermediate_type",
+    # fill=True,
+    # common_norm=False,
+    # palette="crest",
+    # alpha=.5,
+    # linewidth=0,
+)
+
 
 # Plot conditional historgam.

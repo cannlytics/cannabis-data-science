@@ -1,4 +1,4 @@
-# Cannabis Data Science – Meetup 3/14/2021
+# Cannabis Data Science – Meetup 3/24/2021
 
 Agenda
 

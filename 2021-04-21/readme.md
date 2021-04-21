@@ -1,4 +1,4 @@
-# Cannabis Data Science – Meetup 4/14/2021
+# Cannabis Data Science – Meetup 4/21/2021
 
 Agenda
 
@@ -7,6 +7,10 @@ Agenda
 3. Data Exploration (15 minutes)
 4. Questions and Answers (15 minutes)
 5. Future work (5 minutes)
+
+## Objective
+
+Today we will calculate inflation in Oregon's cannabis prices and use macroeconomic theory to predict inflation and cannabis sales through 2022.
 
 ## Resources
 

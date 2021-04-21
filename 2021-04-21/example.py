@@ -111,8 +111,8 @@ print('Best lag order:', results.k_ar)
 # forecast = results.forecast(data.values[-lag_order:], 5)
 
 # Show the data!
-results.plot_forecast(9)
- 
+forecasts = results.plot_forecast(9)
+
 
 
 

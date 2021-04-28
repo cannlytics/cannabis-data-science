@@ -8,6 +8,10 @@ Agenda
 4. Questions and Answers (15 minutes)
 5. Future work (5 minutes)
 
+## Helpful resources
+
+- [WA Cannabis Waste by Producer by Day](https://github.com/ufosoftwarellc/cannabis_data_science/blob/main/wa/analytics/waste.ipynb)
+
 ## Objective
 
 Today we will calculate inflation in Oregon's cannabis prices and use macroeconomic theory to predict inflation and cannabis sales through 2022.

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="385.89407mm"
+   height="105.57986mm"
+   viewBox="0 0 385.89407 105.57986"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   sodipodi:docname="leaf_data_systems_map.svg">
+  <defs
+     id="defs2">
+    <rect
+       x="24.190475"
+       y="-106.58929"
+       width="157.99405"
+       height="90.714287"
+       id="rect861" />
+    <rect
+       x="122.46429"
+       y="72.193451"
+       width="141.74107"
+       height="128.88988"
+       id="rect841" />
+    <rect
+       x="10.690781"
+       y="76.171814"
+       width="115.30388"
+       height="139.9437"
+       id="rect835" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="727.36172"
+     inkscape:cy="133.83819"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1120"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-11.234007,-74.877075)">
+    <text
+       xml:space="preserve"
+       id="text833"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect835);fill:#000000;fill-opacity:1;stroke:none;"><tspan
+         x="10.691406"
+         y="85.82734"><tspan>Licensees
+</tspan></tspan><tspan
+         x="10.691406"
+         y="99.056466"><tspan>{
+</tspan></tspan><tspan
+         x="10.691406"
+         y="112.28559"><tspan>global_id
+</tspan></tspan><tspan
+         x="10.691406"
+         y="125.51472"><tspan>.
+</tspan></tspan><tspan
+         x="10.691406"
+         y="138.74384"><tspan>.
+</tspan></tspan><tspan
+         x="10.691406"
+         y="151.97297"><tspan>.
+</tspan></tspan><tspan
+         x="10.691406"
+         y="165.2021"><tspan>code
+</tspan></tspan><tspan
+         x="10.691406"
+         y="178.43122"><tspan>}</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       id="text839"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect841);fill:#000000;fill-opacity:1;stroke:none;"
+       transform="translate(2.1381562,1.0690781)"><tspan
+         x="122.46484"
+         y="81.848824"><tspan>Lab Results {
+</tspan></tspan><tspan
+         x="122.46484"
+         y="95.07795"><tspan>from_mme_id
+</tspan></tspan><tspan
+         x="122.46484"
+         y="108.30708"><tspan>.
+</tspan></tspan><tspan
+         x="122.46484"
+         y="121.5362"><tspan>.
+</tspan></tspan><tspan
+         x="122.46484"
+         y="134.76533"><tspan>.
+</tspan></tspan><tspan
+         x="122.46484"
+         y="147.99445"><tspan>inventory_id
+</tspan></tspan><tspan
+         x="122.46484"
+         y="161.22358"><tspan>}</tspan></tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 68.955538,95.682489 113.85682,94.078874"
+       id="path847"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 62.366071,156.48214 111.125,146.27678"
+       id="path849"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       id="text859"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect861);fill:#000000;fill-opacity:1;stroke:none;"
+       transform="translate(269.11905,229.43155)"><tspan
+         x="24.191406"
+         y="-96.934379"><tspan>Sales Item {
+</tspan></tspan><tspan
+         x="24.191406"
+         y="-83.705253"><tspan>global_inventory_id
+</tspan></tspan><tspan
+         x="24.191406"
+         y="-70.476127"><tspan>}</tspan></tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 199.57142,144.3869 287.2619,142.875"
+       id="path865"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

@@ -114,14 +114,14 @@ batches_df = pd.read_csv(
 )
 
 # Change negative values to postitive values.
-#batches_df.loc[(batches_df.waste < 0), 'waste'] = batches_df.loc[(batches_df.waste < 0), 'waste'] * -1.0
+# batches_df.loc[(batches_df.waste < 0), 'waste'] = batches_df.loc[(batches_df.waste < 0), 'waste'] * -1.0
 batches_df['waste'] = batches_df['waste'].abs()
 
 # Fill in missing values where waste is present but
 # the plant stage is missing using the most common value.
 batches_df.loc[(batches_df.plant_stage.isna() & batches_df.waste > 0), 'plant_stage'] = 'harvested'
 
-# Find the amount of waste for harvested product
+# Find the amount of waste for harvested product.
 wasted_harvested_df =  batches_df[(batches_df.plant_stage == 'harvested') & (batches_df.waste > 0)].copy()
 
 # Group the data by producer and date.
@@ -174,6 +174,7 @@ seedling_waste_df = seedling_waste_df.groupby(['mme_id', 'update_date']).agg({'w
 #-----------------------------------------------------------------------
 # Auto-ARIMA forecasting
 # https://towardsdatascience.com/time-series-forecasting-using-auto-arima-in-python-bb83e49210cd
+# https://github.com/alkaline-ml/pmdarima/blob/master/examples/quick_start_example.ipynb
 #-----------------------------------------------------------------------
 
 # from pmdarima.arima import auto_arima

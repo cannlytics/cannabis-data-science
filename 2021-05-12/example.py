@@ -21,46 +21,31 @@ Resources:
 """
 
 # External imports
-import numpy as np
 import pandas as pd
-from dotenv import dotenv_values
-from fredapi import Fred
-from statsmodels.tsa.api import VAR
-
-# Internal imports
-from logistics import *
 
 #-----------------------------------------------------------------------------
-# Import the data.
+# Import the data and match lab results to licensee.
 #-----------------------------------------------------------------------------
 
 # Specify where the data lives.
 directory = r'E:\cannlytics\data_archive\leaf'
+# directory = r'E:\cannlytics\data_archive\leaf'
 
-# Read in the lab resultdata.
+# Read in the lab result data.
 file_name = f'{directory}\LabResults_0\LabResults_0.csv'
 lab_data = pd.read_csv(
     file_name,
     sep='\t',
     encoding='utf-16',
-    nrows=1000,
+    nrows=10000, # FIXME: Read in all the data!
 )
-
-# 
-lab_data.iloc[0]['for_mme_id'] # 'WAWA1.MMCY'
 
 # Read in the licensee data.
-file_name = f'{directory}\Licensees_0\Licensees_0.csv'
-license_data = pd.read_csv(
-    file_name,
-    sep='\t',
-    encoding='utf-16',
-)
-
-# TODO: Get county by zip code
+file_name = f'{directory}\Licensees_0\wa_licensee_data.xlsx'
+license_data = pd.read_excel(file_name)
 
 # Combine the data sets.
-merged = pd.merge(
+data = pd.merge(
     left=lab_data,
     right=license_data,
     how='left',
@@ -69,59 +54,61 @@ merged = pd.merge(
 )
 
 #-----------------------------------------------------------------------------
-# Match lab results to licensee.
-#-----------------------------------------------------------------------------
-
-
-#-----------------------------------------------------------------------------
 # Create dummy variable for Eastern vs Western Washington
 #-----------------------------------------------------------------------------
 
 eastern_wa = [
-    'Clallam',
-    'Clark',
-    'Columbia',
-    'Cowlitz',
-    'Ferry',
-    'Grays Harbor',
-    'Island',
-    'Jefferson',
-    'King',
-    'Kitsap',
-    'Lewis',
-    'Mason',
-    'Pacific',
-    'Pierce',
-    'San Juan',
-    'Skagit',
-    'Skamania',
-    'Snohomish',
-    'Thurston',
-    'Wahkiakum',
-    'Whatcom',
+    'Clallam County',
+    'Clark County',
+    'Columbia County',
+    'Cowlitz County',
+    'Ferry County',
+    'Grays Harbor County',
+    'Island County',
+    'Jefferson County',
+    'King County',
+    'Kitsap County',
+    'Lewis County',
+    'Mason County',
+    'Pacific County',
+    'Pierce County',
+    'San Juan County',
+    'Skagit County',
+    'Skamania County',
+    'Snohomish County',
+    'Thurston County',
+    'Wahkiakum County',
+    'Whatcom County',
 ]
 
 western_wa = [
-    'Adams',
-    'Asotin',
-    'Benton',
-    'Douglas',
-    'Chelan',
-    'Garfield',
-    'Grant',
-    'Okanogan',
-    'Kittitas',
-    'Klickitat',
-    'Whitman',
-    'Spokane',
-    'Pend Oreille',
-    'Stevens',
-    'Lincoln',
-    'Franklin',
-    'Walla Walla',
-    'Yakima',
+    'Adams County',
+    'Asotin County',
+    'Benton County',
+    'Douglas County',
+    'Chelan County',
+    'Garfield County',
+    'Grant County',
+    'Okanogan County',
+    'Kittitas County',
+    'Klickitat County',
+    'Whitman County',
+    'Spokane County',
+    'Pend Oreille County',
+    'Stevens County',
+    'Lincoln County',
+    'Franklin County',
+    'Walla Walla County',
+    'Yakima County',
 ]
 
+# Create region dummy variable.
+data['eastern_wa'] = 0
+for index, values in data.iterrows():
+    if values.county in eastern_wa:
+        data.at[index, 'eastern_wa'] = 1
+    else:
+        data.at[index, 'eastern_wa'] = 0
 
 
 #-----------------------------------------------------------------------------
@@ -132,12 +119,9 @@ western_wa = [
 # https://www.statsmodels.org/stable/examples/notebooks/generated/contrasts.html
 #-----------------------------------------------------------------------------
 
-# cannabinoid_d9_thca_percent, thc_percent
-
 # Dummy variable regressions with `statsmodels`.
-# from statsmodels.formula.api import ols
-# fit = ols('Wage ~ C(Sex_male) + C(Job) + Age', data=df).fit() 
-# fit.summary()
+from statsmodels.formula.api import ols
+fit = ols('thc_percent ~ eastern_wa', data=data).fit() 
+print(fit.summary())
 
-
-# Dummy variable regression with `pandas`.
+# Optional: Dummy variable regression with `pandas`.

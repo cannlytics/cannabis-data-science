@@ -3,3 +3,6 @@
 
 # Ignore admin tokens.
 *.admin/tokens
+
+# Ignore large datasets.
+*.datasets

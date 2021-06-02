@@ -166,7 +166,7 @@ TAX_RATE = 7
 
 
 def download_website_pdfs(url, destination):
-    """Download all PDFS from a given website to a given folder.
+    """Download all PDFs from a given website to a given folder.
     Args:
         url (str): The website that contains the PDFs.
         destination (str): The destination for the PDFS.
@@ -285,24 +285,31 @@ if __name__ == '__main__':
     
     revenue_data = pd.DataFrame(excise_tax)
     revenue_data = revenue_data.set_index(pd.to_datetime(revenue_data['date']))
-    revenue_data['total_revenue'] =  revenue_data.excise_tax * 100 / TAX_RATE
-    revenue_data.total_revenue.plot()
+    
+    revenue_data['revenue'] = revenue_data['excise_tax'].diff() * 100 / TAX_RATE
+    revenue_data.revenue.plot()
+
+    # Add a time index.
     revenue_data['t'] = range(0, len(revenue_data))
 
-    # TODO: Calculate average revenue per retailer
-    
     # Save the revenue data.
     revenue_data.to_excel(f'.datasets/revenue_OK_{date}.xlsx')
-    
+
     # TODO: Upload the revenue data.
-    
+
     # Calculate rate of growth (trend).
     import statsmodels.api as sm
-    
-    model = sm.formula.ols(formula='total_revenue ~ t', data=revenue_data)
+
+    # Run a regression of total revenue on time, where t = 0, 1, ... T.
+    model = sm.formula.ols(formula='revenue ~ t', data=revenue_data)
     regression = model.fit()
     print(regression.summary())
-    
-    revenue_data['trend'] = regression.predict()
-    revenue_data[['total_revenue', 'trend']].plot()
 
+    # Plot the trend with total revenue.
+    revenue_data['trend'] = regression.predict()
+    revenue_data[['revenue', 'trend']].plot()
+
+    # Calculate estimated revenue per dispensary per month.
+    dispensaries = licensees.loc[licensees.license_type == 'dispensaries']
+    number_of_dispensaries = len(dispensaries)
+    revenue_data['revenue_per_dispensary'] = revenue_data['revenue'] / number_of_dispensaries

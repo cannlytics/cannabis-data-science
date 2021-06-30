@@ -1296,6 +1296,19 @@
          x="14707.821"
          y="989.94952" />
     </clipPath>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1447"
+       x="-1.1851176e-06"
+       width="1.0000024"
+       y="-1.2152609e-06"
+       height="1.0000024">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.0024952058"
+         id="feGaussianBlur1449" />
+    </filter>
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -1312,7 +1325,7 @@
      showgrid="false"
      inkscape:zoom="0.16"
      inkscape:cx="1889.8864"
-     inkscape:cy="222.31695"
+     inkscape:cy="834"
      inkscape:window-x="-11"
      inkscape:window-y="-11"
      inkscape:window-maximized="1"
@@ -1322,7 +1335,8 @@
      inkscape:groupmode="layer"
      inkscape:label="Image"
      id="g10"
-     transform="translate(70354.902,24425.348)">
+     transform="translate(70354.902,24425.348)"
+     style="filter:url(#filter1447)">
     <g
        id="g2183"
        transform="matrix(0.96064871,0,0,0.96064871,-2499.7934,-2320.4027)">
@@ -3077,13 +3091,13 @@
        xml:space="preserve"
        id="text4211-9"
        style="font-style:normal;font-weight:normal;font-size:60.24px;line-height:1.05;font-family:sans-serif;letter-spacing:1.38532px;white-space:pre;shape-inside:url(#rect4213-3);fill:#000000;fill-opacity:1;stroke:none;"
-       transform="matrix(6.7121892,0,0,6.7121892,401059.12,137010.82)"><tspan
+       transform="matrix(5.7856988,0,0,5.7856988,336052.85,114950.28)"><tspan
          x="-70163.992"
          y="-23876.136"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Inflation
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Traceability &amp;
 </tspan></tspan><tspan
          x="-70163.992"
          y="-23812.249"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Pt. 1</tspan></tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Communication</tspan></tspan></text>
   </g>
 </svg>

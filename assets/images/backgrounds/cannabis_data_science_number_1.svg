@@ -1312,7 +1312,7 @@
      showgrid="false"
      inkscape:zoom="0.22627417"
      inkscape:cx="1907.8086"
-     inkscape:cy="972.35874"
+     inkscape:cy="795.58204"
      inkscape:window-x="-11"
      inkscape:window-y="-11"
      inkscape:window-maximized="1"
@@ -3080,10 +3080,10 @@
        transform="matrix(6.7121892,0,0,6.7121892,401059.12,137010.82)"><tspan
          x="-70163.992"
          y="-23876.136"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.24px;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Data
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.24px;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Get
 </tspan></tspan><tspan
          x="-70163.992"
          y="-23812.249"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.24px;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Wrangling</tspan></tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.24px;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Data</tspan></tspan></text>
   </g>
 </svg>

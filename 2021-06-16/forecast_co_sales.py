@@ -89,3 +89,6 @@ print('2021 Colorado Forecast: %.2f million' % year_forecast_millions)
 
 # Save the forecasts.
 forecast.to_excel('data/co_revenue_forecast.xlsx')
+
+# TODO: Save Optimistic and Pessimistic forecast plots side-by-side
+

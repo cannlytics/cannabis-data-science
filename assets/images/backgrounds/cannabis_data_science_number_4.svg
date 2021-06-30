@@ -15,7 +15,7 @@
    viewBox="0 0 4199.9998 2366"
    sodipodi:docname="cannabis_data_science_number_4.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   inkscape:export-filename="C:\Users\keega\Documents\cannlytics\cannabis-data-science\assets\images\backgrounds\cannabis_data_science_number_9.png"
+   inkscape:export-filename="C:\Users\keega\Documents\cannlytics\cannabis-data-science\assets\images\backgrounds\cannabis_data_science_number_4.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <metadata
@@ -1311,8 +1311,8 @@
      id="namedview4"
      showgrid="false"
      inkscape:zoom="0.16"
-     inkscape:cx="1889.8864"
-     inkscape:cy="1722.3169"
+     inkscape:cx="2261.2301"
+     inkscape:cy="1162.1523"
      inkscape:window-x="-11"
      inkscape:window-y="-11"
      inkscape:window-maximized="1"
@@ -3080,6 +3080,10 @@
        transform="matrix(6.7121892,0,0,6.7121892,401059.12,137010.82)"><tspan
          x="-70163.992"
          y="-23876.136"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Title</tspan></tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">API
+</tspan></tspan><tspan
+         x="-70163.992"
+         y="-23812.249"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Poor Richard';-inkscape-font-specification:'Poor Richard'">Exploration</tspan></tspan></text>
   </g>
 </svg>

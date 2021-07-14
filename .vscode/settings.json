@@ -1,10 +1,21 @@
 {
     "cSpell.words": [
+        "astype",
         "bokeh",
+        "cannabinoid",
         "gmaps",
         "herfindahl",
         "hirschman",
+        "imshow",
+        "logit",
         "metrc",
-        "sampledata"
+        "numpy",
+        "pyplot",
+        "sampledata",
+        "sklearn",
+        "xaxis",
+        "xlabel",
+        "yaxis",
+        "ylim"
     ]
 }

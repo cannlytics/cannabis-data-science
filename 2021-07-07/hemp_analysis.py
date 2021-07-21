@@ -141,9 +141,9 @@ data = pd.concat([data, dummies], axis=1)
 Y = data['fail']
 X = data[[
     'sampled_at_days',
-    'in_Indiana',
-    'in_Michigan',
-    'in_Wisconsin',
+    # 'in_Indiana',
+    # 'in_Michigan',
+    # 'in_Wisconsin',
 ]]
 
 model = LogisticRegression()

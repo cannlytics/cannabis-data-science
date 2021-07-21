@@ -77,7 +77,7 @@ delta_8_thc = delta_8_thc.loc[delta_8_thc.cannabinoid_d8_thc_percent < upper_bou
 # Plot a histogram of delta-8 THC in flower.
 cannabinoid_histogram(
     delta_8_thc['cannabinoid_d8_thc_percent'],
-    title='Distribution of Delta-8 THC',
+    title='Distribution of Delta-8 THC in Flower in Washington State',
     y_label='Density',
     x_label='Delta-8 THC Concentration'
 )
@@ -96,7 +96,7 @@ print('Number of solid edible samples: %i' % len(solid_edibles))
 # Optional: Plot of mg of THC in edibles.
 # solid_edibles.cannabinoid_d9_thc_mg_g.hist()
 
-# Calculate THC to CBD datio.
+# Calculate THC to CBD ratio.
 solid_edibles['thc_to_cbd_ratio'] = solid_edibles.cannabinoid_d9_thc_mg_g / \
                                     solid_edibles.cannabinoid_cbd_mg_g
 

@@ -9,13 +9,18 @@
         "imshow",
         "logit",
         "metrc",
+        "notna",
         "numpy",
         "pyplot",
+        "quantile",
         "sampledata",
         "sklearn",
+        "wslcb",
         "xaxis",
         "xlabel",
+        "xlim",
         "yaxis",
+        "ylabel",
         "ylim"
     ]
 }

@@ -1,9 +1,9 @@
 """
-Delta-8 THC Analysis | Cannabis Data Science
+Cannabinoid Analysis | Cannabis Data Science
 
 Author: Keegan Skeate<keegan@cannlytics.com>
 Created: 7/21/2021
-Updated: 7/21/2021
+Updated: 7/28/2021
 License: MIT License <https://opensource.org/licenses/MIT>
 Data Sources:
     - WSLCB Traceability Data: https://lcb.app.box.com/s/fnku9nr22dhx04f6o646xv6ad6fswfy9?page=1
@@ -94,6 +94,9 @@ solid_edibles = data.loc[data.intermediate_type == 'solid_edible']
 print('Number of solid edible samples: %i' % len(solid_edibles))
 
 # FIXME: Standardize mg of THC if mg of THC is missing but percent is given.
+# mg_g = solid_edibles.apply(lambda row: row.cannabinoid_d9_thc_percent * 10 if \
+#                            row.cannabinoid_d9_thc_percent else \
+#                                row.cannabinoid_d9_thc_mg_g, axis=1)
 
 # Optional: Plot of mg of THC in edibles.
 # solid_edibles.cannabinoid_d9_thc_mg_g.hist()

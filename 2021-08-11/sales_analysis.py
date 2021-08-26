@@ -2,11 +2,12 @@
 Cannabis Sales Analysis in Washington State 2018 - 2020
 Cannabis Data Science
 
-Author: Keegan Skeate
-Contact: <keegan@cannlytics.com>
+Authors:
+    Keegan Skeate <keegan@cannlytics.com>
+    Charles Rice
 Created: 8/10/2021
 Updated: 8/10/2021
-License: MIT License <https://opensource.org/licenses/MIT>
+License: GPLv3+
 Data Source:
     https://lcb.app.box.com/s/fnku9nr22dhx04f6o646xv6ad6fswfy9?page=1
 """

@@ -3,6 +3,7 @@
         "astype",
         "bokeh",
         "cannabinoid",
+        "dotenv",
         "gmaps",
         "herfindahl",
         "hirschman",

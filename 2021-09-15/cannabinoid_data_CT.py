@@ -105,18 +105,18 @@ data['total_cannabinoids'] = data[CANNABINOIDS].sum(axis=1)
 # 2. Look at the data.
 #--------------------------------------------------------------------------
 
-# Calculate the prevelance (percent of samples that contains) of each terpene.
+# Calculate the prevalence (percent of samples that contains) of each terpene.
 # Also, calculate the average for each terpene when the terpene is present.
 averages = {}
-prevelance = {}
+prevalence = {}
 analytes = pd.DataFrame(columns=['analyte', 'concentration', 'brand_name',
                                  'dosage_form', 'producer'])
 for analyte in TERPENES:
     analyte_present_data = data.loc[data[analyte] > 0].copy(deep=True)
-    prevelance[analyte] = len(analyte_present_data) / len(data)
+    prevalence[analyte] = len(analyte_present_data) / len(data)
     averages[analyte] = analyte_present_data[analyte].mean()
     print('--------------\n%s' % analyte)
-    print('Prevelance:', round(prevelance[analyte], 4))
+    print('Prevalence:', round(prevalence[analyte], 4))
     print('Avg. Concentration:', round(averages[analyte], 4))
     analyte_present_data['analyte'] = analyte
     analyte_present_data['concentration'] = analyte_present_data[analyte]
@@ -126,13 +126,13 @@ for analyte in TERPENES:
 
 # Create a DataFrame with statistics for each analyte.
 terpene_data = pd.DataFrame(
-    prevelance.items(),
-    columns=['analyte', 'prevelance'],
-    index=prevelance.keys()
+    prevalence.items(),
+    columns=['analyte', 'prevalence'],
+    index=prevalence.keys()
 )
 
 # Sort the data by the most prevelant terpene.
-terpene_data = terpene_data.sort_values('prevelance', ascending=False)
+terpene_data = terpene_data.sort_values('prevalence', ascending=False)
 
 #--------------------------------------------------------------------------
 # 3. Visualize the data.
@@ -140,9 +140,9 @@ terpene_data = terpene_data.sort_values('prevelance', ascending=False)
 from cannlytics_charts import crispy_bar_chart
 
 # Isolate top 10 most prevelant terpenes.
-terpene_data = terpene_data.sort_values('prevelance', ascending=True)
+terpene_data = terpene_data.sort_values('prevalence', ascending=True)
 top_ten = terpene_data[-10:].copy(deep=True)
-top_ten['prevelance'] = top_ten.prevelance * 100
+top_ten['prevalence'] = top_ten.prevalence * 100
 
 # Clean Y labels.
 y_ticks = [s \
@@ -166,23 +166,23 @@ Data Source: Connecticut Medical Marijuana Brand Registry.
 Notes: The terpenes β-eudesmol, fenchone, and camphor were present in more than 95% of
 samples, so they were excluded from the top ten becaues they appear to be ubiquitous."""
 
-# Create a bar chart of terpene prevelance.
-crispy_bar_chart(
-    top_ten,
-    annotations=True,
-    key='prevelance',
-    title='Top Ten Terpenes Found in Connecticut Cannabis',
-    fig_size=(9, 7),
-    text_color='#1a1a1a',
-    notes=notes,
-    notes_offset=.125,
-    palette=palette,
-    percentage=True,
-    y_ticks=y_ticks,
-    x_label='Prevelance (percent of samples where detected)',
-    save='figures/top-ten-terpenes-in-connecticut-cannabis.png',
-    zero_bound=True,
-)
+# Create a bar chart of terpene prevalence.
+# crispy_bar_chart(
+#     top_ten,
+#     annotations=True,
+#     key='prevalence',
+#     title='Top Ten Terpenes Found in Connecticut Cannabis',
+#     fig_size=(9, 7),
+#     text_color='#1a1a1a',
+#     notes=notes,
+#     notes_offset=.125,
+#     palette=palette,
+#     percentage=True,
+#     y_ticks=y_ticks,
+#     x_label='Prevalence (percent of samples where detected)',
+#     save='figures/top-ten-terpenes-in-connecticut-cannabis.png',
+#     zero_bound=True,
+# )
 
 #--------------------------------------------------------------------------
 # 4. Analyze the data.

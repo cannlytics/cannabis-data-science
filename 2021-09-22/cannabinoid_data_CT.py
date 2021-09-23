@@ -3,7 +3,7 @@ Cannabinoid Data in Connecticut | Cannabis Data Science
 
 Author: Keegan Skeate <keegan@cannlytics.com>
 Created: 9/14/2021
-Updated: 9/16/2021
+Updated: 9/23/2021
 License: MIT License <https://opensource.org/licenses/MIT>
 
 Data Source:
@@ -17,7 +17,8 @@ import seaborn as sns
 from sodapy import Socrata
 
 # Internal imports
-from cannlytics_charts import crispy_bar_chart
+from cannlytics_charts import crispy_bar_chart, crispy_scatter_plot
+
 
 # Define plot style.
 plt.style.use('fivethirtyeight')
@@ -137,7 +138,6 @@ terpene_data = terpene_data.sort_values('prevalence', ascending=False)
 #--------------------------------------------------------------------------
 # 3. Visualize the data.
 #--------------------------------------------------------------------------
-from cannlytics_charts import crispy_bar_chart
 
 # Isolate top 10 most prevelant terpenes.
 terpene_data = terpene_data.sort_values('prevalence', ascending=True)
@@ -234,26 +234,20 @@ plt.show()
 # Scatterplot of total terpenes vs. total cannabinoids by producer.
 categories = list(data.producer.unique())
 categories = [x.title().replace('Llc', 'LLC') for x in categories]
+categories.sort()
 colors = sns.color_palette('Set2', n_colors=len(categories))
-plt.figure(figsize=(16, 10), dpi= 80)
-for i, category in enumerate(categories):
-    plt.scatter(
-        x='total_cannabinoids',
-        y='total_terpenes',
-        data=data.loc[data.producer==category.upper(), :], 
-        s=20,
-        c=colors[i],
-        label=str(category)
-    )
-
-plt.gca().set(
-    xlim=(0.0, 100),
-    ylim=(0, 10),
-    xlabel='Total Cannabinoids',
-    ylabel='Total Terpenes'
+crispy_scatter_plot(
+        data,
+        'total_cannabinoids',
+        'total_terpenes',
+        'producer',
+        categories,
+        colors,
+        title='Total Terpenes to Cannabinoids by Producer in Connecticut Cannabis',
+        save='figures/total-terpenes-to-cannabinoids.png',
+        percentage=True,
+        notes="""Data: 10,879 brand analyses between 3/24/2015 and 9/22/2021.
+Data Source: Connecticut Medical Marijuana Brand Registry.
+Notes: The terpenes β-eudesmol, fenchone, and camphor were present in more than 95% of
+samples, so they were excluded because they appear to be ubiquitous.""",
 )
-plt.xticks(fontsize=12); plt.yticks(fontsize=12)
-plt.title('Total Terpenes vs Total Cannabinoids by Producer in Connecticut Cannabis', fontsize=22)
-plt.legend(fontsize=12, loc='upper left')
-plt.savefig('figures/total-terpenes-vs-cannabinoids.png', dpi=300, bbox_inches='tight')
-plt.show()

@@ -4,10 +4,10 @@ Crispy Charts | Cannlytics
 Author: Keegan Skeate
 Contact: <keegan@cannlytics.com>
 Created: 9/16/2021
-Updated: 9/16/2021
+Updated: 9/23/2021
 License: MIT License <https://opensource.org/licenses/MIT>
 
-Resources:
+Plotting Resources:
     https://scentellegher.github.io/visualization/2018/10/10/beautiful-bar-plots-matplotlib.html
     https://towardsdatascience.com/a-simple-guide-to-beautiful-visualizations-in-python-f564e6b9d392
     https://www.python-graph-gallery.com/ridgeline-graph-seaborn
@@ -16,6 +16,121 @@ Resources:
 """
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+
+
+def crispy_scatter_plot(
+        data,
+        x,
+        y,
+        category_key,
+        categories,
+        colors,
+        label_size=20,
+        legend_loc='upper left',
+        notes='',
+        notes_offset=.15,
+        note_size=14,
+        percentage=False,
+        save='',
+        title='',
+        title_size=24,
+        font_size=18,
+        fig_size=(15, 7.5),
+        font_family='serif',
+        font_style='Times NEw Roman',
+        text_color='#333F4B',
+):
+    """Create a beautiful scatter plot given data.
+    Args:
+        TODO: Write docs!
+    Returns:
+        (figure): The chart figure for any post-processing.
+    """
+    
+    # Set the chart font.
+    plt.rcParams['font.family'] = font_family
+    if font_family == 'sans-serif':
+        plt.rcParams['font.sans-serif'] = font_style
+    else:
+        plt.rcParams['font.sans-serif'] = font_style
+        
+    # Set the style of the axes and the text color.
+    plt.style.use('fivethirtyeight')
+    plt.rcParams['axes.edgecolor'] = text_color
+    plt.rcParams['axes.linewidth'] = 0.8
+    plt.rcParams['xtick.color'] = text_color
+    plt.rcParams['ytick.color'] = text_color
+    plt.rcParams['text.color'] = text_color
+    
+    # Create a figure.
+    fig, ax = plt.subplots(figsize=fig_size)
+    
+    # Plot categorical data.
+    for i, category in enumerate(categories):
+        plt.scatter(
+            x=x,
+            y=y,
+            data=data.loc[data[category_key]==category.upper(), :], 
+            s=20,
+            c=colors[i],
+            label=str(category)
+        )
+
+    # Format the axes and axes labels.
+    plt.gca().set(
+        xlim=(0.0, 100),
+        ylim=(0, 15),
+    )
+    
+    # Format the X-axis.
+    plt.xticks(fontsize=font_size)
+    plt.yticks(fontsize=font_size)
+    
+    # Add a title.
+    if title:
+        plt.title(title, fontsize=title_size, pad=20)
+    
+    # Add X and Y axis labels.
+    plt.xlabel(x.replace('_', ' ').title(), fontsize=label_size, labelpad=10)
+    plt.ylabel(y.replace('_', ' ').title(), fontsize=label_size, labelpad=10)
+    
+    # Format the legend.
+    plt.legend(fontsize=font_size, loc=legend_loc)  
+
+    # Hide unnecessary spines and ticks.
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(True)
+    ax.spines['left'].set_visible(True)
+    ax.tick_params(axis='both', which='major', labelsize=font_size)
+    
+    # Format the axes as percentages.
+    if percentage:
+        ax.xaxis.set_major_formatter(mtick.PercentFormatter(decimals=0))
+        ax.yaxis.set_major_formatter(mtick.PercentFormatter(decimals=0))
+
+    # Hide the first y-label to prevent overlap.
+    plt.setp(ax.get_yticklabels()[0], visible=False)
+
+    # Add figure notes.
+    if notes:
+        plt.figtext(0.0, -notes_offset, notes,
+                    ha='left', fontsize=note_size)
+    
+    # Show and optionally save the figure.
+    if save:
+        plt.margins(1, 1)
+        plt.savefig(
+            save,
+            dpi=300,
+            bbox_inches='tight',
+            pad_inches=0.75,
+            transparent=False,
+        )
+    
+    # Return the figure.
+    plt.show()
+    return fig
 
 
 def crispy_bar_chart(
@@ -39,7 +154,7 @@ def crispy_bar_chart(
 ):
     """Create a beautiful bar chart given data.
     Args:
-        
+        TODO: Write docs!
     Returns:
         (figure): The chart figure for any post-processing.
     """

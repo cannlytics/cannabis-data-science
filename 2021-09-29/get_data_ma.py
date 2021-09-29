@@ -17,9 +17,20 @@ Data Sources:
 """
 import os
 from dotenv import dotenv_values
+from fredapi import Fred
 import pandas as pd
 import matplotlib.pyplot as plt
 import requests
+
+
+def reverse_dataframe(df):
+    """Reverse the ordering of a DataFrame.
+    Args:
+        df (DataFrame): A DataFrame to re-order.
+    Returns:
+        (DataFrame): The re-ordered DataFrame.
+    """
+    return df[::-1].reset_index(drop=True)
 
 
 #--------------------------------------------------------------------------
@@ -56,16 +67,65 @@ prices = pd.DataFrame(response.json())
 
 # Get production stats (total employees, total plants, etc.) j3q7-3usu
 url = f'{base}/j3q7-3usu.json'
-params = {'$limit': 100, '$order': 'activitysummarydate DESC'}
+params = {'$limit': 2000, '$order': 'activitysummarydate DESC'}
 response = requests.get(url,  headers=headers, params=params)
-production = pd.DataFrame(response.json())
+production = pd.DataFrame(response.json(), dtype=float)
+production = reverse_dataframe(production)
 
 #--------------------------------------------------------------------------
 # 2. Clean the data, standardizing variables.
 #--------------------------------------------------------------------------
 
+# Initialize Fed Fred.
+config = dotenv_values('../.env')
+fred = Fred(api_key=config['FRED_API_KEY'])
+
+# Find the observation time start.
+start = production.activitysummarydate.min()
+observation_start = start.split('T')[0]
+
 # Calculate percent of the civilian labor force in Massachusetts.
-# 
+labor_force = fred.get_series('MALF', observation_start=observation_start)
+labor_force.index = labor_force.index.to_period('M').to_timestamp('M')
+
+# Aggregate daily production data into totals.
+production['date'] = pd.to_datetime(production['activitysummarydate'])
+production.set_index('date', inplace=True)
+monthly_avg_production = production.resample('1M').mean()
+
+
+cannabis_portion_of_labor_force = monthly_avg_production.total_employees \
+                                  / labor_force * 100
+
+# production['date'] = pd.to_datetime(production['activitysummarydate'])
+# cannabis_portion_of_labor_force = production.groupby(pd.Grouper(freq='1M', key='date')) \
+#                                   .transform(lambda x: x.mean())
+
+
+# Calculate total employees as a percent of all employees in MA.
+total_ma_employees = fred.get_series('MANA', observation_start=observation_start)
+
+
+# Optional: Correlate total sales with GDP (https://fred.stlouisfed.org/series/MANQGSP)
+
+
+# TODO: Calculate (estimate) GDP from the cannabis industry in MA.
+
+# 1. Calculate GDP from consumption (total sales).
+
+# 2. Calculate GDI from labor (this excludes capital rents).
+# Gross domestic income
+minimum_wage = fred.get_series('STTMINWGMA', observation_start=observation_start)
+avg_wage = fred.get_series('LES1252881600Q', observation_start=observation_start)
+
+
+
+# TODO: Estimate the percent of GDP in MA from cannabis.
+
+
+# Optional: Calculate (Estimate) the cannabis GDP per Capita in MA.
+# This metric may reflect the value added to the people of MA by permitting
+# recreational cannabis.
 
 
 #--------------------------------------------------------------------------

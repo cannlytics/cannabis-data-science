@@ -17,6 +17,7 @@ Data Sources:
 """
 import os
 from dotenv import dotenv_values
+from fredapi import Fred
 import pandas as pd
 import matplotlib.pyplot as plt
 import requests
@@ -64,8 +65,17 @@ production = pd.DataFrame(response.json())
 # 2. Clean the data, standardizing variables.
 #--------------------------------------------------------------------------
 
+# Initialize Fed Fred.
+config = dotenv_values('../.env')
+fred = Fred(api_key=config['FRED_API_KEY'])
+
 # Calculate percent of the civilian labor force in Massachusetts.
-# 
+labor_force = fred.get_series('MALF', observation_start='1/1/2020')
+
+# Calculate total employees as a percent of all employees in MA.
+total_ma_employees = fred.get_series('MANA', observation_start='1/1/2020')
+
+# Optional: Correlate total sales with GDP (https://fred.stlouisfed.org/series/MANQGSP)
 
 
 #--------------------------------------------------------------------------

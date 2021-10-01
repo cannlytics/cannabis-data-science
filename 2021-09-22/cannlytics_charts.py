@@ -37,7 +37,7 @@ def crispy_scatter_plot(
         font_size=18,
         fig_size=(15, 7.5),
         font_family='serif',
-        font_style='Times NEw Roman',
+        font_style='Times New Roman',
         text_color='#333F4B',
 ):
     """Create a beautiful scatter plot given data.

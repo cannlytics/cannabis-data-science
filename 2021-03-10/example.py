@@ -81,7 +81,7 @@ Total_Labor = df['Total-Occupational-Licenses'] # L_t
 
 # Fed Fred Import
 from fredapi import Fred
-fred = Fred(api_key='dca13a86a94f640163e6e546b7aaf6b4')
+fred = Fred(api_key='redacted')
 Weekly_Hours = fred.get_series('SMU08000000500000002')[-40:-4]
 
 

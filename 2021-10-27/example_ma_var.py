@@ -139,16 +139,50 @@ print('Best lag order:', results.k_ar)
 # Create a forecast.
 horizon = 15
 forecast = results.forecast(vector[-lag_order:], horizon)
+forecast_intervals = results.forecast_interval(vector[-lag_order:], horizon)
+forecast = np.append(forecast, forecast_intervals[1], axis=1)
+forecast = np.append(forecast, forecast_intervals[2], axis=1)
 
-# Show the data!
-results.plot_forecast(horizon)
-
-# Save the data
+# Format the forecast data.
 variables = [
-    'total_sales_forecast',
+    'output_forecast',
     'inflation_forecast',
     'interest_rate_forecast',
+    'output_forecast_lower_bound',
+    'inflation_forecast_lower_bound',
+    'interest_rate_forecast_lower_bound',
+    'output_forecast_upper_bound',
+    'inflation_forecast_upper_bound',
+    'interest_rate_forecast_upper_bound',
 ]
 forecast_data = pd.DataFrame(forecast, columns=variables)
-# forecast_data.index = pd.date_range('2021-04-01', '2022-01-01', freq='m')
-forecast_data.to_excel('./data/forecasts.xlsx')
+forecast_data.index = pd.date_range('2021-10-01', '2023-01-01', freq='m')
+
+# Show the data!
+# results.plot_forecast(horizon)
+
+# Save the data
+# forecast_data.to_excel('./data/forecasts.xlsx')
+
+#--------------------------------------------------------------------------
+# Plot the VAR model.
+#--------------------------------------------------------------------------
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(15, 5))
+
+# # Plot the data (here we are subsetting it to get a better look at the forecasts)
+# endog.loc['1999':].plot(ax=ax)
+
+# Construct the forecasts.
+forecast_data['output_forecast']plot(ax=ax, style='k--')
+
+# Add confidence bounds.
+ax.fill_between(
+    forecast_data.index,
+    forecast_data['output_forecast_lower_bound'],
+    forecast_data['output_forecast_upper_bound'],
+    color='k',
+    alpha=0.1
+)

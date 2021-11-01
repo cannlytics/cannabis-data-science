@@ -1,4 +1,4 @@
-"""
+ """
 Crispy Charts | Cannlytics
 
 Author: Keegan Skeate

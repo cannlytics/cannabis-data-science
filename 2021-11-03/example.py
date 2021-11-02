@@ -95,6 +95,20 @@ price_per_teenth = prices.avg_1oz.astype(float).divide(16).round(2)
 price_per_eighth = prices.avg_1oz.astype(float).divide(8).round(2)
 price_per_quarter = prices.avg_1oz.astype(float).divide(4).round(2)
 
+# Get the products.
+url = f'{base}/xwf2-j7g9.json'
+params = {'$limit': 10000, '$order': 'saledate DESC'}
+response = requests.get(url,  headers=headers, params=params)
+products = pd.DataFrame(response.json(), dtype=float)
+products = reverse_dataframe(products)
+products.set_index('saledate', inplace=True)
+
+# Plot sales by product type.
+product_types = list(products.productcategoryname.unique())
+for product_type in product_types:
+    print(product_type)
+    products.loc[products.productcategoryname == product_type].dollartotal.plot()
+
 #--------------------------------------------------------------------------
 # Get supplemental data from FRED (Federal Reserve Economic Data).
 #--------------------------------------------------------------------------

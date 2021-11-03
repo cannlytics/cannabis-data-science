@@ -21,6 +21,11 @@ def end_of_period_timeseries(df, period='M'):
     return df
 
 
+def format_millions(x, pos):
+    """The two args are the value and tick position."""
+    return '%1.0fM' % (x * 1e-6)
+
+
 def reverse_dataframe(df):
     """Reverse the ordering of a DataFrame.
     Args:

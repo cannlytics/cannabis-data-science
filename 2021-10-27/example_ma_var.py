@@ -1,10 +1,10 @@
 """
-VAR Analysis with Massachusetts Cannabis Data
+Box-Jenkins (ARIMA) Analysis with Massachusetts Cannabis Data
 Cannabis Data Science
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
-Created: 10/27/2021
-Updated: 10/27/2021
+Created: 11/3/2021
+Updated: 11/3/2021
 License: MIT License <https://opensource.org/licenses/MIT>
 
 Objective:
@@ -186,3 +186,22 @@ ax.fill_between(
     color='k',
     alpha=0.1
 )
+
+
+#--------------------------------------------------------------------------
+# Forecast sales, plants grown, and employees using Box-Jenkins methodology.
+# Attempt to forecast with daily series with day-of-the-week fixed effects.
+# Attempt to forecast with weekly series with month fixed effects.
+#--------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------
+# Plot the forecasts, with error bounds.
+#--------------------------------------------------------------------------
+
+
+
+#--------------------------------------------------------------------------
+# Optional: Estimate a production function with the forecasted values
+# and calculate the estimated competitive wage and interest rate.
+#--------------------------------------------------------------------------

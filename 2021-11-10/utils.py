@@ -49,6 +49,11 @@ def format_millions(x, pos):
     return '%1.0fM' % (x * 1e-6)
 
 
+def format_thousands(x, pos):
+    """The two args are the value and tick position."""
+    return '%1.0fK' % (x * 1e-3)
+
+
 def reverse_dataframe(df):
     """Reverse the ordering of a DataFrame.
     Args:

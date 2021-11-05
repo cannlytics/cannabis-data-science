@@ -42,13 +42,14 @@ import seaborn as sns
 from utils import (
     forecast_arima,
     format_millions,
+    format_thousands,
     reverse_dataframe,
     set_training_period,
 )
 
 
 #--------------------------------------------------------------------------
-# Get MA public cannabis data.
+# Get all MA public cannabis data.
 #--------------------------------------------------------------------------
 
 # Setup Socrata API, get the App Token, and define the headers.
@@ -110,110 +111,17 @@ response = requests.get(url,  headers=headers, params=params)
 products = pd.DataFrame(response.json(), dtype=float)
 products = reverse_dataframe(products)
 products.set_index('saledate', inplace=True)
-
-# Plot sales by product type.
 product_types = list(products.productcategoryname.unique())
-for product_type in product_types:
-    print(product_type)
-    products.loc[products.productcategoryname == product_type].dollartotal.plot()
-
 
 #--------------------------------------------------------------------------
-# Estimate sales, plants, employees in 2021 and 2022,
+# Estimate historic sales per retialer, plants per cultivator,
+# and employees per licensee.
 #--------------------------------------------------------------------------
-
-
-# Specifiy training time periods.
-train_start = '2020-06-01'
-train_end = '2021-10-25'
 
 # Create weekly series.
 weekly_sales = production.sales.resample('W-SUN').sum()
 weekly_plants = production.total_planttrackedcount.resample('W-SUN').mean()
 weekly_employees = production.total_employees.resample('W-SUN').mean()
-
-# Define forecast horizon.
-forecast_horizon = pd.date_range(
-    pd.to_datetime(train_end),
-    periods=60,
-    freq='w'
-)
-
-# Create month fixed effects (dummy variables),
-# excluding 1 month (January) for comparison.
-month_effects = pd.get_dummies(weekly_sales.index.month)
-month_effects.index = weekly_sales.index
-month_effects = set_training_period(month_effects, train_start, train_end)
-forecast_month_effects = pd.get_dummies(forecast_horizon.month)
-del month_effects[1]
-try:
-    del forecast_month_effects[1]
-except:
-    pass
-
-# Estimate sales forecasting model.
-model = pm.auto_arima(
-    set_training_period(weekly_sales, train_start, train_end),
-    X=month_effects,
-    start_p=0,
-    d=0,
-    start_q=0,
-    max_p=6,
-    max_d=6,
-    max_q=6,
-    seasonal=True,
-    start_P=0,
-    D=0,
-    start_Q=0,
-    max_P=6,
-    max_D=6,
-    max_Q=6,
-    information_criterion='bic',
-    alpha=0.2,
-)
-print(model.summary())
-
-# Make sales forecasts.
-sales_forecast, sales_conf = forecast_arima(model, forecast_horizon, X=month_effects)
-
-
-#--------------------------------------------------------------------------
-# Visualize the forecasts.
-#--------------------------------------------------------------------------
-
-# Define the plot style.
-plt.style.use('fivethirtyeight')
-plt.rcParams['font.family'] = 'Times New Roman'
-palette = sns.color_palette('tab10')
-primary_color = palette[0]
-secondary_color = palette[-1]
-
-# Plot sales forecast.
-fig, ax = plt.subplots(figsize=(15, 5))
-weekly_sales[-25:-1].plot(ax=ax, color=primary_color, label='Historic')
-sales_forecast.plot(ax=ax, color=secondary_color, style='--', label='Forecast')
-plt.fill_between(
-    sales_forecast.index,
-    sales_conf[:, 0],
-    sales_conf[:, 1],
-    alpha=0.1,
-    color=secondary_color,
-)
-plt.legend(loc='lower left', fontsize=18)
-plt.title('Massachusetts Cannabis Sales Forecast', fontsize=24, pad=10)
-yaxis_format = FuncFormatter(format_millions)
-ax.yaxis.set_major_formatter(yaxis_format)
-plt.setp(ax.get_yticklabels()[0], visible=False)
-plt.xlabel('')
-plt.xticks(fontsize=18)
-plt.yticks(fontsize=18)
-plt.show()
-
-
-#--------------------------------------------------------------------------
-# Estimate sales per retialer, plants per cultivator,
-# and employees per licensee.
-#--------------------------------------------------------------------------
 
 # Find total retailers and cultivators.
 retailers = licensees.loc[licensees.license_type == 'Marijuana Retailer']
@@ -245,32 +153,56 @@ weekly_total_retailers = production['total_retailers'].resample('W-SUN').mean()
 weekly_total_cultivators = production['total_cultivators'].resample('W-SUN').mean()
 weekly_total_licensees = production['total_licensees'].resample('W-SUN').mean()
 
-# Plot sales per retailer.
+# Estimate sales per retailer.
 sales_per_retailer = weekly_sales / weekly_total_retailers
 sales_per_retailer.plot()
 plt.show()
 
-# Plot plants per cultivator.
+# Estimate plants per cultivator.
 plants_per_cultivator = weekly_plants / weekly_total_cultivators
 plants_per_cultivator.plot()
 plt.show()
 
-# Plot employees per licensee.
+# Estimate employees per licensee.
 employees_per_license = weekly_employees / weekly_total_licensees
 employees_per_license.plot()
 plt.show()
 
 #--------------------------------------------------------------------------
-# Forecast sales, plants grown, and employees using Box-Jenkins methodology.
-# Optional: Also forecast total retailers, total cultivators, and total licensees.
+# Estimate sales, plants grown, and employees,
+# total retailers, total cultivators, and total licensees
+# in 2021 and 2022 # using Box-Jenkins (ARIMA) methodology.
+# Month fixed effects are used.
 # Optional: Attempt to forecast with daily series with day-of-the-week fixed effects.
-# Attempt to forecast with weekly series with month fixed effects.
 #--------------------------------------------------------------------------
 
-# Estimate plants forecasting model and make plant forecasts.
-model = pm.auto_arima(
-    weekly_plants[73:-1],
-    X=month_effects[73:-1],
+# Specifiy training time periods.
+train_start = '2020-06-01'
+train_end = '2021-10-25'
+
+# Define forecast horizon.
+forecast_horizon = pd.date_range(
+    pd.to_datetime(train_end),
+    periods=60,
+    freq='w'
+)
+
+# Create month fixed effects (dummy variables),
+# excluding 1 month (January) for comparison.
+month_effects = pd.get_dummies(weekly_sales.index.month)
+month_effects.index = weekly_sales.index
+month_effects = set_training_period(month_effects, train_start, train_end)
+forecast_month_effects = pd.get_dummies(forecast_horizon.month)
+del month_effects[1]
+try:
+    del forecast_month_effects[1]
+except:
+    pass
+
+# Forecast sales.
+sales_model = pm.auto_arima(
+    set_training_period(weekly_sales, train_start, train_end),
+    X=month_effects,
     start_p=0,
     d=0,
     start_q=0,
@@ -286,24 +218,69 @@ model = pm.auto_arima(
     max_Q=6,
     information_criterion='bic',
     alpha=0.2,
-    # m=12,
 )
-print(model.summary())
-plants_forecast, plants_conf = model.predict(
-    n_periods=len(forecast_horizon),
-    return_conf_int=True,
-    X=forecast_month_effects,
+sales_forecast, sales_conf = forecast_arima(
+    sales_model,
+    forecast_horizon,
+    X=forecast_month_effects
 )
-plants_forecast = pd.Series(plants_forecast)
-plants_forecast.index = forecast_horizon
-weekly_plants[73:-1].plot()
-plants_forecast.plot()
-plt.show()
 
-# Estimate employees forecasting model and make employees forecasts.
-model = pm.auto_arima(
-    weekly_employees[73:-1],
-    X=month_effects[73:-1],
+# Forecast total plants.
+plants_model = pm.auto_arima(
+    set_training_period(weekly_plants, train_start, train_end),
+    X=month_effects,
+    start_p=0,
+    d=0,
+    start_q=0,
+    max_p=6,
+    max_d=6,
+    max_q=6,
+    seasonal=True,
+    start_P=0,
+    D=0,
+    start_Q=0,
+    max_P=6,
+    max_D=6,
+    max_Q=6,
+    information_criterion='bic',
+    alpha=0.2,
+)
+plants_forecast, plants_conf = forecast_arima(
+    plants_model,
+    forecast_horizon,
+    X=forecast_month_effects
+)
+
+# Forecast total employees.
+employees_model = pm.auto_arima(
+    set_training_period(weekly_employees, train_start, train_end),
+    X=month_effects,
+    start_p=0,
+    d=1,
+    start_q=0,
+    max_p=6,
+    max_d=6,
+    max_q=6,
+    seasonal=True,
+    start_P=0,
+    D=0,
+    start_Q=0,
+    max_P=6,
+    max_D=6,
+    max_Q=6,
+    information_criterion='bic',
+    alpha=0.2,
+)
+employees_forecast, employees_conf = forecast_arima(
+    employees_model,
+    forecast_horizon,
+    X=forecast_month_effects
+)
+
+# Forecast total retailers.
+retailers_model = pm.auto_arima(
+    set_training_period(weekly_total_retailers, train_start, train_end),
+    X=month_effects,
     start_p=0,
     d=1,
     start_q=0,
@@ -321,34 +298,176 @@ model = pm.auto_arima(
     alpha=0.2,
     # m=12,
 )
-print(model.summary())
-employees_forecast, plants_conf = model.predict(
-    n_periods=len(forecast_horizon),
-    return_conf_int=True,
-    X=forecast_month_effects,
+total_retailers_forecast, total_retailers_conf = forecast_arima(
+    retailers_model,
+    forecast_horizon,
+    X=forecast_month_effects
 )
-employees_forecast = pd.Series(employees_forecast)
-employees_forecast.index = forecast_horizon
-weekly_employees[73:-1].plot()
-employees_forecast.plot()
+
+# Forecast total cultivators.
+cultivators_model = pm.auto_arima(
+    set_training_period(weekly_total_cultivators, train_start, train_end),
+    X=month_effects,
+    start_p=0,
+    d=1,
+    start_q=0,
+    max_p=6,
+    max_d=6,
+    max_q=6,
+    seasonal=True,
+    start_P=0,
+    D=0,
+    start_Q=0,
+    max_P=6,
+    max_D=6,
+    max_Q=6,
+    information_criterion='bic',
+    alpha=0.2,
+    # m=12,
+)
+total_cultivators_forecast, total_cultivators_conf = forecast_arima(
+    cultivators_model,
+    forecast_horizon,
+    X=forecast_month_effects
+)
+
+# Forecast total licensees.
+licensees_model = pm.auto_arima(
+    set_training_period(weekly_total_licensees, train_start, train_end),
+    X=month_effects,
+    start_p=0,
+    d=1,
+    start_q=0,
+    max_p=6,
+    max_d=6,
+    max_q=6,
+    seasonal=True,
+    start_P=0,
+    D=0,
+    start_Q=0,
+    max_P=6,
+    max_D=6,
+    max_Q=6,
+    information_criterion='bic',
+    alpha=0.2,
+    # m=12,
+)
+total_licensees_forecast, total_licensees_conf = forecast_arima(
+    licensees_model,
+    forecast_horizon,
+    X=forecast_month_effects
+)
+
+# Predict total sales per retailer in 2022.
+# TODO: Figure out how to estimate confidence bounds?
+forecast_sales_per_retailer =  sales_forecast / total_retailers_forecast
+
+# Predict total plants per cultivator in 2022.
+forecast_plants_per_cultivator =  plants_forecast / total_cultivators_forecast
+
+# Predict total employees per licensee in 2022.
+forecast_employees_per_license =  employees_forecast / total_licensees_forecast
+
+#--------------------------------------------------------------------------
+# TODO: Visualize the forecasts as 2x3 time series plots.
+# Sales | Plants
+# Retailers | Cultivators
+# Sales per Retailer | Plants per Cultivator
+#--------------------------------------------------------------------------
+
+# Define the plot style.
+plt.style.use('fivethirtyeight')
+plt.rcParams['font.family'] = 'Times New Roman'
+palette = sns.color_palette('tab10')
+primary_color = palette[0]
+secondary_color = palette[-1]
+
+# TODO: Pick out colors for all series.
+
+# Plot sales forecast.
+# fig, ax = plt.subplots(figsize=(15, 5))
+# weekly_sales.plot(ax=ax, color=primary_color, label='Historic')
+# sales_forecast.plot(ax=ax, color=secondary_color, style='--', label='Forecast')
+# plt.fill_between(
+#     sales_forecast.index,
+#     sales_conf[:, 0],
+#     sales_conf[:, 1],
+#     alpha=0.1,
+#     color=secondary_color,
+# )
+# plt.legend(loc='lower left', fontsize=18)
+# plt.title('Massachusetts Cannabis Sales Forecast', fontsize=24, pad=10)
+# yaxis_format = FuncFormatter(format_millions)
+# ax.yaxis.set_major_formatter(yaxis_format)
+# plt.gca().set(ylim=0)
+# plt.setp(ax.get_yticklabels()[0], visible=False)
+# plt.xlabel('')
+# plt.xticks(fontsize=18)
+# plt.yticks(fontsize=18)
+# plt.show()
+
+# TODO: Reduce boilerplate when creating charts (create a function?).
+series_list = [[weekly_sales, weekly_plants]]
+
+# Plot all series.
+fig = plt.figure(figsize=(25, 5))
+
+# Plot sales.
+ax1 = plt.subplot(1, 2, 1)
+weekly_sales.plot(color=primary_color, label='Historic')
+sales_forecast.plot(color=primary_color, style='--', label='Forecast')
+plt.fill_between(
+    sales_forecast.index,
+    sales_conf[:, 0],
+    sales_conf[:, 1],
+    alpha=0.1,
+    color=primary_color,
+)
+plt.title('Massachusetts Cannabis Sales Forecast', fontsize=24, pad=10)
+yaxis_format = FuncFormatter(format_millions)
+ax1.yaxis.set_major_formatter(yaxis_format)
+plt.gca().set(ylim=0)
+plt.setp(ax1.get_yticklabels()[0], visible=False)
+plt.xlabel('')
+plt.xticks(fontsize=18)
+plt.yticks(fontsize=18)
+
+# Plot plants.
+ax2 = plt.subplot(1, 2, 2)
+weekly_plants.plot(color=secondary_color, label='Historic Plants')
+plants_forecast.plot(color=secondary_color, style='--', label='Forecast')
+plt.fill_between(
+    plants_forecast.index,
+    plants_conf[:, 0],
+    plants_conf[:, 1],
+    alpha=0.1,
+    color=secondary_color,
+)
+plt.title('Massachusetts Cannabis Plants Forecast', fontsize=24, pad=10)
+yaxis_format = FuncFormatter(format_thousands)
+ax2.yaxis.set_major_formatter(yaxis_format)
+plt.gca().set(ylim=0)
+plt.setp(ax2.get_yticklabels()[0], visible=False)
+plt.xlabel('')
+plt.xticks(fontsize=18)
+plt.yticks(fontsize=18)
+
+# Plot retailers.
+
+# Plot cultivators.
+
+# Plot average sales per retailer.
+
+# Plot average plants per cultivator.
+
+
+# plt.legend(loc='lower left', fontsize=18)
+
 plt.show()
 
-# TODO: Forecast total retailers.
+# TODO: Find a clever way to display 2022 forecast totals (curly braces?)
 
 
-# TODO: Forecast total cultivators.
-
-
-# TODO: Forecast total licensees.
-
-
-# TODO: Predict total sales per retailer in 2022.
-
-
-# TODO: Predict total plants per cultivator in 2022.
-
-
-# TODO: Predict total employees per licensee in 2022.
 
 
 

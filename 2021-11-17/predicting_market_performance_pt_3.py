@@ -372,6 +372,9 @@ forecast_plants_per_cultivator =  plants_forecast / total_cultivators_forecast
 # Predict total employees per licensee in 2022.
 forecast_employees_per_license =  employees_forecast / total_licensees_forecast
 
+# TODO: Calculate totals for 2022.
+
+
 #--------------------------------------------------------------------------
 # Visualize the forecasts as 2x3 time series plots.
 # Sales | Plants
@@ -503,7 +506,9 @@ plot_forecast(
 
 # Add figure notes.
 notes = """Data: Cannabis sales, total tracked plants, and licensees data from October 15, 2018 through October 26, 2021.
-Data Source: MA Cannabis Control Commission."""
+Data Source: MA Cannabis Control Commission.
+Notes: Box-Jenkins methodology is used for forecasting. Massachusetts cannabis markets were closed from 3/26/2021 through 5/24/2020.
+Forecasts were made with data post 5/25/2020."""
 plt.figtext(0.05, -0.01, notes, ha='left', fontsize=16)
 
 # Add a title above all of the subplots.
@@ -515,11 +520,11 @@ fig.suptitle(
 # Save the figure.
 plt.margins(1, 1)
 plt.savefig(
-    'figures/ma_market_forecast.pdf',
-    dpi=300,
+    'figures/ma_market_forecast.png',
+    dpi=96,
     bbox_inches='tight',
     pad_inches=0.75,
-    transparent=True,
+    transparent=False,
 )
 
 # Show the figure.

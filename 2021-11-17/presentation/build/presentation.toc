@@ -1,5 +1,4 @@
 \babel@toc {english}{}
 \beamer@sectionintoc {1}{Introduction}{2}{0}{1}
-\beamer@sectionintoc {2}{Economics}{3}{0}{2}
-\beamer@sectionintoc {3}{Empirics}{6}{0}{3}
-\beamer@sectionintoc {4}{Cannabis Applications}{8}{0}{4}
+\beamer@sectionintoc {2}{Theoretical Economics}{3}{0}{2}
+\beamer@sectionintoc {3}{Empirical Economics}{6}{0}{3}

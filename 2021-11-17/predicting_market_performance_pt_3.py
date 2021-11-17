@@ -5,7 +5,7 @@ Copyright (c) 2021 Cannlytics and the Cannabis Data Science Meetup Group
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 10/6/2021
-Updated: 11/10/2021
+Updated: 11/17/2021
 License: MIT License <https://opensource.org/licenses/MIT>
 
 References:
@@ -50,6 +50,9 @@ from utils import (
     set_training_period,
 )
 
+
+CAPITAL = 'total_plantfloweringcount'
+# CAPITAL = 'total_planttrackedcount'
 
 #--------------------------------------------------------------------------
 # Get all MA public cannabis data.
@@ -117,13 +120,14 @@ products.set_index('saledate', inplace=True)
 product_types = list(products.productcategoryname.unique())
 
 #--------------------------------------------------------------------------
+# Create novel statistics.
 # Estimate historic sales per retialer, plants per cultivator,
 # and employees per licensee.
 #--------------------------------------------------------------------------
 
 # Create weekly series.
 weekly_sales = production.sales.resample('W-SUN').sum()
-weekly_plants = production.total_planttrackedcount.resample('W-SUN').mean()
+weekly_plants = production[CAPITAL].resample('W-SUN').mean()
 weekly_employees = production.total_employees.resample('W-SUN').mean()
 
 # Find total retailers and cultivators.
@@ -182,12 +186,13 @@ plt.show()
 
 # Specifiy training time periods.
 train_start = '2020-06-01'
-train_end = '2021-10-25'
+train_end = '2021-11-15'
+forecast_end = '2023-01-01'
 
 # Define forecast horizon.
 forecast_horizon = pd.date_range(
-    pd.to_datetime(train_end),
-    periods=62,
+    start=pd.to_datetime(train_end),
+    end=pd.to_datetime(forecast_end),
     freq='w'
 )
 
@@ -555,6 +560,17 @@ avg_weekly_hours = fred.get_series('SMU25000000500000002SA', observation_start=o
 avg_weekly_hours = end_of_period_timeseries(avg_weekly_hours)
 avg_weekly_hours = avg_weekly_hours.resample('W-Sun').ffill().iloc[:-1]
 
+# Get Average Hourly Earnings of All Employees: Total Private in Massachusetts
+# SMU25000000500000003SA
+avg_earnings = fred.get_series('SMU25000000500000003SA', observation_start=observation_start)
+avg_earnings = end_of_period_timeseries(avg_earnings)
+avg_earnings = avg_earnings.resample('W-Sun').ffill().iloc[:-1]
+
+# Get the state minimum wage rate for Massachusetts.
+min_wage = fred.get_series('STTMINWGMA', observation_start=observation_start)
+min_wage = end_of_period_timeseries(min_wage)
+min_wage = min_wage.resample('W-Sun').ffill().iloc[:-1]
+
 #--------------------------------------------------------------------------
 # Optional: Estimate historic competitive wages and interest rates.
 #--------------------------------------------------------------------------
@@ -564,20 +580,28 @@ Y = weekly_sales
 K = weekly_plants
 L = weekly_employees * avg_weekly_hours
 
+# Restrict time frame.
+Y = Y.loc[
+    (Y.index >= pd.to_datetime('2019-01-01')) &
+    (Y.index <= pd.to_datetime('2021-09-30'))
+]
+K = K.loc[
+    (K.index >= pd.to_datetime('2019-01-01')) &
+    (K.index <= pd.to_datetime('2021-09-30'))
+]
+L = L.loc[
+    (L.index >= pd.to_datetime('2019-01-01')) &
+    (L.index <= pd.to_datetime('2021-09-30'))
+]
+
 # Exclude missing observations.
 missing_sales = Y.loc[Y == 0].index
 Y = Y[~Y.index.isin(missing_sales)]
 K = K[~K.index.isin(missing_sales)]
 L = L[~L.index.isin(missing_sales)]
 
-# Restrict time frame.
-Y = Y.loc[(Y.index >= pd.to_datetime('2019-01-01')) & (Y.index <= pd.to_datetime('2021-08-01'))]
-K = K.loc[(K.index >= pd.to_datetime('2019-01-01')) & (K.index <= pd.to_datetime('2021-08-01'))]
-L = L.loc[(L.index >= pd.to_datetime('2019-01-01')) & (L.index <= pd.to_datetime('2021-08-01'))]
-
 # Estimate alpha and beta.
-# The typical is 0.3 for alpha and
-# 0.7 for beta for most industries.
+# The typical is 0.3 for alpha and 0.7 for beta for most industries.
 ln_y = np.log(Y)
 ln_k = np.log(K)
 ln_l = np.log(L)
@@ -585,7 +609,7 @@ X = pd.concat([ln_k, ln_l], axis=1)
 X = sm.add_constant(X)
 regression = sm.OLS(ln_y, X).fit()
 print(regression.summary())
-alpha = regression.params['total_planttrackedcount']
+alpha = regression.params[CAPITAL]
 beta = regression.params[0]
 
 # Estimate historic competitive wage.
@@ -599,9 +623,144 @@ interest_rates.plot()
 plt.show()
 
 #--------------------------------------------------------------------------
-# Optional: Predict future competitive wages and interest rates
+# Predict the future competitive wages and interest rates
 # either using estimated historic production function parameters
 # or by estimating a new production function for the future observations.
 #--------------------------------------------------------------------------
 
+# Set forecast time index for the wage series.
+wage_month_effects = month_effects.loc[
+    (month_effects.index >= wage.index.min()) &
+    (month_effects.index <= wage.index.max())
+]
+wage_forecast_horizon = pd.date_range(
+    start=wage.index.max(),
+    end=pd.to_datetime(forecast_end),
+    freq='w'
+)
+wage_forecast_month_effects = pd.get_dummies(wage_forecast_horizon.month)
+try:
+    del wage_forecast_month_effects[1]
+except:
+    pass
 
+# Atheoretical forecasting.
+wage_model = pm.auto_arima(
+    set_training_period(wage, train_start, train_end),
+    X=wage_month_effects,
+    start_p=0,
+    d=0,
+    start_q=0,
+    max_p=6,
+    max_d=6,
+    max_q=6,
+    seasonal=True,
+    start_P=0,
+    D=0,
+    start_Q=0,
+    max_P=6,
+    max_D=6,
+    max_Q=6,
+    information_criterion='bic',
+    alpha=0.2,
+    # m=12,
+)
+wage_forecast, wage_conf = forecast_arima(
+    wage_model,
+    wage_forecast_horizon,
+    X=wage_forecast_month_effects
+)
+
+# Plot the wage and wage forecast.
+wage.plot()
+wage_forecast.plot()
+wages_2022 = wage_forecast.loc[wage_forecast.index >= pd.to_datetime('2022-01-01')]
+print('Forecast average wage for 2022:', round(wages_2022.mean(), 2))
+
+fig = plt.figure(figsize=(10, 5))
+ax1 = plt.subplot(1, 1, 1)
+plot_forecast(
+        ax1,
+        wage_forecast,
+        historic=wage,
+        conf=wage_conf,
+        title='Competitive Wage Forecast',
+        color=palette[0],
+)
+plt.show()
+
+# Plot all wages together.
+fig = plt.figure(figsize=(10, 5))
+avg_earnings.plot()
+min_wage.plot()
+wage.plot()
+wage_forecast.plot()
+plt.fill_between(
+    wage_forecast.index,
+    wage_conf[:, 0],
+    wage_conf[:, 1],
+    alpha=0.1,
+    color='green',
+)
+plt.ylim(0)
+plt.show()
+
+# TODO: Atheoretical forecast of the rate of return of plants.
+
+
+#--------------------------------------------------------------------------
+# Look at labor share of income.
+#--------------------------------------------------------------------------
+
+# Historic labor share of income. Notice, this is beta!
+gross_wages = wage * \
+              avg_weekly_hours.loc[
+                  (avg_weekly_hours.index >= wage.index.min()) &
+                  (avg_weekly_hours.index <= wage.index.max())
+              ] * \
+              weekly_employees.loc[
+                  (weekly_employees.index >= wage.index.min()) &
+                  (weekly_employees.index <= wage.index.max())
+              ]
+labor_share_of_income = gross_wages / weekly_sales.loc[
+                  (weekly_sales.index >= wage.index.min()) &
+                  (weekly_sales.index <= wage.index.max())
+              ]
+labor_share_of_income.plot()
+plt.show()
+assert round(labor_share_of_income.mean(), 4) == round(beta, 4)
+
+#--------------------------------------------------------------------------
+# Theoretical forecasting.
+#--------------------------------------------------------------------------
+
+# Estimate future competitive wage with regression params and
+# predicted sales and labor.
+L_forecast = employees_forecast * avg_weekly_hours.iloc[-1]
+theory_wage_forecast = beta * sales_forecast / (L_forecast)
+theory_wage_forecast.plot()
+plt.show()
+
+# Plot theoretical with atheoretical wage forecast.
+fig = plt.figure(figsize=(10, 5))
+avg_earnings.plot()
+min_wage.plot()
+wage.plot()
+wage_forecast.plot()
+plt.fill_between(
+    wage_forecast.index,
+    wage_conf[:, 0],
+    wage_conf[:, 1],
+    alpha=0.1,
+    color='green',
+)
+theory_wage_forecast.plot()
+plt.ylim(0)
+plt.show()
+
+# Estimate future competitive interest rate with regression params and
+# predicted sales and plants.
+interest_rates.plot()
+interest_rates_forecast = alpha * sales_forecast / plants_forecast
+interest_rates_forecast.plot()
+plt.show()

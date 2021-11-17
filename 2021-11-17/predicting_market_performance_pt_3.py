@@ -54,6 +54,7 @@ from utils import (
 CAPITAL = 'total_plantfloweringcount'
 # CAPITAL = 'total_planttrackedcount'
 
+
 #--------------------------------------------------------------------------
 # Get all MA public cannabis data.
 #--------------------------------------------------------------------------
@@ -539,7 +540,6 @@ plt.show()
 # plt.legend(loc='lower left', fontsize=18)
 
 # Optional: Find a clever way to display 2022 forecast totals (curly braces?)
-
 
 #--------------------------------------------------------------------------
 # Optional: Estimate a production function with the forecasted values

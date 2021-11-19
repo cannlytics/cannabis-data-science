@@ -29,6 +29,9 @@ Data Sources:
     - MA Avg. Weekly Wage: https://fred.stlouisfed.org/series/LES1252881600Q
     - MA Minimum Wage: https://fred.stlouisfed.org/series/STTMINWGMA
     - MA Population: https://fred.stlouisfed.org/series/MAPOP
+    - Average Hourly Earnings of All Employees: Total Private in Massachusetts
+      https://fred.stlouisfed.org/series/SMU25000000500000003SA
+    - MA Minimum Wage Rate: https://fred.stlouisfed.org/series/STTMINWGMA
 """
 from dotenv import dotenv_values
 import matplotlib.pyplot as plt

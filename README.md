@@ -15,12 +15,12 @@ At Cannabis Data Science meetups, you can learn how to get, wrangle, and analyze
 
 ## 👪 Events <a name="events"></a>
 
+The current roster of events is below. You can send event suggestions to <keegan@cannlytics.com>.
+
 | Event | Day | Time |
 |-------|-----|------|
 | [**Cannabis Data Science**](https://www.meetup.com/cannabis-data-science) | Wednesdays | 8:30am PST / 10:30am CDT / 11:30am EST / [your time](http://www.timebie.com/std/pst.php?q=8.5) |
 | [**Saturday Morning Statistics**](https://www.meetup.com/cannabis-data-science) | Saturdays | 8:30am PST / 10:30am CDT / 11:30am EST / [your time](http://www.timebie.com/std/pst.php?q=8.5)|
-
-You can send event suggestions to <keegan@cannlytics.com>.
 
 ## 📡 Data Sources <a name="data-sources"></a>
 
@@ -39,6 +39,8 @@ You are always welcome to reach out with any questions, ideas, thoughts, comment
 ## ❤️ Support <a name="support"></a>
 
 The Cannabis Data Science meetup group and the accompanying source code is made available with ❤️ and <a href="https://opencollective.com/cannlytics-company">your good will</a>. Please consider making a contribution to keep the good work flowing 🚢
+
+🥞 Bitcoin donation address: 34CoUcAFprRnLnDTHt6FKMjZyvKvQHb6c6
 
 ## 🏛️ License <a name="license"></a>
 

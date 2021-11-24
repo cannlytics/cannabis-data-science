@@ -7,24 +7,58 @@ Created: 11/17/2021
 Updated: 11/24/2021
 License: MIT License <https://opensource.org/licenses/MIT>
 
-Objective:
-    
-    Analyze the structure and performance of the cannabis markets in
-    various states by estimating the relationship between dispensaries
-    per capita and revenue per dispensary.
-
 Data Sources:
+    
+    Alaska
+    
+    Arizona
+    
+    California
+    
+    Colorado
+    
+    Illinois Department of Financial and Professional Regulation
+    
+        - Illinois adult use cannabis monthly sales figures
+        https://www.idfpr.com/Forms/AUC/2021%2011%2002%20IDFPR%20monthly%20adult%20use%20cannabis%20sales.pdf
         
+        - Licensed Adult Use Cannabis Dispensaries
+        https://www.idfpr.com/LicenseLookup/AdultUseDispensaries.pdf
+        
+    Maine
+
+    Massachusetts Cannabis Control Commission
+    
+        - Approved Massachusetts Licensees
+        https://dev.socrata.com/foundry/opendata.mass-cannabis-control.com/hmwt-yiqy
+        
+        - Plant Activity and Volume
+        https://dev.socrata.com/foundry/opendata.mass-cannabis-control.com/j3q7-3usu
+
+    Michigan
+    
+    Montana
+    
     Nevada
+    
+        https://ccb.nv.gov/ccb-dot-release-annual-cannabis-taxable-sales-data-fy21/
+        https://ccb.nv.gov/media/#item-3
+        
     
         - Nevada Cannabis Dispensary Market Overview Technical Memorandum
         https://www.leg.state.nv.us/App/NELIS/REL/81st2021/ExhibitDocument/OpenExhibitDocument?exhibitId=50417&fileDownloadName=SB%20235%20RCG%20Economic%20impact%20report%202021-3-30%20NV%20Cannabis%20Dispensary%20Mkt%20Analysis-Final%20%281%29.pdf
+    
+    Oregon
+    
+    Oklahoma
+    
+    Vermont
+    
+    Washington
 
     Fed Fred
     
-        - State populations
-        https://fred.stlouisfed.org/
-
+        - State populations   
 """
 # External imports.
 from dotenv import dotenv_values
@@ -146,11 +180,8 @@ plt.savefig(
 )
 plt.show()
 
-
-
-
 #--------------------------------------------------------------------------
-# FUTURE WORK: Get public cannabis data for several states.
+# Get public cannabis data for several states.
 #--------------------------------------------------------------------------
 
 # TODO: Get California data.
@@ -169,14 +200,14 @@ plt.show()
 
 
 #--------------------------------------------------------------------------
-# FUTURE WORK: Calculate market performance statistics.
+# Calculate market performance statistics.
 #--------------------------------------------------------------------------
 
 # Read FRED API key.
 config = dotenv_values('../.env')
 fred_api_key = config.get('FRED_API_KEY')
 
-# TODO: Get the population for each state.
+# Get the population for each state.
 state_populations = {}
 states = ['MA']
 for state in states:
@@ -190,7 +221,7 @@ for state in states:
 
 
 #--------------------------------------------------------------------------
-# FUTURE WORK: Compare sales per retailer across the various states.
+# Compare sales per retailer across the various states.
 #--------------------------------------------------------------------------
 
 # TODO: Plot sales per retailer together.
@@ -200,3 +231,5 @@ for state in states:
 
 
 # TODO: See if there is a statistical difference in the growth of sales in any state.
+
+

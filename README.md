@@ -38,7 +38,7 @@ You are always welcome to reach out with any questions, ideas, thoughts, comment
 
 ## ❤️ Support <a name="support"></a>
 
-The Cannabis Data Science meetup group and the accompanying source code is made available with ❤️ and <a href="https://opencollective.com/cannlytics-company">your good will</a>. Please consider making a contribution to keep the good work flowing 🚢
+The Cannabis Data Science meetup group and the accompanying source code is made available with ❤️ and <a href="https://opencollective.com/cannlytics-company">your good will</a>. Please consider making a contribution to keep the good work coming 🚢
 
 🥞 Bitcoin donation address: 34CoUcAFprRnLnDTHt6FKMjZyvKvQHb6c6
 

@@ -110,6 +110,8 @@ abline_plot(
 )
 plt.show()
 
+# TODO: Look at the normality of the regression errors.
+
 #--------------------------------------------------------------------------
 # Create a beautiful visualization.
 #--------------------------------------------------------------------------
@@ -233,3 +235,6 @@ for state in states:
 # TODO: See if there is a statistical difference in the growth of sales in any state.
 
 
+#--------------------------------------------------------------------------
+# TODO: Compare sales per retailer in the states to Canada.
+#--------------------------------------------------------------------------

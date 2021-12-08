@@ -1,0 +1,5 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@sectionintoc {2}{Economic Theory}{4}{0}{2}
+\beamer@sectionintoc {3}{Panel Data}{8}{0}{3}
+\beamer@sectionintoc {4}{Conclusion}{9}{0}{4}

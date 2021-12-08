@@ -381,35 +381,35 @@ avg_sales_per_item.plot(title='Average Price per Item')
 plt.show()
 
 #--------------------------------------------------------------------------
-# Attempt to identify the demand curve.
+# Future work: Attempt to identify the demand curve.
 #--------------------------------------------------------------------------
 
-# Run a regression of "price" on "quantity".
-Y = avg_sales_per_item
-x = sales_data.items_sold
-X = sm.add_constant(x)
-regression = sm.OLS(Y, X).fit()
-print(regression.summary())
+# # Run a regression of "price" on "quantity".
+# Y = avg_sales_per_item
+# x = sales_data.items_sold
+# X = sm.add_constant(x)
+# regression = sm.OLS(Y, X).fit()
+# print(regression.summary())
 
-# Interpret the relationship.
-b_0 = beta = regression.params.values[0]
-beta = regression.params.values[1]
-change_q = .01
-change_p = (b_0 + beta * x * (1 + change_q)) - (b_0 + beta * x)
-elasticity_of_demand = change_q / (change_p / Y)
+# # Interpret the relationship.
+# b_0 = beta = regression.params.values[0]
+# beta = regression.params.values[1]
+# change_q = .01
+# change_p = (b_0 + beta * x * (1 + change_q)) - (b_0 + beta * x)
+# elasticity_of_demand = change_q / (change_p / Y)
 
-# Visualize the regression.
-stats['Price'] = Y
-stats['Quantity'] = x
-ax = stats.plot(
-    x='Quantity',
-    y='Price',
-    kind='scatter'
-)
-abline_plot(
-    model_results=regression,
-    ax=ax
-)
-plt.show()
+# # Visualize the regression.
+# stats['Price'] = Y
+# stats['Quantity'] = x
+# ax = stats.plot(
+#     x='Quantity',
+#     y='Price',
+#     kind='scatter'
+# )
+# abline_plot(
+#     model_results=regression,
+#     ax=ax
+# )
+# plt.show()
 
-instrument = sales_data['total_retailers'].diff()
+# instrument = sales_data['total_retailers'].diff()

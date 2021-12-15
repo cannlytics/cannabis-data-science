@@ -271,32 +271,32 @@ print('Sales per retailer in IL in 2021: %.2fM' % (avg_2021_sales / 1_000_000))
 # sales per dispensary.
 #--------------------------------------------------------------------------
 
-# # Run a regression of sales per retailer on retailers per 100,000 people.
-# Y = sales_per_retailer
-# X = retailers_per_capita
-# X = sm.add_constant(X)
-# regression = sm.OLS(Y, X).fit()
-# print(regression.summary())
+# Run a regression of sales per retailer on retailers per 100,000 people.
+Y = sales_per_retailer
+X = retailers_per_capita
+X = sm.add_constant(X)
+regression = sm.OLS(Y, X).fit()
+print(regression.summary())
 
-# # Interpret the relationship.
-# beta = regression.params.values[1]
-# statement = """If retailers per 100,000 people increases by 1,
-# then everything else held constant one would expect
-# revenue per retailer to change by {}.
-# """.format(format_thousands(beta))
-# print(statement)
+# Interpret the relationship.
+beta = regression.params.values[1]
+statement = """If retailers per 100,000 people increases by 1,
+then everything else held constant one would expect
+revenue per retailer to change by {}.
+""".format(format_thousands(beta))
+print(statement)
 
-# # Visualize the regression.
-# ax = stats.plot(
-#     x='retailers_per_capita',
-#     y='sales_per_retailer',
-#     kind='scatter'
-# )
-# abline_plot(
-#     model_results=regression,
-#     ax=ax
-# )
-# plt.show()
+# Visualize the regression.
+ax = stats.plot(
+    x='retailers_per_capita',
+    y='sales_per_retailer',
+    kind='scatter'
+)
+abline_plot(
+    model_results=regression,
+    ax=ax
+)
+plt.show()
 
 #--------------------------------------------------------------------------
 # Create a beautiful visualization.

@@ -96,13 +96,8 @@
 {\large \textbf{Research Question}: What is the relationship between dispensaries per capita and revenue per dispensary?}\vspace{0.5\baselineskip}\\
 
 \begin{figure}
-    \begin{subfigure}[t]{.8\textwidth}
+    \begin{subfigure}[t]{\textwidth}
       \includegraphics[width=\textwidth]{images/revenue_per_retailer_to_retailers_per_100_000.png}
-    \end{subfigure}
-    
-    \begin{subfigure}[t]{.5\textwidth}
-      \includegraphics[width=\textwidth]{images/dispensary_statistics.png}
-      \caption*{\tiny Source: Nevada Cannabis Dispensary Market Overview Technical Memorandum}
     \end{subfigure}
 \end{figure}
 
@@ -115,7 +110,7 @@
 
 \begin{frame}{}
 
-The 10 Commandments of Forecasting
+{\large \textbf{The 10 Commandments of Forecasting}}
 \vspace{1\baselineskip}
 
 {\scriptsize Silvia, J, Iqbal, A, et. al (2014), ‘Economic and Business Forecasting’.}
@@ -134,6 +129,21 @@ The 10 Commandments of Forecasting
 \item Use recursive methods.
 \item Understand that forecasting models evolve over time.
 \end{enumerate}
+\end{frame}
+
+%------------------------------------------%
+% RMSE
+%------------------------------------------%
+
+\begin{frame}{}
+
+{\large \textbf{Measuring Forecast Error}}\vspace{0.5\baselineskip}\\
+
+The out-of-sample root mean square error (RMSE) can quantify forecast error.
+
+$$
+RMSE = \sqrt{\frac{1}{T}\Sigma(Y_{t+1} - \hat{Y}_{t+1})^2}
+$$
 \end{frame}
 
 %------------------------------------------%

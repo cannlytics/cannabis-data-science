@@ -152,6 +152,13 @@ yaxis_format = FuncFormatter(format_millions)
 ax.yaxis.set_major_formatter(yaxis_format)
 plt.title('Monthly Forecasted Cannabis Sales by State')
 plt.legend()
+plt.savefig(
+    'figures/state_cannabis_sales_forecast.png',
+    dpi=300,
+    bbox_inches='tight',
+    pad_inches=0.75,
+    transparent=False,
+)
 plt.show()
 
 

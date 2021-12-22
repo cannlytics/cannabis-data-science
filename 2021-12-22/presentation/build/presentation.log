@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  18 DEC 2021 10:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  22 DEC 2021 11:21
 entering extended mode
 **./presentation.tex
 (presentation.tex
@@ -963,8 +963,8 @@ File: pgfmodulematrix.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 z/libraries\tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 )))
-(C:\Users\keega\OneDrive\Cannlytics\python\saturday-morning-statistics\2021-12-
-18\presentation\build\presentation.aux)
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2021-12-22\presentat
+ion\build\presentation.aux)
 \openout1 = `presentation.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 78.
@@ -1059,10 +1059,10 @@ LaTeX Info: Redefining \ref on input line 78.
 LaTeX Info: Redefining \pageref on input line 78.
 LaTeX Info: Redefining \nameref on input line 78.
 
-(C:\Users\keega\OneDrive\Cannlytics\python\saturday-morning-statistics\2021-12-
-18\presentation\build\presentation.out)
-(C:\Users\keega\OneDrive\Cannlytics\python\saturday-morning-statistics\2021-12-
-18\presentation\build\presentation.out)
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2021-12-22\presentat
+ion\build\presentation.out)
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2021-12-22\presentat
+ion\build\presentation.out)
 \@outlinefile=\write5
 \openout5 = `presentation.out'.
 
@@ -1149,8 +1149,8 @@ File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
-(C:\Users\keega\OneDrive\Cannlytics\python\saturday-morning-statistics\2021-12-
-18\presentation\build\presentation.nav)
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2021-12-22\presentat
+ion\build\presentation.nav)
 LaTeX Font Info:    Trying to load font information for U+msa on input line 78.
 
 
@@ -1188,51 +1188,48 @@ File: images/revenue_per_retailer_to_retailers_per_100_000.png Graphic file (ty
 pe png)
 <use images/revenue_per_retailer_to_retailers_per_100_000.png>
 Package pdftex.def Info: images/revenue_per_retailer_to_retailers_per_100_000.p
-ng  used on input line 110.
-(pdftex.def)             Requested size: 233.54118pt x 112.8371pt.
-<images/dispensary_statistics.png, id=37, 550.055pt x 322.20375pt>
-File: images/dispensary_statistics.png Graphic file (type png)
-<use images/dispensary_statistics.png>
-Package pdftex.def Info: images/dispensary_statistics.png  used on input line 1
-10.
-(pdftex.def)             Requested size: 145.96268pt x 85.49666pt.
+ng  used on input line 105.
+(pdftex.def)             Requested size: 291.92537pt x 141.04843pt.
+ [2
 
-Overfull \vbox (6.98708pt too high) detected at line 110
- []
+ <./images/revenue_per_retailer_to_retailers_per_100_000.png>]
+(C:\Users\keega\AppData\Local\Programs\MiKTeX\tex/latex/ucs\uni-32.def
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+)
+[3
 
-[2
+] [4
 
- <./images/revenue_per_retailer_to_retailers_per_100_000.png> <./images/dispens
-ary_statistics.png>]
-<images/panel.png, id=46, 200.75pt x 25.59563pt>
+]
+<images/panel.png, id=62, 200.75pt x 25.59563pt>
 File: images/panel.png Graphic file (type png)
 <use images/panel.png>
-Package pdftex.def Info: images/panel.png  used on input line 149.
+Package pdftex.def Info: images/panel.png  used on input line 186.
 (pdftex.def)             Requested size: 145.96268pt x 18.6116pt.
-<images/regression.png, id=47, 114.92938pt x 21.58063pt>
+<images/regression.png, id=63, 114.92938pt x 21.58063pt>
 File: images/regression.png Graphic file (type png)
 <use images/regression.png>
-Package pdftex.def Info: images/regression.png  used on input line 149.
+Package pdftex.def Info: images/regression.png  used on input line 186.
 (pdftex.def)             Requested size: 87.57849pt x 16.44588pt.
-<images/errors.png, id=48, 80.3pt x 17.06375pt>
+<images/errors.png, id=64, 80.3pt x 17.06375pt>
 File: images/errors.png Graphic file (type png)
 <use images/errors.png>
-Package pdftex.def Info: images/errors.png  used on input line 149.
+Package pdftex.def Info: images/errors.png  used on input line 186.
 (pdftex.def)             Requested size: 72.98134pt x 15.509pt.
- [3
+ [5
 
  <./images/panel.png> <./images/regression.png> <./images/errors.png>]
-<images/prayer.png, id=60, 54.2025pt x 54.2025pt>
+<images/prayer.png, id=75, 54.2025pt x 54.2025pt>
 File: images/prayer.png Graphic file (type png)
 <use images/prayer.png>
-Package pdftex.def Info: images/prayer.png  used on input line 195.
+Package pdftex.def Info: images/prayer.png  used on input line 204.
 (pdftex.def)             Requested size: 18.06749pt x 18.06717pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 195--195
+Underfull \hbox (badness 10000) in paragraph at lines 204--204
 
  []
 
-[4
+[6
 
  <./images/prayer.png>]
 \tf@nav=\write6
@@ -1244,37 +1241,39 @@ Underfull \hbox (badness 10000) in paragraph at lines 195--195
 \tf@snm=\write8
 \openout8 = `presentation.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 200.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 200.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 209.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 209.
 
-(C:\Users\keega\OneDrive\Cannlytics\python\saturday-morning-statistics\2021-12-
-18\presentation\build\presentation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 200.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 200.
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2021-12-22\presentat
+ion\build\presentation.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 209.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 209.
 Package rerunfilecheck Info: File `presentation.out' has not changed.
 (rerunfilecheck)             Checksum: 9E40C25063DDC4FAF62F99D0C822BAA1;92.
  ) 
 Here is how much of TeX's memory you used:
- 24234 strings out of 480790
- 486387 string characters out of 2897301
- 758178 words of memory out of 3000000
- 39642 multiletter control sequences out of 15000+200000
- 542522 words of font info for 60 fonts, out of 3000000 for 9000
+ 24560 strings out of 480790
+ 491067 string characters out of 2897301
+ 764136 words of memory out of 3000000
+ 39963 multiletter control sequences out of 15000+200000
+ 541911 words of font info for 58 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 81i,19n,68p,816b,580s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 81i,19n,68p,816b,638s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmmi10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmss10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmss12.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/keega/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/keega/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/keega/AppDa
-ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb>
-Output written on C:\Users\keega\OneDrive\Cannlytics\python\saturday-morning-st
-atistics\2021-12-18\presentation\build\presentation.pdf (4 pages, 707794 bytes)
-.
+cmex10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmmi10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmss10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/keega/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/keega/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/keega/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/ke
+ega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:
+/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy1
+0.pfb>
+Output written on C:\Users\keega\Documents\cannlytics\cannabis-data-science\202
+1-12-22\presentation\build\presentation.pdf (6 pages, 459208 bytes).
 PDF statistics:
- 95 PDF objects out of 1000 (max. 8388607)
- 11 named destinations out of 1000 (max. 500000)
- 94 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 116 PDF objects out of 1000 (max. 8388607)
+ 15 named destinations out of 1000 (max. 500000)
+ 95 words of extra memory for PDF output out of 10000 (max. 10000000)
 

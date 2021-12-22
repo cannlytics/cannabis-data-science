@@ -74,13 +74,13 @@ for state in states:
 
     # Define the series.
     series = panel_data.loc[panel_data.state == state]
-    
+
     # Create month fixed effects.
     excluded_month = 1
     month_effects = pd.get_dummies(series.index.month)
     month_effects.index = series.index
     del month_effects[excluded_month]
-    
+
     # Define forecast horizon.
     forecast_start = series.index.max() + relativedelta.relativedelta(months=1)
     forecast_horizon = pd.date_range(
@@ -88,7 +88,7 @@ for state in states:
         end=pd.to_datetime('2023-01-01'),
         freq='M',
     )
-    
+
     # Define forecasted fixed effects.
     forecast_month_effects = pd.get_dummies(forecast_horizon.month)
     try:
@@ -116,7 +116,7 @@ for state in states:
         information_criterion='bic',
         alpha=0.2,
     )
-    
+
     # Forecast sales.
     sales_forecast, sales_conf = forecast_arima(
         sales_model,
@@ -171,6 +171,7 @@ print('Predicted total cannabis sales by state:')
 total_cannabis_sales = 0
 for state in states:
     
+    # Estimate 2022 total sales.
     state_forecast = forecasts['{}_forecast'.format(state.lower())]
     next_year_forecast = state_forecast.loc[
         (state_forecast.index >= pd.to_datetime('2022-01-01')) &
@@ -179,6 +180,21 @@ for state in states:
     next_year_sales = next_year_forecast.sum()
     print(state, '≈', format_millions(next_year_sales))
     total_cannabis_sales += next_year_sales
+
+    # Estimate number of schools that could be built with a given tax rate.
+    tax = 0.07
+    elementary_school = 7_393_000 # https://www.rsmeans.com/model-pages/elementary-school
+    high_school = 20_592_000 # https://www.rsmeans.com/model-pages/high-school
+    number_of_new_elementary_schools = (next_year_sales * tax) / elementary_school
+    number_of_new_high_schools = (next_year_sales * tax) / high_school
+    print(state, 'could build', round(number_of_new_elementary_schools), 'new elementary schools.')
+    print(state, 'could build', round(number_of_new_high_schools), 'new high schools.')
+
+    # Calculate sales per capita.
+    series = panel_data.loc[panel_data.state == state]
+    latest_pop = series.population.iloc[-1]
+    cannabis_gdp_per_capita = round(next_year_sales/ latest_pop, 2)
+    print(state, 'GDP per Capita from cannabis:', cannabis_gdp_per_capita)
 
 total_sales = format_millions(total_cannabis_sales)
 print('A forecast of cannabis sales in 2022 in the U.S. is at least', total_sales)

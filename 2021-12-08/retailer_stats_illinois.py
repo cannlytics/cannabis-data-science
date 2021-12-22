@@ -413,3 +413,24 @@ plt.show()
 # plt.show()
 
 # instrument = sales_data['total_retailers'].diff()
+
+#--------------------------------------------------------------------------
+# Save the data.
+#--------------------------------------------------------------------------
+stats = pd.concat([
+    sales_data['total_sales'],
+    sales_data['total_retailers'],
+    retailers_per_capita,
+    sales_per_retailer,
+    monthly_population,
+    avg_sales_per_item,
+], axis=1)
+stats.columns = [
+    'total_sales',
+    'total_retailers',
+    'retailers_per_capita',
+    'sales_per_retailer',
+    'population',
+    'price',
+]
+stats.to_excel('./data/il_retail_stats.xlsx')

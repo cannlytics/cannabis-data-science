@@ -216,3 +216,35 @@ plt.scatter(
     y=price_per_eighth.loc[(price_per_eighth.index >= pd.to_datetime('2020-01-01')) &
                   (price_per_eighth.index <= pd.to_datetime('2021-11-01'))],
 )
+
+#--------------------------------------------------------------------------
+# Save the data.
+#--------------------------------------------------------------------------
+
+monthly_sales = production.sales.resample('M').sum()
+monthly_total_retailers = production['total_retailers'].resample('M').mean()
+monthly_population = population[0].resample('M').mean().pad()
+
+monthly_retailers_per_capita = monthly_total_retailers / (monthly_population / 100_000)
+
+monthly_sales_per_retailer = monthly_sales / monthly_total_retailers
+
+price = end_of_period_timeseries(price_per_eighth)
+
+stats = pd.concat([
+    monthly_sales,
+    monthly_total_retailers,
+    monthly_retailers_per_capita,
+    monthly_sales_per_retailer,
+    monthly_population,
+    price,
+], axis=1)
+stats.columns = [
+    'total_sales',
+    'total_retailers',
+    'retailers_per_capita',
+    'sales_per_retailer',
+    'population',
+    'price',
+]
+stats.to_excel('./data/ma_retail_stats.xlsx')

@@ -160,3 +160,30 @@ for key, shares in market_shares.items():
 cr5_data = pd.Series(cr5s) * 100
 cr5_data.plot()
 plt.show()
+
+#--------------------------------------------------------------------------
+# TODO: Create a beautiful visualization.
+#--------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------
+# Save the data.
+#--------------------------------------------------------------------------
+total_sales = monthly_production['Total Sales']
+total_sales.index = pd.to_datetime(total_sales.index)
+total_sales = end_of_period_timeseries(total_sales)
+stats = pd.concat([
+    total_sales,
+    monthly_count['License Number'],
+    retailers_per_capita,
+    sales_per_retailer,
+    monthly_population,
+], axis=1)
+stats.columns = [
+    'total_sales',
+    'total_retailers',
+    'retailers_per_capita',
+    'sales_per_retailer',
+    'population',
+]
+stats.to_excel('./data/wa_retail_stats.xlsx')

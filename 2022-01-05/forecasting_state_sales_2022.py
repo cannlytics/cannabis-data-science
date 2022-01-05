@@ -230,6 +230,9 @@ state_forecasts = pd.DataFrame(forecasts)
 # Visualize the 2022 forecasts.
 #------------------------------------------------------------------------------
 
+# Add a time index.
+state_forecasts.index = pd.to_datetime(state_forecasts.date)
+
 # Plot forecasts.
 fig, ax = plt.subplots(figsize=(16, 8))
 colors = sns.color_palette('Set2', n_colors=len(state_data))

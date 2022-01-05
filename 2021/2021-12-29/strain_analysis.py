@@ -107,19 +107,19 @@ plt.rcParams.update({
 })
 
 # Compare the distribution of THCA from 2020 to 2021.
-bins = 40
+bins = 100
 cannabinoid = 'cannabinoid_d9_thca_percent'
-plt.hist(data_2020[cannabinoid], bins, alpha=0.5, label='2020')
-plt.hist(data_2021[cannabinoid], bins, alpha=0.5, label='2021')
+plt.hist(data_2020[cannabinoid], bins, alpha=0.5, label='2020', density=True)
+plt.hist(data_2021[cannabinoid], bins, alpha=0.5, label='2021', density=True)
 plt.legend(loc='upper right')
 plt.title('Distribution of THCA in WA Cannabis')
 plt.show()
 
 # Compare the distribution of THCA in flower from 2020 to 2021.
-bins = 40
+bins = 100
 cannabinoid = 'cannabinoid_d9_thca_percent'
-plt.hist(flower_data_2020[cannabinoid], bins, alpha=0.5, label='2020')
-plt.hist(flower_data_2021[cannabinoid], bins, alpha=0.5, label='2021')
+plt.hist(flower_data_2020[cannabinoid], bins, alpha=0.5, label='2020', density=True)
+plt.hist(flower_data_2021[cannabinoid], bins, alpha=0.5, label='2021', density=True)
 plt.legend(loc='upper right')
 plt.title('Distribution of THCA in WA Flower')
 plt.show()
@@ -134,10 +134,10 @@ plt.title('Distribution of THCA in WA Concentrates')
 plt.show()
 
 # Plot the distribution of total cannabinoids in flower.
-bins = 40
+bins = 100
 cannabinoid = 'total_cannabinoids'
-plt.hist(flower_data_2020[cannabinoid].loc[flower_data_2020[cannabinoid] <= 100], bins, alpha=0.5, label='2020')
-plt.hist(flower_data_2021[cannabinoid].loc[flower_data_2021[cannabinoid] <= 100], bins, alpha=0.5, label='2021')
+plt.hist(flower_data_2020[cannabinoid].loc[flower_data_2020[cannabinoid] <= 100], bins, alpha=0.5, label='2020', density=True)
+plt.hist(flower_data_2021[cannabinoid].loc[flower_data_2021[cannabinoid] <= 100], bins, alpha=0.5, label='2021', density=True)
 plt.legend(loc='upper right')
 plt.title('Distribution of Total Cannabinoids in WA Flower')
 plt.show()
@@ -417,7 +417,6 @@ flower_data_2021['total_cannabinoids_mc'] = \
     flower_data_2021['total_cannabinoids'] \
     / (1 - flower_data_2021['moisture_content_percent'] * .01)
 
-
 # Plot the distribution of total cannabinoids in CT and WA.
 bins = 40
 cannabinoid = 'total_cannabinoids'
@@ -440,4 +439,3 @@ plt.hist(
 plt.legend(loc='upper right')
 plt.title('Distribution of Total Cannabinoids')
 plt.show()
-                                            

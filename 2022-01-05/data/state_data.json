@@ -1,0 +1,462 @@
+[
+    {
+        "state": "AL",
+        "state_name": "Alabama",
+        "medicinal": true,
+        "medicinal_permitted": "2023-01-01",
+        "medicinal_permitted_source": "https://www.montgomeryadvertiser.com/story/news/2021/10/15/medical-marijuana-unlikely-available-alabama-before-2023/8458708002/",
+        "adult_use": false
+    },
+    {
+        "state": "AK",
+        "state_name": "Alaska",
+        "medicinal": true,
+        "medicinal_permitted": "1998-01-01",
+        "medicinal_permitted_source": "https://dhss.alaska.gov/dph/Director/Documents/marijuana/MarijuanaUse_PublicHealth_Alaska_2020.pdf",
+        "adult_use": true,
+        "adult_use_permitted": "2015-02-24",
+        "adult_use_permitted_source": "https://dhss.alaska.gov/dph/Director/Documents/marijuana/MarijuanaUse_PublicHealth_Alaska_2020.pdf",
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "AZ",
+        "state_name": "Arizona",
+        "medicinal": true,
+        "medicinal_permitted": "2010-11-02",
+        "medicinal_permitted_source": "https://www.mpp.org/states/arizona/#:~:text=Medical%20marijuana%20in%20Arizona,regulations%20on%20March%2028%2C%202011.",
+        "adult_use": true,
+        "adult_use_permitted": "2020-11-01",
+        "adult_use_permitted_source": "https://azdor.gov/transaction-privilege-tax/adult-use-marijuana#:~:text=Proposition%20207%2C%20the%20Safe%20and,Title%2036%2C%20Chapter%2028.2."
+    },
+    {
+        "state": "AR",
+        "state_name": "Arkansas",
+        "medicinal": true,
+        "medicinal_permitted": "2016-11-08",
+        "medicinal_permitted_source": "https://www.mpp.org/states/arkansas/overview-arkansass-medical-marijuana-amendment/",
+        "adult_use": false
+    },
+    {
+        "state": "CA",
+        "state_name": "California",
+        "medicinal": true,
+        "medicinal_permitted": "1996-01-01",
+        "medicinal_permitted_source": "https://cannabis.ca.gov/resources/laws-and-regulations/",
+        "adult_use": true,
+        "adult_use_permitted": "2016-11-08",
+        "adult_use_permitted_source": "https://post.ca.gov/proposition-64-the-control-regulate-and-tax-adult-use-of-marijuana-act",
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "CO",
+        "state_name": "Colorado",
+        "medicinal": true,
+        "medicinal_permitted": "2000-11-01",
+        "medicinal_permitted_source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4404298/#:~:text=In%20November%202000%2C%20the%20Colorado,prosecution%20of%20the%20possession%20and",
+        "adult_use": true,
+        "adult_use_permitted": "2014-01-01",
+        "adult_use_permitted_source": "https://www.bostonglobe.com/metro/2016/02/21/from-colorado-glimpse-life-after-marijuana-legalization/rcccuzhMDWV74UC4IxXIYJ/story.html",
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "CT",
+        "state_name": "Connecticut",
+        "medicinal": true,
+        "medicinal_permitted": "2012-06-01",
+        "medicinal_permitted_source": "https://www.mpp.org/states/connecticut/summary-connecticuts-medical-marijuana-law/#:~:text=On%20June%201%2C%202012%2C%20Gov,formal%20rules%20in%20September%202013.",
+        "adult_use": true,
+        "adult_use_permitted": "2021-06-22",
+        "adult_use_permitted_source": "https://www.jdsupra.com/legalnews/key-aspects-of-connecticut-s-recently-4837091/#:~:text=Connecticut%20became%20the%2019th%20state,state's%20existing%20medical%20cannabis%20program.",
+        "update_daily_data": true,
+        "update_weekly_data": true,
+        "update_monthly_data": true
+    },
+    {
+        "state": "DE",
+        "state_name": "Delaware",
+        "medicinal": true,
+        "medicinal_permitted": "2011-05-13",
+        "medicinal_permitted_source": "http://www.theunion.com/news/delaware-becomes-16th-medical-marijuana-state/",
+        "adult_use": false,
+        "adult_use_permitted": "2022-01-11",
+        "adult_use_permitted_source": "https://www.cannabisbusinesstimes.com/article/states-likely-legalize-cannabis-2022/"
+    },
+    {
+        "state": "DCDIST5",
+        "state_name": "District of Columbia",
+        "medicinal": true,
+        "medicinal_permitted": "2011-01-01",
+        "medicinal_permitted_source": "http://voices.washingtonpost.com/dc/2010/07/medical_marijuana_now_legal.html",
+        "adult_use": false,
+        "adult_use_permitted": "",
+        "adult_use_permitted_source": "https://www.mpp.org/states/district-of-columbia/#:~:text=In%20November%202014%2C%20D.C.%20voters,taxing%20and%20regulating%20marijuana%20sales"
+    },
+    {
+        "state": "FL",
+        "state_name": "Florida",
+        "medicinal": true,
+        "medicinal_permitted": "2014-06-16",
+        "medicinal_permitted_source": "https://www.cannamd.com/every-florida-medical-marijuana-law-you-need-to-know/#:~:text=MORE%20DETAILS%3A%20On%20June%2016,Medical%20Cannabis%20Act%20of%202014.",
+        "adult_use": false
+    },
+    {
+        "state": "GA",
+        "state_name": "Georgia",
+        "medicinal": true,
+        "medicinal_permitted": "2019-07-01",
+        "medicinal_permitted_source": "https://www.gmcc.ga.gov/commission/history-purpose#:~:text=Governor%20Kemp%20signed%20the%20bill,the%20Georgia%20Secretary%20of%20State.",
+        "adult_use": false
+    },
+    {
+        "state": "HI",
+        "state_name": "Hawaii",
+        "medicinal": true,
+        "medicinal_permitted": "2000-06-15",
+        "medicinal_permitted_source": "https://www.nytimes.com/2000/06/15/us/hawaii-becomes-first-state-to-approve-medical-marijuana-bill.html",
+        "adult_use": false
+    },
+    {
+        "state": "ID",
+        "state_name": "Idaho",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "IL",
+        "state_name": "Illinois",
+        "medicinal": true,
+        "medicinal_permitted": "2013-08-01",
+        "medicinal_permitted_source": "https://dph.illinois.gov/topics-services/prevention-wellness/medical-cannabis.html#:~:text=In%20August%202013%2C%20Illinois%20became,one%20of%20the%20qualifying%20conditions.",
+        "adult_use": true,
+        "adult_use_permitted": "2020-01-01",
+        "adult_use_permitted_source": "https://www2.illinois.gov/sites/agr/Plants/Pages/Adult-Use-Cannabis.aspx#:~:text=The%20Cannabis%20Regulation%20and%20Tax%20Act%20(410%20ILCS%20705)%20legalized,legal%20in%20Illinois%20since%202014."
+    },
+    {
+        "state": "IN",
+        "state_name": "Indiana",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "IA",
+        "state_name": "Iowa",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "KS",
+        "state_name": "Kansas",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "KY",
+        "state_name": "Kentucky",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "LA",
+        "state_name": "Louisiana",
+        "medicinal": true,
+        "medicinal_permitted": "2015-01-01",
+        "medicinal_permitted_source": "https://www.wwno.org/2021-12-31/take-a-look-at-the-new-louisiana-laws-that-take-effect-jan-1",
+        "adult_use": false,
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "ME",
+        "state_name": "Maine",
+        "medicinal": true,
+        "medicinal_permitted": "2011-03-01",
+        "medicinal_permitted_source": "https://www.mpp.org/issues/medical-marijuana/state-by-state-medical-marijuana-laws/medical-marijuana-program-implementation-timeline/",
+        "adult_use": true,
+        "adult_use_permitted": "2016-11-08",
+        "adult_use_permitted_source": "https://www.3ccannabis.com/2020/01/2020-maine-recreational-marijuana-establishment-licensing#:~:text=Voters%20in%20Maine%20legalized%20adult,adult%2Duse%20cannabis%20like%20alcohol.",
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "MD",
+        "state_name": "Maryland",
+        "medicinal": true,
+        "medicinal_permitted": "2017-12-01",
+        "medicinal_permitted_source": "https://www.washingtonpost.com/local/md-politics/friday-appears-to-be-the-day-medical-marijuana-will-go-on-sale-in-maryland/2017/12/01/62d66dee-d605-11e7-95bf-df7c19270879_story.html",
+        "adult_use": false,
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "MA",
+        "state_name": "Massachusetts",
+        "medicinal": true,
+        "medicinal_permitted": "2012-11-06",
+        "medicinal_permitted_source": "https://www.mpp.org/states/massachusetts/massachusetts-medical-marijuana-law-an-overview/#:~:text=On%20November%206%2C%202012%2C%20Massachusetts,the%20medical%20use%20of%20marijuana.",
+        "adult_use": true,
+        "adult_use_permitted": "2016-12-15",
+        "adult_use_permitted_source": "https://www.mpp.org/states/massachusetts/massachusetts-adult-use-marijuana-regulation-law/#:~:text=On%20November%208%2C%202016%2C%20Massachusetts,effect%20on%20December%2015%2C%202016.",
+        "traceability_system": "Metrc",
+        "state_sales_tax": 6.25,
+        "state_excise_tax": 10.75,
+        "state_local_tax": 3,
+        "tax_rate_url": "https://opendata.mass-cannabis-control.com/stories/s/xwwk-y3zr",
+        "update_daily_data": true,
+        "update_weekly_data": true,
+        "update_monthly_data": true
+    },
+    {
+        "state": "MI",
+        "state_name": "Michigan",
+        "medicinal": true,
+        "medicinal_permitted": "2008-11-04",
+        "medicinal_permitted_source": "https://ballotpedia.org/Michigan_Medical_Marijuana_Initiative,_Proposal_1_(2008)",
+        "adult_use": true,
+        "adult_use_permitted": "2019-12-01",
+        "adult_use_permitted_source": "https://www.fraserlawfirm.com/blog/2021/05/michigan-municipal-adult-use-marijuana-licensing-processes-give-rise-to-lawsuits/#:~:text=In%20December%2C%202019%2C%20Michigan%20authorized,prohibiting%20them%20within%20their%20jurisdictions.",
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "MN",
+        "state_name": "Minnesota",
+        "medicinal": true,
+        "medicinal_permitted": "2022-03-01",
+        "medicinal_permitted_source": "https://www.mprnews.org/story/2021/05/18/major-change-to-minnesota-medical-cannabis-law-approved#:~:text=The%20new%20medical%20cannabis%20law,from%20the%20state's%20existing%20manufacturers.",
+        "adult_use": false
+    },
+    {
+        "state": "MS",
+        "state_name": "Mississippi",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "MO",
+        "state_name": "Missouri",
+        "medicinal": true,
+        "medicinal_permitted": "2020-10-17",
+        "medicinal_permitted_source": "https://www.stltoday.com/news/local/marijuana/medical-marijuana-sales-begin-in-st-louis-county-patients-line-up-at-two-licensed-dispensaries/article_8c280d10-deb6-53ce-92fc-d835c3d357a6.html",
+        "adult_use": false,
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "MT",
+        "state_name": "Montana",
+        "medicinal": true,
+        "medicinal_permitted": "2004-11-02",
+        "medicinal_permitted_source": "https://ballotpedia.org/Montana_Medical_Marijuana_Allowance,_I-148_%282004%29",
+        "adult_use": true,
+        "adult_use_permitted": "2022-01-01",
+        "adult_use_permitted_source": "https://www.marijuanamoment.net/what-to-expect-when-montana-recreational-marijuana-sales-launch-on-january-1/#:~:text=On%20January%201%2C%202022%2C%20adult,available%20for%20purchase%20in%20Montana.",
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "NE",
+        "state_name": "Nebraska",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "NV",
+        "state_name": "Nevada",
+        "medicinal": true,
+        "medicinal_permitted": "2000-01-01",
+        "medicinal_permitted_source": "https://www.mpp.org/states/nevada/#:~:text=2000%3A%20Voters%20approved%20a%20ballot,state's%20existing%20medical%20marijuana%20program.",
+        "adult_use": true,
+        "adult_use_permitted": "2017-06-01",
+        "adult_use_permitted_source": "https://ccb.nv.gov/nevada-cannabis-program/#:~:text=General%20Information-,On%20November%208%2C%202016%2C%20Nevada%20voters%20passed%20the%20Regulation%20and,for%20adults%2021%20and%20older.",
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "NH",
+        "state_name": "New Hampshire",
+        "medicinal": true,
+        "medicinal_permitted": "2021-06-24",
+        "medicinal_permitted_source": "https://www.dhhs.nh.gov/oos/tcp/",
+        "adult_use": false
+    },
+    {
+        "state": "NJ",
+        "state_name": "New Jersey",
+        "medicinal": true,
+        "medicinal_permitted": "2019-12-21",
+        "medicinal_permitted_source": "https://www.nj.gov/health/news/2019/approved/20191219a.shtml",
+        "adult_use": true,
+        "adult_use_permitted": "2022-03-01",
+        "adult_use_permitted_source": "https://www.nj.gov/cannabis/"
+    },
+    {
+        "state": "NM",
+        "state_name": "New Mexico",
+        "medicinal": true,
+        "medicinal_permitted": "2020-02-20",
+        "medicinal_permitted_source": "https://www.nmhealth.org/about/mcp/svcs/fad/#:~:text=On%20February%2020%2C%202020%2C%20the,be%20included%20with%20their%20application.",
+        "adult_use": true,
+        "adult_use_permitted": "2022-04-01",
+        "adult_use_permitted_source": "https://www.mpp.org/states/new-mexico/new-mexicos-hb-2-the-cannabis-regulation-act/#:~:text=New%20Mexico's%20HB%202%2C%20the%20Cannabis%20Regulation%20Act%2C%20legalizes%20and,Michelle%20Lujan%20Grisham."
+    },
+    {
+        "state": "NY",
+        "state_name": "New York",
+        "medicinal": true,
+        "medicinal_permitted": "2014-01-01",
+        "medicinal_permitted_source": "https://www1.nyc.gov/site/doh/health/health-topics/marijuana.page",
+        "adult_use": true,
+        "adult_use_permitted": "2022-10-01",
+        "adult_use_permitted_source": "https://www1.nyc.gov/site/doh/health/health-topics/marijuana.page"
+    },
+    {
+        "state": "NC",
+        "state_name": "North Carolina",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "ND",
+        "state_name": "North Dakota",
+        "medicinal": true,
+        "medicinal_permitted": "2017-04-19",
+        "medicinal_permitted_source": "https://www.marijuanadoctors.com/nd/#:~:text=When%20did%20medical%20marijuana%20in,program%20on%20April%2019%2C%202017.",
+        "adult_use": false
+    },
+    {
+        "state": "OH",
+        "state_name": "Ohio",
+        "medicinal": true,
+        "medicinal_permitted": "2018-09-08",
+        "medicinal_permitted_source": "https://www.bwc.ohio.gov/downloads/blankpdf/MedMarijuanaImpact.pdf",
+        "adult_use": false,
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "OK",
+        "state_name": "Oklahoma",
+        "medicinal": true,
+        "medicinal_permitted": "2018-01-04",
+        "medicinal_permitted_source": "http://www.newson6.com/story/37194557/medical-marijuana-vote-set-in-oklahoma",
+        "adult_use": false,
+        "adult_use_permitted": "2022-11-01",
+        "adult_use_permitted_source": "https://www.cannabisbusinesstimes.com/article/states-likely-legalize-cannabis-2022/",
+        "sources": [
+            {"name": "Medical Marijuana Excise Tax", "url": "https://oklahomastate.opengov.com/transparency#/33894/accountType=revenues&embed=n&breakdown=types&currentYearAmount=cumulative&currentYearPeriod=months&graph=bar&legendSort=desc&month=5&proration=false&saved_view=105742&selection=A49C34CEBF1D01A1738CB89828C9274D&projections=null&projectionType=null&highlighting=null&highlightingVariance=null&year=2021&selectedDataSetIndex=null&fiscal_start=earliest&fiscal_end=latest"},
+            {"name": "List of Licensed Businesses", "url": "https://oklahoma.gov/omma/businesses/list-of-businesses.html"}
+        ],
+        "background_image": "https://firebasestorage.googleapis.com/v0/b/cannlytics.appspot.com/o/public%2Fimages%2Fbackgrounds%2Fstates%2Foklahoma_city.jpg?alt=media&token=83bb9264-2674-4a09-b682-9f96251164e1",
+        "traceability_system": "Metrc",
+        "update_daily_data": true,
+        "update_weekly_data": true,
+        "update_monthly_data": true
+    },
+    {
+        "state": "OR",
+        "state_name": "Oregon",
+        "medicinal": true,
+        "medicinal_permitted": "1998-11-03",
+        "medicinal_permitted_source": "https://ballotpedia.org/Oregon_Medical_Marijuana,_Measure_67_(1998)#:~:text=The%20Oregon%20Medical%20Marijuana%20Act,a%20state%2Dcontrolled%20permit%20system.",
+        "adult_use": true,
+        "adult_use_permitted": "2015-07-01",
+        "adult_use_permitted_source": "http://www.kptv.com/story/27273055/measure-91-oregon-voters-decide-on-legalization-of-marijuana?autostart=true",
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "PA",
+        "state_name": "Pennsylvania",
+        "medicinal": true,
+        "medicinal_permitted": "2018-02-15",
+        "medicinal_permitted_source": "https://www.pa.gov/guides/pennsylvania-medical-marijuana-program/#:~:text=Governor%20Wolf%20legalized%20medical%20marijuana,patients%20with%20serious%20medical%20conditions.",
+        "adult_use": false
+    },
+    {
+        "state": "RI",
+        "state_name": "Rhode Island",
+        "medicinal": true,
+        "medicinal_permitted": "2018-12-06",
+        "medicinal_permitted_source": "https://www.providencejournal.com/story/news/2019/12/06/rhode-island-changed-medical-marijuana-rules-staters-suddenly-6500-rhode-islanders-moved-california/2137749007/",
+        "adult_use": false
+    },
+    {
+        "state": "SC",
+        "state_name": "South Carolina",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "SD",
+        "state_name": "South Dakota",
+        "medicinal": true,
+        "medicinal_permitted": "2021-07-01",
+        "medicinal_permitted_source": "https://ballotpedia.org/South_Dakota_Initiated_Measure_26,_Medical_Marijuana_Initiative_(2020)#:~:text=Under%20Initiated%20Measure%2026%2C%20medical,regulations%20for%20implementing%20the%20program.",
+        "adult_use": false
+    },
+    {
+        "state": "TN",
+        "state_name": "Tennessee",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "TX",
+        "state_name": "Texas",
+        "medicinal": true,
+        "medicinal_permitted": "2021-09-01",
+        "medicinal_permitted_source": "https://www.houstonpublicmedia.org/articles/news/politics/2021/09/02/407648/new-medical-marijuana-law-goes-into-effect-expanding-access-to-cancer-patients-and-texans-with-ptsd/#:~:text=New%20medical%20marijuana%20rules%20in,ingredient%20that%20gets%20people%20high.",
+        "adult_use": false
+    },
+    {
+        "state": "UT",
+        "state_name": "Utah",
+        "medicinal": true,
+        "medicinal_permitted": "2020-03-02",
+        "medicinal_permitted_source": "https://www.mpp.org/states/utah/",
+        "adult_use": false
+    },
+    {
+        "state": "VT",
+        "state_name": "Vermont",
+        "medicinal": true,
+        "medicinal_permitted": "2017-06-08",
+        "medicinal_permitted_source": "https://www.mpp.org/states/vermont/#:~:text=On%20June%208%2C%202017%2C%20Gov,to%20Vermont's%20medical%20cannabis%20program.",
+        "adult_use": true,
+        "adult_use_permitted": "2018-07-01",
+        "adult_use_permitted_source": "https://www.mpp.org/states/vermont/#:~:text=Phil%20Scott%20signed%20H.,effect%20on%20July%201%2C%202018."
+    },
+    {
+        "state": "VA",
+        "state_name": "Virginia",
+        "medicinal": true,
+        "medicinal_permitted": "2020-07-01",
+        "medicinal_permitted_source": "https://www.mpp.org/states/virginia/#:~:text=Several%20improvements%20went%20into%20effect,merely%20have%20an%20affirmative%20defense.",
+        "adult_use": true,
+        "adult_use_permitted": "2024-06-01",
+        "adult_use_permitted_source": "https://www.mpp.org/states/virginia/hb-2312/sb-1406-virginia-cannabis-regulation-bill-summary/"
+    },
+    {
+        "state": "WA",
+        "state_name": "Washington",
+        "medicinal": true,
+        "medicinal_permitted": "1998-01-01",
+        "medicinal_permitted_source": "https://www.doh.wa.gov/YouandYourFamily/Marijuana/MedicalMarijuana/LawsandRules/HistoryinWashington",
+        "adult_use": true,
+        "adult_use_permitted": "2012-12-06",
+        "adult_use_permitted_source": "https://web.archive.org/web/20201130020423/https://kdvr.com/news/governor-signs-amendment-64-marijuana-officially-legal-in-colorado/",
+        "traceability_system": "CCRS"
+    },
+    {
+        "state": "WV",
+        "state_name": "West Virginia",
+        "medicinal": true,
+        "medicinal_permitted": "2017-04-19",
+        "medicinal_permitted_source": "https://dhhr.wv.gov/bph/Pages/Medical-Cannabis-Program.aspx",
+        "adult_use": false,
+        "traceability_system": "Metrc"
+    },
+    {
+        "state": "WI",
+        "state_name": "Wisconsin",
+        "medicinal": false,
+        "adult_use": false
+    },
+    {
+        "state": "WY",
+        "state_name": "Wyoming",
+        "medicinal": false,
+        "adult_use": false
+    }
+]

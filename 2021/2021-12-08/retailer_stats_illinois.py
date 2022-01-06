@@ -11,7 +11,7 @@ License: MIT License <https://opensource.org/licenses/MIT>
 
 Data Sources:
     
-    - Licensed Adult Use Cannabis Dispensaries
+    - Illinois Licensed Adult Use Cannabis Dispensaries
     <https://www.idfpr.com/LicenseLookup/AdultUseDispensaries.pdf>
 
     - Illinois adult use cannabis monthly sales figures

@@ -425,7 +425,7 @@ for lab_id in lab_ids:
             information_criterion='bic',
             alpha=0.2,
         )
-    
+
         # Forecast.
         forecast, confidence_interval = forecast_arima(
             model,
@@ -524,7 +524,7 @@ for count, lab_id in enumerate(lab_ids):
 plt.ylim(0)
 plt.setp(ax.get_yticklabels()[0], visible=False)
 ax.yaxis.set_major_formatter(FuncFormatter(format_thousands))
-plt.title('Forecast of Monthly Samples Tested by Labs in Washington')
+plt.title('Forecast of Monthly Revenue by Labs in Washington')
 plt.legend(ncol=5, loc='upper center', bbox_to_anchor=(0.5, -0.05),)
 plt.savefig('figures/monthly_revenue_per_lab_forecast_wa.png', dpi=300,
             bbox_inches='tight', pad_inches=0.75, transparent=False)
@@ -613,7 +613,7 @@ print(five_year_forecast_data[['formatted_revenue', 'formatted_total_samples', '
 #------------------------------------------------------------------------------
 
 # Specify total fixed costs
-total_fixed_costs = 1_000_000
+total_fixed_costs = 5_000_000
 
 # Create a forecast of profits over 5 years for each lab assuming that each lab
 # needs to buy all brand new instruments and that each instrument has a life

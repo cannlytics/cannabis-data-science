@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  5 JAN 2022 11:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  12 JAN 2022 11:23
 entering extended mode
 **./presentation.tex
 (presentation.tex
@@ -963,7 +963,7 @@ File: pgfmodulematrix.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 z/libraries\tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 )))
-(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-05\presentat
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-12\presentat
 ion\build\presentation.aux)
 \openout1 = `presentation.aux'.
 
@@ -1059,9 +1059,9 @@ LaTeX Info: Redefining \ref on input line 78.
 LaTeX Info: Redefining \pageref on input line 78.
 LaTeX Info: Redefining \nameref on input line 78.
 
-(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-05\presentat
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-12\presentat
 ion\build\presentation.out)
-(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-05\presentat
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-12\presentat
 ion\build\presentation.out)
 \@outlinefile=\write5
 \openout5 = `presentation.out'.
@@ -1149,7 +1149,7 @@ File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
-(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-05\presentat
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-12\presentat
 ion\build\presentation.nav)
 LaTeX Font Info:    Trying to load font information for U+msa on input line 78.
 
@@ -1171,7 +1171,7 @@ erncmss.fd
 File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/ma
 thkerncmss.
 )
-<images/logos/cannlytics_logo_with_text_light.png, id=25, 1129.21875pt x 225.84
+<images/logos/cannlytics_logo_with_text_light.png, id=17, 1129.21875pt x 225.84
 375pt>
 File: images/logos/cannlytics_logo_with_text_light.png Graphic file (type png)
 <use images/logos/cannlytics_logo_with_text_light.png>
@@ -1181,58 +1181,20 @@ Package pdftex.def Info: images/logos/cannlytics_logo_with_text_light.png  used
  [1
 
 {C:/Users/keega/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./images/logos/
-cannlytics_logo_with_text_light.png>]
-<images/Peternaur.jpg, id=40, 842.14626pt x 1122.1925pt>
-File: images/Peternaur.jpg Graphic file (type jpg)
-<use images/Peternaur.jpg>
-Package pdftex.def Info: images/Peternaur.jpg  used on input line 111.
-(pdftex.def)             Requested size: 85.40176pt x 113.81102pt.
-<images/C.F._Jeff_Wu_at_Chinese_Academy_of_Sciences_2011.jpg, id=41, 64.75392pt
- x 97.13087pt>
-File: images/C.F._Jeff_Wu_at_Chinese_Academy_of_Sciences_2011.jpg Graphic file 
-(type jpg)
-<use images/C.F._Jeff_Wu_at_Chinese_Academy_of_Sciences_2011.jpg>
-Package pdftex.def Info: images/C.F._Jeff_Wu_at_Chinese_Academy_of_Sciences_201
-1.jpg  used on input line 111.
-(pdftex.def)             Requested size: 75.87836pt x 113.81102pt.
- [2
-
- <./images/Peternaur.jpg> <./images/C.F._Jeff_Wu_at_Chinese_Academy_of_Sciences
-_2011.jpg>] [3
-
-] [4
+cannlytics_logo_with_text_light.png>] [2
 
 ]
-[5
-
-] [6
-
-]
-LaTeX Font Info:    Trying to load font information for TS1+cmss on input line 
-229.
- (C:\Users\keega\AppData\Local\Programs\MiKTeX\tex/latex/base\ts1cmss.fd
-File: ts1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) [7
-
-] (C:\Users\keega\AppData\Local\Programs\MiKTeX\tex/latex/ucs\uni-32.def
-File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-)
-[8
-
-] [9
-
-]
-<images/prayer.png, id=103, 54.2025pt x 54.2025pt>
+<images/prayer.png, id=38, 54.2025pt x 54.2025pt>
 File: images/prayer.png Graphic file (type png)
 <use images/prayer.png>
-Package pdftex.def Info: images/prayer.png  used on input line 355.
+Package pdftex.def Info: images/prayer.png  used on input line 131.
 (pdftex.def)             Requested size: 18.06749pt x 18.06717pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 355--355
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
 
  []
 
-[10
+[3
 
  <./images/prayer.png>]
 \tf@nav=\write6
@@ -1244,43 +1206,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 355--355
 \tf@snm=\write8
 \openout8 = `presentation.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 360.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 360.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 136.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 136.
 
-(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-05\presentat
+(C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-01-12\presentat
 ion\build\presentation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 360.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 360.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 136.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 136.
 Package rerunfilecheck Info: File `presentation.out' has not changed.
-(rerunfilecheck)             Checksum: CC4AD54312FF42103BB700411221BEBB;154.
+(rerunfilecheck)             Checksum: 4CA0FF56E3EE124326A4720E136735D1;47.
  ) 
 Here is how much of TeX's memory you used:
- 24622 strings out of 480790
- 492475 string characters out of 2897301
- 763133 words of memory out of 3000000
- 40009 multiletter control sequences out of 15000+200000
- 544519 words of font info for 66 fonts, out of 3000000 for 9000
+ 24178 strings out of 480790
+ 484944 string characters out of 2897301
+ 758134 words of memory out of 3000000
+ 39595 multiletter control sequences out of 15000+200000
+ 541911 words of font info for 58 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 81i,19n,68p,816b,627s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\keega\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss
-1095.pk><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmex10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmmi10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmmi8.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/keega/AppData/Local/Progra
-ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/keega/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/keega/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/k
-eega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb>
-<C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
-ssi10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
-onts/cm/cmssi8.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmssi9.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmsy10.pfb>
+ 81i,19n,68p,816b,495s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmss10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmss12.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmss8.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmssbx10.pfb>
 Output written on C:\Users\keega\Documents\cannlytics\cannabis-data-science\202
-2-01-05\presentation\build\presentation.pdf (10 pages, 723385 bytes).
+2-01-12\presentation\build\presentation.pdf (3 pages, 86427 bytes).
 PDF statistics:
- 162 PDF objects out of 1000 (max. 8388607)
- 24 named destinations out of 1000 (max. 500000)
- 93 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 63 PDF objects out of 1000 (max. 8388607)
+ 8 named destinations out of 1000 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

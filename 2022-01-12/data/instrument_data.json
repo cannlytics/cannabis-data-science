@@ -1,0 +1,66 @@
+[
+    {
+        "name": "Shimadzu 2010 GC/MS with Headspace units",
+        "vendor": "",
+        "analyses": [],
+        "price": 0,
+        "price_url": "",
+        "type": "GC"
+    },
+    {
+        "name": "Shimadzu 2010 Dual Widebore dual FID",
+        "vendor": "",
+        "analyses": [],
+        "price": 0,
+        "price_url": "",
+        "type": "GC"
+    },
+    {
+        "name": "SRI 8610c  GC/FID/NPD/DELCD",
+        "vendor": "",
+        "analyses": [],
+        "price": 0,
+        "price_url": "",
+        "type": "GC"
+    },
+    {
+        "name": "Shimadzu 2010 HPLC/MS",
+        "vendor": "",
+        "analyses": [],
+        "price": 0,
+        "price_url": "",
+        "type": "HPLC"
+    },
+    {
+        "name": "Shimadzu 2010 HPLC UV/Vis",
+        "vendor": "",
+        "analyses": [],
+        "price": 0,
+        "price_url": "",
+        "type": "HPLC"
+    },
+    {
+        "name": "Agilent 1050 DAD",
+        "vendor": "",
+        "analyses": [],
+        "price": 0,
+        "price_url": "",
+        "type": "HPLC"
+    },
+    {
+        "name": "Shimadzu LC2040 with PDA",
+        "vendor": "",
+        "analyses": [],
+        "price": 0,
+        "price_url": "",
+        "type": "HPLC"
+    },
+    {
+        "name": "",
+        "vendor": "",
+        "analyses": [],
+        "price": 0,
+        "price_url": "",
+        "type": ""
+    }
+]

@@ -13,7 +13,7 @@ this script calculates historic performance of each lab and uses analysis
 prices to forecast the profitability of each lab over the next 5 years.
 
 Data Sources:
-    
+
     - WA State Traceability Data January 2018 - November 2021
     https://lcb.app.box.com/s/e89t59s0yb558tjoncjsid710oirqbgd?page=1
 

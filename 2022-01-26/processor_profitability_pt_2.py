@@ -71,7 +71,6 @@ datatypes = {
     'intermediate_type' : 'category',
     'status' : 'category',
     'global_for_inventory_id': 'string',
-    'lab_result_id': 'string',
     'inventory_type_id': 'string',
     'lab_id': 'string',
     'strain_id': 'string',
@@ -154,10 +153,19 @@ results = pd.read_csv(
 
 # Identify processors as tests with residual solvent screening
 # or solventless products.
+solventless = [
+    'food_grade_solvent_concentrate',
+    'non-solvent_based_concentrate',
+    'infused_mix',
+    'solid_edible',
+    'liquid_edible',
+    'topical',
+    'infused_cooking_medium',
+    'capsules',
+]
 products = results[
     (~results['solvent_status'].isna()) |
-    (results['intermediate_type'] == 'food_grade_solvent_concentrate') |
-    (results['intermediate_type'] == 'non-solvent_based_concentrate')
+    (results['intermediate_type'].str.isin(solventless))
 ]
 products = products[
     (~products['intermediate_type'].isna()) &

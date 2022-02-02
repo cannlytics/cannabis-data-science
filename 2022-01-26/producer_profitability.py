@@ -259,26 +259,25 @@ ax = sns.boxplot(
     ],
     palette='Set3',
 )
-# ax = sns.swarmplot(
-#     x='month',
-#     y='total_cannabinoids',
-#     data=results.loc[
-#         (results['intermediate_type'] == 'flower_lots')
-#     ],
-#     color='.25',
-# )
+ax = sns.swarmplot(
+    x='month',
+    y='total_cannabinoids',
+    data=results.loc[
+        (results['intermediate_type'] == 'flower_lots')
+    ],
+    color='.25',
+)
 plt.title('Total Cannabinoids by Month of the Year in Washington State')
 plt.ylabel('Total Cannabinoids (%)')
 plt.xlabel('Month of the Year')
 plt.show()
 
-
 # Bubble Plot
 plt.figure(figsize=(12, 8))
 ax = sns.scatterplot(
     producers['avg_concentration'],
-    producers['total_samples'],
-    hue=producers['variance'],
+    producers['variance'],
+    hue=producers['total_samples'],
     color='darkblue',
     alpha=0.5,
     s = 0.25 * 2000

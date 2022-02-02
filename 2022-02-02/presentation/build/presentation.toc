@@ -1,0 +1,4 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@sectionintoc {2}{Panel Data}{3}{0}{2}
+\beamer@sectionintoc {3}{Takeaway}{4}{0}{3}

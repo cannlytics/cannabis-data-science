@@ -125,7 +125,7 @@ columns = list(datatypes.keys()) + date_columns
 # Read augmented lab results.
 file_name = 'augmented-washington-state-lab-results'
 results = pd.read_csv(
-    f'../.datasets/{file_name}/{file_name}.csv',
+    f'D:/leaf-data/augmented/{file_name}.csv',
     index_col='lab_result_id',
     dtype=datatypes,
     usecols=columns,
@@ -152,7 +152,7 @@ licensee_fields = {
     # 'postal_code': 'string',
 }
 licensees = pd.read_csv(
-    f'../.datasets/{licensees_file_name}/{licensees_file_name}.csv',
+    f'D:/leaf-data/augmented/{licensees_file_name}.csv',
     usecols=list(licensee_fields.keys()),
     dtype=licensee_fields,
 )
@@ -267,9 +267,15 @@ ax = sns.swarmplot(
     ],
     color='.25',
 )
-plt.title('Total Cannabinoids by Month of the Year in Washington State')
+plt.title('Total Cannabinoids by Month of the Year in\nWashington State Cannabis Flower')
 plt.ylabel('Total Cannabinoids (%)')
 plt.xlabel('Month of the Year')
+plt.savefig(
+    'total-cannabinoids-by-month-wa.png',
+    format='png',
+    dpi=300,
+    facecolor='white'
+)
 plt.show()
 
 # Bubble Plot
@@ -280,7 +286,7 @@ ax = sns.scatterplot(
     hue=producers['total_samples'],
     color='darkblue',
     alpha=0.5,
-    s = 0.25 * 2000
+    s=0.25 * 2000,
 )
 plt.xlabel('Avg Concentration (%)')
 plt.ylabel('Total Samples')

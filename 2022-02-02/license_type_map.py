@@ -46,6 +46,7 @@ licensees = licensees.loc[
     licensees['type'].isin(license_types)
 ]
 
+
 #------------------------------------------------------------------------------
 # Scatterplot with different colors for different license types.
 #------------------------------------------------------------------------------
@@ -93,6 +94,7 @@ points = sns.scatterplot(
 # Optional: Label / plot cities.
 
 # Optional: Style legend.
+# plt.legend().remove()
 
 # Add notes and data source.
 plt.text(
@@ -111,6 +113,7 @@ plt.title('Washington State Licensees', fontsize=28, pad=14)
 # Save and show the figure.
 fig.savefig(
     f'{DATA_DIR}/figures/licensees_scatterplot.png',
+    format='png',
     dpi=96,
     facecolor='white',
 )

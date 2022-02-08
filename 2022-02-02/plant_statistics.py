@@ -117,7 +117,7 @@ for date in time_range:
     # Keep track of the daily totals.
     daily_plant_count.append([date, total_plants, len(licensees)])
 
-    # Kep track of the totals by licensee.
+    # Keep track of the totals by licensee.
     for mme_id, count in licensees_total_plants.items():
         plant_panel.append({
             'date': date,
@@ -166,11 +166,6 @@ daily_plant_data.index = pd.to_datetime(daily_plant_data.date)
 monthly_plants = daily_plant_data.resample('M').mean().pad()
 monthly_plants['month'] = monthly_plants.index.strftime('%Y-%m')
 
-
-#------------------------------------------------------------------------------
-# Augment plants data with licensee data.
-#------------------------------------------------------------------------------
-
 # Add latitude and longitude for each day / licensee observation.
 licensee_fields = {
     'global_id': 'string',
@@ -215,7 +210,7 @@ plt.rcParams.update({
 
 # Create a plot for each day.
 dates = list(geocoded_plant_data.month.unique())
-for date in dates:
+for date in dates[:5]:
 
     # Identify the data for the time period.
     data = geocoded_plant_data.loc[
@@ -246,7 +241,7 @@ for date in dates:
     points = plt.scatter(
         x,
         y,
-        s=data['total_plants'] * 0.2,
+        s=data['total_plants'] * 0.25,
         marker='s',
         color=palette[0],
         alpha=0.8,
@@ -319,7 +314,8 @@ for date in dates:
     )
     plt.title('Washington State Canopy', fontsize=28, pad=14)
     fig.savefig(
-        f'{DATA_DIR}/figures/canopy-{date}.png',
+        f'{DATA_DIR}/figures/canopy-{date}.pdf',
+        format='pdf',
         dpi=96,
         facecolor='white'
     )

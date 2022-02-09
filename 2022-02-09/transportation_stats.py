@@ -23,9 +23,6 @@ Data Guide:
 """
 # Standard imports.
 from datetime import datetime
-import gc
-from statistics import mode
-from time import sleep
 from typing import Any, Optional, Tuple
 
 # External imports.
@@ -39,7 +36,6 @@ import polyline # pip install polyline
 import seaborn as sns
 
 # Internal imports
-from augmentation import augment_dataset
 from utils import format_thousands
 
 
@@ -85,7 +81,7 @@ transfer_date_fields = [
 ]
 transfer_columns = list(transfer_datatypes.keys()) + transfer_date_fields
 
-# Example: Read in a portion of the data.
+# Read in the data.
 transfers = pd.read_csv(
     f'{DATA_DIR}/InventoryTransfers_0.csv',
     sep='\t',
@@ -104,7 +100,7 @@ daily_transfers = {}
 daily_transfers_by_license = []
 
 # Specify the time range to calculate statistics.
-time_range = pd.date_range(start='2018-01-31', end='2021-11-10')
+time_range = pd.date_range(start='2018-04-01', end='2021-10-01')
 transfers['created_at_day'] = transfers['created_at'].dt.date
 for date in time_range:
 
@@ -149,10 +145,8 @@ for date in time_range:
 
 
 #------------------------------------------------------------------------------
-# Get recipient and transporter licensee details (latitude and longitude).
-# Map data ©2022 Google
-# Limit: 50 requests per second
-# Price: $0.005 @ 0–100,000, $0.004 @ 100,001–500,000 
+# Get sender and recipient licensee details (name, type, latitude, and longitude).
+# Licensees data: https://cannlytics.com/data/market/augmented-washington-state-licensees
 #------------------------------------------------------------------------------
 
 # Create panel data.
@@ -210,69 +204,76 @@ panel.rename(
 )
 panel.drop(['global_id'], axis=1, inplace=True, errors='ignore')
 
-# Initialize Google Maps.
-config = dotenv_values('../.env')
-google_maps_api_key = config['GOOGLE_MAPS_API_KEY']
-gmaps = googlemaps.Client(key=google_maps_api_key)  
 
-# Get all of the unique from / to combinations and calculate
-# the route (distance and time) for each transfer combination.
-combinations = panel.drop_duplicates(
-    subset=['sender', 'recipient'],
-    keep='first'
-).reset_index(drop=True)
-# now = datetime.now()
-# distances = []
-# durations = []
-# routes = []
-# for index, row in combinations.iterrows():
+#------------------------------------------------------------------------------
+# Future work: Lookup routes for each transfer.
+# Notes: Map data ©2022 Google.
+# Limit: 50 requests per second.
+# Price: $0.005 @ 0–100,000, $0.004 @ 100,001–500,000.
+#------------------------------------------------------------------------------
 
-#     # Simple: Get distance as the bird flies.
+# # Initialize Google Maps.
+# config = dotenv_values('../.env')
+# google_maps_api_key = config['GOOGLE_MAPS_API_KEY']
+# gmaps = googlemaps.Client(key=google_maps_api_key)  
 
+# # Get all of the unique from / to combinations and calculate
+# # the route (distance and time) for each transfer combination.
+# combinations = panel.drop_duplicates(
+#     subset=['sender', 'recipient'],
+#     keep='first'
+# ).reset_index(drop=True)
+# # now = datetime.now()
+# # distances = []
+# # durations = []
+# # routes = []
+# # for index, row in combinations.iterrows():
 
-#     # Get the distance for a given route.
-#     # driving_distances = gmaps.distance_matrix(
-#     #     [str(row['sender_latitude']) + ' ' + str(row['sender_longitude'])],
-#     #     [str(row['recipient_latitude']) + ' ' + str(row['recipient_longitude'])],
-#     #     mode='driving')
-#     # elements = driving_distances['rows'][0]['elements'][0]
-#     # km = elements['distance']['value']
-#     # duration = elements['duration']['value']
-#     # distances.append(km)
-#     # durations.append(duration)
+# #     # TODO: Simply get distance as the bird flies (without googlemaps).
 
-#     # Get driving directions.
-#     # driving_directions = gmaps.directions(
-#     #     str(row['sender_latitude']) + ',' + str(row['sender_longitude']),
-#     #     str(row['recipient_latitude']) + ',' + str(row['recipient_longitude']),
-#     #     mode='driving',
-#     #     departure_time=now
-#     # )
-#     # routes.append(driving_directions[0]['overview_polyline']['points'])
+# #     # Get the distance for a given route.
+# #     # driving_distances = gmaps.distance_matrix(
+# #     #     [str(row['sender_latitude']) + ' ' + str(row['sender_longitude'])],
+# #     #     [str(row['recipient_latitude']) + ' ' + str(row['recipient_longitude'])],
+# #     #     mode='driving')
+# #     # elements = driving_distances['rows'][0]['elements'][0]
+# #     # km = elements['distance']['value']
+# #     # duration = elements['duration']['value']
+# #     # distances.append(km)
+# #     # durations.append(duration)
 
-
-# def combine_distances(row, combinations):
-#     """Combine distances with panel data (optional: optimize this code)."""
-#     match = combinations.loc[
-#         (combinations['sender'] == row['sender']) &
-#         (combinations['recipient'] == row['recipient'])
-#     ].iloc[0]
-#     return match['distance'], match['duration']
+# #     # Get driving directions.
+# #     # driving_directions = gmaps.directions(
+# #     #     str(row['sender_latitude']) + ',' + str(row['sender_longitude']),
+# #     #     str(row['recipient_latitude']) + ',' + str(row['recipient_longitude']),
+# #     #     mode='driving',
+# #     #     departure_time=now
+# #     # )
+# #     # routes.append(driving_directions[0]['overview_polyline']['points'])
 
 
-# # Merge distance and duration for each observation.
-# combinations['distance'] = pd.Series(distances)
-# combinations['duration'] = pd.Series(durations)
-# distances = panel.apply(lambda row : combine_distances(row, combinations), axis=1)
-# panel['distance'] = distances.apply(lambda x: [y[0] for y in x])
-# panel['duration'] = distances.apply(lambda x: [y[1] for y in x])
+# # def combine_distances(row, combinations):
+# #     """Combine distances with panel data (optional: optimize this code)."""
+# #     match = combinations.loc[
+# #         (combinations['sender'] == row['sender']) &
+# #         (combinations['recipient'] == row['recipient'])
+# #     ].iloc[0]
+# #     return match['distance'], match['duration']
+
+
+# # # Merge distance and duration for each observation.
+# # combinations['distance'] = pd.Series(distances)
+# # combinations['duration'] = pd.Series(durations)
+# # distances = panel.apply(lambda row : combine_distances(row, combinations), axis=1)
+# # panel['distance'] = distances.apply(lambda x: [y[0] for y in x])
+# # panel['duration'] = distances.apply(lambda x: [y[1] for y in x])
 
 # Save the data.
-# panel.to_csv(f'{DATA_DIR}/augmented/transfer-statistics-b.csv', index=False)
-# timeseries = pd.DataFrame.from_dict(daily_transfers, orient='index')
-# timeseries.index = pd.to_datetime(timeseries.index)
-# timeseries.rename(columns={0: 'total_transfers'}, inplace=True)
-# timeseries.to_csv(f'{DATA_DIR}/augmented/transfer-timeseries.csv', index=False)
+panel.to_csv(f'{DATA_DIR}/augmented/transfer-statistics-b.csv', index=False)
+timeseries = pd.DataFrame.from_dict(daily_transfers, orient='index')
+timeseries.index = pd.to_datetime(timeseries.index)
+timeseries.rename(columns={0: 'total_transfers'}, inplace=True)
+timeseries.to_csv(f'{DATA_DIR}/augmented/transfer-timeseries.csv', index=False)
 
 
 #------------------------------------------------------------------------------
@@ -282,6 +283,7 @@ combinations = panel.drop_duplicates(
 # Read the data.
 panel = pd.read_csv(f'{DATA_DIR}/augmented/transfer-statistics.csv')
 timeseries = pd.read_csv(f'{DATA_DIR}/augmented/transfer-timeseries.csv', index_col=0)
+
 timeseries.index = pd.to_datetime(timeseries.index)
 timeseries = timeseries.loc[
     (timeseries.index >= pd.to_datetime('2018-04-01')) &
@@ -315,11 +317,11 @@ transfers_by_type = panel.groupby(['day', 'combination'])['count'].sum().unstack
 # Group transfers by the month.
 monthly_transfers = transfers_by_type.resample('M').sum()
 
-# Plot monthly lab transfers.
+# FIXME: Plot monthly lab transfers.
 fig = plt.figure(figsize=(15, 10))
 transfer_types = list(panel['combination'].unique())
 lab_types = [x for x in transfer_types if x.endswith('to_lab')]
-ax = monthly_transfers[lab_types].plot(
+ax = transfers_by_type[lab_types].plot(
     kind='bar',
     stacked=True,
     figsize=(15, 5),
@@ -409,50 +411,6 @@ def get_transfer_route(
 
 
 #------------------------------------------------------------------------------
-# Save all unique routes.
-#------------------------------------------------------------------------------
-
-# # Initialize a googlemaps API client.
-# gmaps = initialize_googlemaps('../.env')
-
-# # Save all lab transfer routes.
-# lab_transfers = panel.loc[panel['recipient_type'] == 'lab']
-# lab_routes = []
-# lab_distances = []
-# lab_durations = []
-
-# # TODO: Only find route for unique routes.
-# combinations = lab_transfers.drop_duplicates(
-#     subset=['sender', 'recipient'],
-#     keep='first'
-# ).reset_index(drop=True)
-# for index, row in combinations.iterrows():
-
-#     distance, duration, route_polyline = get_transfer_route(
-#         gmaps,
-#         str(row['sender_latitude']) + ',' + str(row['sender_longitude']),
-#         str(row['recipient_latitude']) + ',' + str(row['recipient_longitude']),
-#         departure_time=None,
-#         mode='driving',
-#     )
-#     lab_routes.append(route_polyline)
-#     lab_distances.append(distance)
-#     lab_durations.append(duration)
-
-
-# # TODO: Merge found routes with lab_transfers.
-# # # combinations['distance'] = pd.Series(distances)
-# # # combinations['duration'] = pd.Series(durations)
-# # # distances = panel.apply(lambda row : combine_distances(row, combinations), axis=1)
-# # # panel['distance'] = distances.apply(lambda x: [y[0] for y in x])
-# # # panel['duration'] = distances.apply(lambda x: [y[1] for y in x])
-
-# # lab_transfers['route'] = pd.Series(lab_routes)
-# # lab_transfers['distance'] = pd.Series(lab_distances)
-# # lab_transfers['duration'] = pd.Series(lab_durations)
-# lab_transfers.to_csv(f'{DATA_DIR}/augmented/lab-transfers.csv', index=False)
-
-#------------------------------------------------------------------------------
 # How far are people transporting lab samples?
 #------------------------------------------------------------------------------
 
@@ -461,7 +419,7 @@ gmaps = initialize_googlemaps('../.env')
 
 # Get a sample of random lab transfers.
 lab_transfers = panel.loc[panel['recipient_type'] == 'lab']
-lab_sample = lab_transfers.sample(3, random_state=420)
+lab_sample = lab_transfers.sample(15, random_state=420)
 
 # Get the routes for the transfers.
 lab_routes = []
@@ -548,6 +506,7 @@ washington_route_map(
 # What does the distribution of cannabis look like?
 #------------------------------------------------------------------------------
 
+# TODO: Create map of all transfers from cultivators.
 # production_transfers = panel.loc[
 #     (panel['sender_type'] == 'cultivator_production') |
 #     (panel['sender_type'] == 'cultivator')
@@ -565,7 +524,7 @@ processor_transfers = panel.loc[
     (panel['recipient_type'] == 'cultivator_production') |
     (panel['recipient_type'] == 'production')
 ]
-processor_sample = processor_transfers.sample(3, random_state=420)
+processor_sample = processor_transfers.sample(15, random_state=420)
 
 # Get the routes for the transfers.
 processor_routes = []
@@ -600,7 +559,7 @@ processor_sample.to_csv(f'{DATA_DIR}/augmented/processor-transfer-sample.csv', i
 # Get a sample of random transfers to retailers.
 gmaps = initialize_googlemaps('../.env')
 retail_transfers = panel.loc[panel['recipient_type'] == 'dispensary']
-retail_sample = retail_transfers.sample(3, random_state=420)
+retail_sample = retail_transfers.sample(15, random_state=420)
 
 # Get the routes for the transfers.
 retail_routes = []
@@ -626,4 +585,3 @@ washington_route_map(
 # Save the data.
 retail_sample['route'] = pd.Series(retail_routes, index=lab_sample.index)
 retail_sample.to_csv(f'{DATA_DIR}/augmented/retail-transfer-sample.csv', index=False)
-

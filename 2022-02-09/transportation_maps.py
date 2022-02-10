@@ -1,10 +1,10 @@
 """
-Calculate Transporation Statistics
+Map of Lab Sample Transfers
 Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 2/9/2022
-Updated: 2/9/2022
+Updated: 2/10/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 """
 # Standard imports.
@@ -28,103 +28,99 @@ from utils import sorted_nicely
 DATA_DIR = 'D:\\leaf-data'
 
 # Define the plot style.
-palette = sns.color_palette('Set2', n_colors=10)
 plt.style.use('fivethirtyeight')
 plt.rcParams.update({
     'font.family': 'Times New Roman',
     'font.size': 20,
 })
 
-# Dev: Read in the data.
-# lab_sample = pd.read_csv(f'{DATA_DIR}/augmented/lab-transfer-sample.csv')
-# processor_sample = pd.read_csv(f'{DATA_DIR}/augmented/processor-transfer-sample.csv')
-# retail_sample = pd.read_csv(f'{DATA_DIR}/augmented/retail-transfer-sample.csv')
-# lab_sample['distance'] = 0
-# lab_sample['duration'] = 0
-# lab_sample['recipient_code'] = 'TBD'
-
-#------------------------------------------------------------------------------
-# Get routes for lab transfers in 2021.
-#------------------------------------------------------------------------------
-
-# Initialize a googlemaps API client.
-gmaps = initialize_googlemaps('../.env')
-
 # Read in the panel data.
 panel = pd.read_csv(f'{DATA_DIR}/augmented/transfer-statistics.csv')
 panel['date'] = pd.to_datetime(panel['day'])
 lab_transfers = panel.loc[panel['recipient_type'] == 'lab']
 
-# Find all unique lab transfer routes.
+# Find all unique lab transfer routes in the desired time period.
 past_year_lab_transfers = lab_transfers.loc[
     (lab_transfers['date'] >= pd.to_datetime('2021-01-01')) &
     (lab_transfers['date'] <= pd.to_datetime('2021-10-31'))
 ]
-# past_year_lab_transfers['combination'] = past_year_lab_transfers['sender'] + '_to_' + past_year_lab_transfers['recipient']
 
-combinations = past_year_lab_transfers.drop_duplicates(
-    subset=['sender', 'recipient'],
-    keep='first'
-).reset_index(drop=True)
+#------------------------------------------------------------------------------
+# First pass: Get routes for lab transfers in 2021.
+#------------------------------------------------------------------------------
 
-# Get the route for each transfer combination.
-routes = []
-distances = []
-durations = []
-for index, row in combinations.iterrows():
-    distance, duration, route = get_transfer_route(
-        gmaps,
-        str(row['sender_latitude']) + ',' + str(row['sender_longitude']),
-        str(row['recipient_latitude']) + ',' + str(row['recipient_longitude']),
-        departure_time=None,
-        mode='driving',
-    )
-    routes.append(route)
-    distances.append(distance)
-    durations.append(duration)
-    sleep(0.021)  # Sleep to abide my request limits (50 requests/s).
-    print('Found route', row['sender'], 'to', row['recipient'])
+# # Initialize a googlemaps API client.
+# gmaps = initialize_googlemaps('../.env')
 
+# combinations = past_year_lab_transfers.drop_duplicates(
+#     subset=['sender', 'recipient'],
+#     keep='first'
+# ).reset_index(drop=True)
 
-# FIXME:
-def combine_distances(row, combinations):
-    """Combine distances with panel data (optional: optimize this code)."""
-    try:
-        match = combinations.loc[
-            (combinations['sender'] == row['sender']) &
-            (combinations['recipient'] == row['recipient'])
-        ].iloc[0]
-        return match['distance'], match['duration'], match['route']
-    except IndexError:
-        return None, None, None
-
-# Merge distance and duration for each observation.
-# combinations['route'] = pd.Series(routes, index=combinations.index)
-# combinations['distance'] = pd.Series(distances, index=combinations.index)
-# combinations['duration'] = pd.Series(durations, index=combinations.index)
-
-values = panel.apply(lambda row : combine_distances(row, combinations), axis=1)
-panel['distance'] = values.apply(lambda x: [y[0] for y in x])
-panel['duration'] = values.apply(lambda x: [y[1] for y in x])
-panel['route'] = values.apply(lambda x: [y[2] for y in x])
+# # Get the route for each transfer combination.
+# routes = []
+# distances = []
+# durations = []
+# for index, row in combinations.iterrows():
+#     distance, duration, route = get_transfer_route(
+#         gmaps,
+#         str(row['sender_latitude']) + ',' + str(row['sender_longitude']),
+#         str(row['recipient_latitude']) + ',' + str(row['recipient_longitude']),
+#         departure_time=None,
+#         mode='driving',
+#     )
+#     routes.append(route)
+#     distances.append(distance)
+#     durations.append(duration)
+#     sleep(0.021)  # Sleep to abide my request limits (50 requests/s).
+#     print('Found route', row['sender'], 'to', row['recipient'])
 
 # Save the data.
-panel.to_csv(f'{DATA_DIR}/augmented/lab-transfer-statistics.csv', index=False)
+# combinations.to_csv(f'{DATA_DIR}/augmented/combined-lab-transfer-statistics.csv', index=False)
 
 
 #------------------------------------------------------------------------------
 # Calculate statistics for the map.
 #------------------------------------------------------------------------------
 
+def combine_distances(row, combinations):
+    """Combine distances with panel data (optional: optimize this code)."""
+    match = combinations.loc[
+        (combinations['sender'] == row['sender']) &
+        (combinations['recipient'] == row['recipient'])
+    ].iloc[0]
+    return match['distance'], match['duration'], match['route']
+
+
+# Read in the combinations.
+combinations = pd.read_csv(f'{DATA_DIR}/augmented/combined-lab-transfer-statistics.csv')
+
 # Identify the data for plotting.
-data = panel.loc[
-    (panel['date'] >= pd.to_datetime('2021-01-01')) &
-    (panel['date'] <= pd.to_datetime('2021-10-31'))
-]
+data = past_year_lab_transfers
+
+# Merge routes with the data.
+values = data.apply(lambda row: combine_distances(row, combinations), axis=1)
+data['distance'] = pd.Series([y[0] for y in list(values.values)], index=data.index)
+data['duration'] = pd.Series([y[1] for y in list(values.values)], index=data.index)
+data['route'] = pd.Series([y[2] for y in list(values.values)], index=data.index)
+
+# Exclude routes that fall outside of Washington.
+invalid_routes = []
+for index, row in data.iterrows():
+    path = polyline.decode(row['route'])
+    lat = [x[0] for x in path]
+    long = [x[1] for x in path]
+    max_lat = max(lat)
+    min_lat = min(lat)
+    max_long = min(long)
+    min_long = max(long)
+    if max_lat > 49 or min_lat < 45.33 or max_long > -116.55 or max_long < -124.46:
+        invalid_routes.append(index)
+data.drop(invalid_routes, inplace=True)
 
 # Identify totals.
 miles_driven = round((data['distance'] * data['count']).sum() * 0.000621371192)
-transit_time = round((data['duration'] * data['count']).sum() / 60)
+transit_time = round((data['duration'] * data['count']).sum() / 60 / 60)
 
 # Identify all the labs.
 labs = data.drop_duplicates(
@@ -135,8 +131,9 @@ labs = data.drop_duplicates(
 # Count the number of transfers to each lab.
 lab_stats = {}
 for index, row in labs.iterrows():
-    total_lab_transfers = len(data.loc[data['recipient'] == row['recipient']])
-    proportion = total_lab_transfers / len(data)
+    lab_specific_transfers = data.loc[data['recipient'] == row['recipient']]
+    total_lab_transfers = lab_specific_transfers['count'].sum()
+    proportion = total_lab_transfers / data['count'].sum()
     lab_stats[row['recipient_code']] = {
         'total': total_lab_transfers,
         'proportion': proportion,
@@ -145,83 +142,100 @@ for index, row in labs.iterrows():
     }
 
 #------------------------------------------------------------------------------
-# Draw the lab transfers map. 
+# Draw the lab transfers map.
 #------------------------------------------------------------------------------
 
+# Color the labs based on number of transfers.
+palette = sns.color_palette('YlOrBr', n_colors=12)
+top_transfers = sorted(list(lab_stats.values()), key=lambda d: d['total']) 
+for i, transfer in enumerate(top_transfers):
+    lab_stats[transfer['code']]['color'] = palette[i]
+
 # Draw the map.
-fig = plt.figure(figsize=(19.8, 12))
+fig, ax = plt.subplots(figsize=(19.8, 12))
 m = Basemap(
     lat_0=44.5,
-    lon_0=-116,
+    lon_0=-116.55,
     llcrnrlon=-125.0,
     llcrnrlat=44.5,
-    urcrnrlon=-116,
+    urcrnrlon=-116.55,
     urcrnrlat=49.5,
     resolution='i',
+    ax=ax,
 )
-m.drawmapboundary(fill_color='#A6CAE0', linewidth=0)
+m.drawmapboundary(fill_color='#ffffff', linewidth=0) #A6CAE0
 m.fillcontinents(color='Grey', alpha=0.3)
 m.drawcoastlines(linewidth=0.1, color='white')
 m.drawcounties()
 
 # Plot the routes on the map.
-for route in data['route']:
-    path = polyline.decode(route)
-    lat = [x[0] for x in path]
-    long = [x[1] for x in path]
-    plt.plot(
-        long,
-        lat,
-        '-',
-        color=palette[5],
-        # label='Lab Transfers',
-        alpha=0.6,
-        linewidth=2,
-    )
+lab_codes = sorted_nicely(list(lab_stats.keys()))
+for i, code in enumerate(lab_codes):
+    stats = lab_stats[code]
+    lab = labs.loc[labs['recipient_code'] == code]
+    lab_specific_transfers = data.loc[data['recipient_code'] == code]
+    for route in lab_specific_transfers['route']:
+        path = polyline.decode(route)
+        lat = [x[0] for x in path]
+        long = [x[1] for x in path]
+        plt.plot(
+            long,
+            lat,
+            '-',
+            color=stats['color'],
+            alpha=0.6,
+            linewidth=2,
+        )
 
-# Plot the labs on the map.
-# Optional: Size the labs by number of transfers.
-for index, row in labs.iterrows():
-    lab_transfers_total = len(data.loc[data['recipient'] == row['recipient']])
-    proportion = lab_transfers_total / len(data)
-    plt.plot(
-        row['recipient_longitude'],
-        row['recipient_latitude'],
+    # Plot the labs on the map.
+    label_name = f'{stats["code"]} - {stats["name"]} ({stats["total"]:,})'
+    ax.plot(
+        lab['recipient_longitude'],
+        lab['recipient_latitude'],
         marker='o',
-        color=palette[9],
-        markersize=100 * proportion,
-        # label=row['recipient_code'],
+        color=stats['color'],
+        # markersize=260 * stats['proportion'], # Optional: Size markers proportionally.
+        markersize=18,
+        linewidth=0,
+        label=label_name,
     )
-    plt.text(
-        row['recipient_longitude'],
-        row['recipient_latitude'],
-        row['recipient_code'],
+    ax.text(
+        lab['recipient_longitude'].iloc[0],
+        lab['recipient_latitude'].iloc[0],
+        lab['recipient_code'].iloc[0],
+        zorder=99,
+        fontsize=24,
     )
 
 # Add a legend.
-# Optional: Remove patches.
-lab_codes = sorted_nicely(list(lab_stats.keys()))
-labels = [f'{lab_stats[code]["code"]}: {lab_stats[code]["name"]} ({lab_stats[code]["total"]:,})' for code in lab_codes]
-plt.legend(
-    bbox_to_anchor=(0.9875, 0.15),
+labels = [f'{lab_stats[code]["code"]} - {lab_stats[code]["name"]} ({lab_stats[code]["total"]:,})' for code in lab_codes]
+handles, _ = ax.get_legend_handles_labels()
+legend = plt.legend(
+    bbox_to_anchor=(0.9975, 0.1875),
     loc='upper right',
     labels=labels,
+    handles=handles,
     ncol=4,
-    fontsize='x-small',
-    handlelength=0,
-    title='Transfers by Lab'
+    fontsize=16,
+    handlelength=0.7,
+    handleheight=0.7,
+    markerscale=0.75,
+    title='Total Number of Transfers by Lab'
 )
+legend._legend_box.sep = 12
 
-# Add text.
+# Add caption.
 plt.text(
     -125,
-    44.325,
-    'Data Source: Washington State Traceability Data (January 2021 to October 2021).',
+    44.15,
+    'Data Sources: Washington State Traceability Data (January 2021 through October 2021).\nRoute data is © 2022 Google.',
 )
+
+# Add stats data block.
 plt.text(
     -124.875,
     49.25,
-    'Total Transfers: {:,}'.format(len(data)),
+    'Total Transfers: {:,}'.format(data['count'].sum()),
     size=24,
 )
 plt.text(
@@ -233,27 +247,19 @@ plt.text(
 plt.text(
     -124.875,
     48.75,
-    'Transit Time (hours): {:,}'.format(transit_time),
+    'Hours of Transit: {:,}'.format(transit_time),
     size=24,
 )
-plt.title('Transfers of Washington State Lab Samples in 2021', fontsize=28, pad=10)
+
+# Add title.
+plt.title('Transfers of Washington State Lab Samples in 2021', fontsize=32, pad=14)
+
+# Save and show the figure.
 fig.savefig(
-    f'{DATA_DIR}/figures/transfers-random-sample.png',
+    f'{DATA_DIR}/figures/lab-transfers-2021.png',
     format='png',
-    dpi=96,
+    dpi=300,
     facecolor='white'
 )
 plt.tight_layout(pad=-0.5)
 plt.show()
-
-
-#------------------------------------------------------------------------------
-# Calculate supplementary statistics.
-#------------------------------------------------------------------------------
-
-# TODO: Calculate the total distance and time spent transferring lab samples.
-# Remember to multiply by the count!
-# total_distance = (lab_transfers['distance'] * lab_transfers['count']).sum()
-# total_duration = (lab_transfers['duration'] * lab_transfers['count']).sum()
-# print('Total miles travelled to transfer lab samples:', total_distance)
-# print('Total time spent transferring lab samples:', total_duration)

@@ -210,7 +210,8 @@ panel.drop(['global_id'], axis=1, inplace=True, errors='ignore')
 
 #------------------------------------------------------------------------------
 # Future work: Lookup routes for each transfer.
-# Notes: Map data ©2022 Google.
+# Notes: Map data ©2022 Google. You will need to get an API key and enable
+# the Directions API, see: https://developers.google.com/maps/documentation/directions/get-api-key
 # Limit: 50 requests per second.
 # Price: $0.005 @ 0–100,000, $0.004 @ 100,001–500,000.
 #------------------------------------------------------------------------------

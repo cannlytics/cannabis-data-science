@@ -100,7 +100,7 @@ daily_transfers = {}
 daily_transfers_by_license = []
 
 # Specify the time range to calculate statistics.
-time_range = pd.date_range(start='2018-04-01', end='2021-10-01')
+time_range = pd.date_range(start='2021-10-02', end='2021-10-31')
 transfers['created_at_day'] = transfers['created_at'].dt.date
 for date in time_range:
 
@@ -155,6 +155,7 @@ panel = pd.DataFrame(daily_transfers_by_license)
 # Read licensees data.
 licensee_fields = {
     'global_id': 'string',
+    'code': 'string',
     'latitude': 'float',
     'longitude': 'float',
     'name': 'string',
@@ -180,6 +181,7 @@ panel.rename(
         'longitude': 'sender_longitude',
         'name': 'sender_name',
         'type': 'sender_type',
+        'code': 'sender_code',
     },
     inplace=True,
 )
@@ -199,6 +201,7 @@ panel.rename(
         'longitude': 'recipient_longitude',
         'name': 'recipient_name',
         'type': 'recipient_type',
+        'code': 'recipient_code',
     },
     inplace=True,
 )
@@ -251,16 +254,6 @@ panel.drop(['global_id'], axis=1, inplace=True, errors='ignore')
 # #     # )
 # #     # routes.append(driving_directions[0]['overview_polyline']['points'])
 
-
-# # def combine_distances(row, combinations):
-# #     """Combine distances with panel data (optional: optimize this code)."""
-# #     match = combinations.loc[
-# #         (combinations['sender'] == row['sender']) &
-# #         (combinations['recipient'] == row['recipient'])
-# #     ].iloc[0]
-# #     return match['distance'], match['duration']
-
-
 # # # Merge distance and duration for each observation.
 # # combinations['distance'] = pd.Series(distances)
 # # combinations['duration'] = pd.Series(durations)
@@ -269,7 +262,7 @@ panel.drop(['global_id'], axis=1, inplace=True, errors='ignore')
 # # panel['duration'] = distances.apply(lambda x: [y[1] for y in x])
 
 # Save the data.
-panel.to_csv(f'{DATA_DIR}/augmented/transfer-statistics-b.csv', index=False)
+panel.to_csv(f'{DATA_DIR}/augmented/transfer-statistics.csv', index=False)
 timeseries = pd.DataFrame.from_dict(daily_transfers, orient='index')
 timeseries.index = pd.to_datetime(timeseries.index)
 timeseries.rename(columns={0: 'total_transfers'}, inplace=True)

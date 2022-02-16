@@ -205,7 +205,7 @@ strain_date_fields = [
 sales_fields = {
     'global_id': 'string',
     'external_id': 'string',
-    'type': 'string', # wholesale or retail_recrational
+    'type': 'string', # wholesale or retail_recreational
     'price_total': 'float16',
     'status': 'string',
     'mme_id': 'string',

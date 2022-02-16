@@ -13,7 +13,7 @@ Washington State traceability data (2018-01-31 to 11-10-2021).
 Data sources:
 
     - Random sample of sales items
-    https://cannlytics.page.link/cds1
+    https://cannlytics.page.link/cds53
 
     - WA State Traceability Data January 2018 - November 2021
     https://lcb.app.box.com/s/e89t59s0yb558tjoncjsid710oirqbgd?page=1
@@ -47,7 +47,7 @@ plt.rcParams.update({
 
 # Specify where the data lives.
 DATA_DIR = 'D:\\leaf-data'
-DATA_FILE = f'{DATA_DIR}/samples/random-sales-items-2022-02-11.csv'
+DATA_FILE = f'{DATA_DIR}/samples/random-sales-items-2022-02-16.csv'
 
 # Read in the data.
 data = pd.read_csv(DATA_FILE)

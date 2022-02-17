@@ -71,6 +71,7 @@
         "pyplot",
         "quantile",
         "sampledata",
+        "scipy",
         "setp",
         "skipna",
         "sklearn",

@@ -75,6 +75,9 @@ data['day'] = data['date'].dt.date
 # Estimate the average_price by sample type.
 sample_types = list(data.intermediate_type.unique())
 for sample_type in sample_types:
+
+    print(sample_type, round(len(data.loc[data.intermediate_type == sample_type]) / len(data), 2))
+
     sample_type_data = data.loc[data.intermediate_type == sample_type]
     print(sample_type, 'avg price:', sample_type_data.price_total.mean())
 

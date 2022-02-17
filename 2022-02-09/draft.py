@@ -37,3 +37,29 @@
 #         stacked=True,
 #         title='Transfers by Type in Washington State'
 #     )
+
+
+# Optional: Add data block.
+# summary_stats = series.describe()
+# summary_stats = summary_stats[['count', 'mean', 'std']]
+# replacement_keys = {
+#     'count': 'Count',
+#     'mean': 'Avg.',
+#     'std': 'Std. Dev.',
+#     # 'min': 'Min',
+#     # '25%': 'Q1',
+#     # '50%': 'Median',
+#     # '75%': 'Q3',
+#     # 'max': 'Max',
+# }
+# summary_stats.index = list(replacement_keys.values())
+# for key, value in summary_stats.items():
+#     summary_stats[key] = str(round(value)).replace('.0', '')
+# ax.annotate(
+#     summary_stats.to_string(),
+#     xy=(0.7, 0.6),
+#     xycoords='axes fraction',
+#     fontsize=32,
+#     horizontalalignment='left',
+#     verticalalignment='bottom',
+# )

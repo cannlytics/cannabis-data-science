@@ -151,7 +151,7 @@ plt.text(
     0,
     -0.0575,
     """Data: A random sample of 36,481 “usable marijuana” sale items.
-Data Sources: Washington State Traceability Data January from 2021 to November 2021.
+Data Source: Washington State Traceability Data January from 2021 to November 2021.
 Notes: The top 5% of sale item observations by price were excluded as outliers.
 The estimated probability distribution is depicted by the dotted orange line.""",
     fontsize=32,
@@ -160,7 +160,6 @@ fig.savefig(
     f'{DATA_DIR}/figures/histogram_{sample_type}_prices_2021.png',
     format='png',
     dpi=300,
-    facecolor='white'
+    bbox_inches='tight',
 )
-# fig.tight_layout(pad=-0.5)
 plt.show()

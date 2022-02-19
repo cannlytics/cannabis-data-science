@@ -1,4 +1,4 @@
-# Cannabis Data Science Meetup 2022-02-19
+# Cannabis Data Science Meetup 2022-02-16
 
 Agenda
 

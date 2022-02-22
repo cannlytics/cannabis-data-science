@@ -69,8 +69,8 @@ data = pd.read_csv(DATA_FILE)
 # Identify the producer with the highest number of retailer connections.
 
 
-# Count the number of transfers from producers to retailers.
+# Count the number of transfers from producers to retailers (by day/month/year?).
 
 
-# Measure the distance producers are travelling to retailers.
+# Measure (or estimate) the distance producers are travelling to retailers.
 

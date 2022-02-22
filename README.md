@@ -26,15 +26,31 @@ The current roster of events is below. You can send event suggestions to <keegan
 
 Below is a non-inclusive list of some of the public cannabis data sets that we have worked with.
 
-- [WA Traceability Data - December 2020](https://lcb.app.box.com/s/fnku9nr22dhx04f6o646xv6ad6fswfy9?page=1)
-- [WA Traceability Data Guide](https://lcb.wa.gov/sites/default/files/publications/Marijuana/traceability/WALeafDataSystems_UserManual_v1.37.5_AddendumC_LicenseeUser.pdf)
+| Dataset | URL |
+|---------|-----|
+| WA Traceability Data - Jan. 18 to Dec. 2020 | <https://lcb.app.box.com/s/fnku9nr22dhx04f6o646xv6ad6fswfy9> |
 
+
+## 🏃‍♀️ Getting Started
+
+The majority of examples are written in Python. If you [install Anaconda](https://docs.anaconda.com/anaconda/install/index.html), then you can create a virtual environment with all of the packages that you will need with the following command-line commands.
+
+```bash
+conda create --name cds python=3.9
+conda activate cds
+pip install -r requirements.txt
+```
 
 ## 🦮 Leadership Team <a name="leadership-team"></a>
 
 You are always welcome to reach out with any questions, ideas, thoughts, comments, or anything else that you may like to mention. The meetups are currently led by:
 
 - Keegan Skeate: <keegan@cannlytics.com>
+
+## Resources
+
+- [Meeting Link](meet.google.com/ifq-jtmc-nuh)
+- [WA Traceability Data Guide](https://lcb.wa.gov/sites/default/files/publications/Marijuana/traceability/WALeafDataSystems_UserManual_v1.37.5_AddendumC_LicenseeUser.pdf)
 
 ## ❤️ Support <a name="support"></a>
 

@@ -1,0 +1,5 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@sectionintoc {2}{Spatial Analysis}{3}{0}{2}
+\beamer@sectionintoc {3}{Topics in Spatial Analysis}{6}{0}{3}
+\beamer@sectionintoc {4}{Takeaway}{7}{0}{4}

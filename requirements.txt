@@ -1,0 +1,11 @@
+basemap
+fred
+googlemaps
+pandas
+# pmdarima
+polyline
+python-dateutil
+python-dotenv
+seaborn
+spacy
+statsmodels

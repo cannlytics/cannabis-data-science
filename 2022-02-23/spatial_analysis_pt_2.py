@@ -242,9 +242,12 @@ common_weights = {
     # 1\/8 oz
 }
 common_multipliers = {
+    'x 2': 2,
+    # '(2)': 2,
     '2 Pk': 2,
     '2pack': 2,
     '3pk': 3,
+    '7 x ': 7,
     '10-pack': 10,
 }
 

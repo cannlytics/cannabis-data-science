@@ -16,6 +16,7 @@ Answer the question, do cannabis prices vary by geography (zip code) in Washingt
 
 ## Resources
 
+- [Healthsea: an end-to-end spaCy pipeline for exploring health supplement effects](https://explosion.ai/blog/healthsea)
 - [Meeting Link](meet.google.com/ifq-jtmc-nuh)
 - [Random Sample of WA Sales Items from 2022-02-16](https://cannlytics.page.link/cds53)
 - [WA State Traceability Data January 2018 - November 2021](https://lcb.app.box.com/s/e89t59s0yb558tjoncjsid710oirqbgd)

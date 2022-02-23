@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  21 FEB 2022 18:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  22 FEB 2022 19:18
 entering extended mode
 **./presentation.tex
 (presentation.tex
@@ -1171,7 +1171,7 @@ erncmss.fd
 File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/ma
 thkerncmss.
 )
-<images/logo.pdf, id=29, 240.89993pt x 99.37125pt>
+<images/logo.pdf, id=21, 240.89993pt x 99.37125pt>
 File: images/logo.pdf Graphic file (type pdf)
 <use images/logo.pdf>
 Package pdftex.def Info: images/logo.pdf  used on input line 111.
@@ -1181,58 +1181,20 @@ Package pdftex.def Info: images/logo.pdf  used on input line 111.
 {C:/Users/keega/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./images/logo.p
 df>] [2
 
+] [3
+
 ]
-<images/first-choropleth-france.jpg, id=150, 328.46715pt x 344.36655pt>
-File: images/first-choropleth-france.jpg Graphic file (type jpg)
-<use images/first-choropleth-france.jpg>
-Package pdftex.def Info: images/first-choropleth-france.jpg  used on input line
- 169.
-(pdftex.def)             Requested size: 160.55983pt x 168.33647pt.
- [3
-
- <./images/first-choropleth-france.jpg>]
-<images/john-snow-cholera-map.jpg, id=159, 321.24014pt x 314.01315pt>
-File: images/john-snow-cholera-map.jpg Graphic file (type jpg)
-<use images/john-snow-cholera-map.jpg>
-Package pdftex.def Info: images/john-snow-cholera-map.jpg  used on input line 1
-86.
-(pdftex.def)             Requested size: 138.66632pt x 135.54529pt.
- [4
-
- <./images/john-snow-cholera-map.jpg>]
-(C:\Users\keega\AppData\Local\Programs\MiKTeX\tex/latex/ucs\uni-32.def
-File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-)
-<images/napolean-moscow-march.png, id=166, 1447.5681pt x 690.1785pt>
-File: images/napolean-moscow-march.png Graphic file (type png)
-<use images/napolean-moscow-march.png>
-Package pdftex.def Info: images/napolean-moscow-march.png  used on input line 1
-98.
-(pdftex.def)             Requested size: 291.92537pt x 139.18115pt.
-
-[5
-
- <./images/napolean-moscow-march.png>]
-<images/lab-transfers-2021.pdf, id=175, 1430.94597pt x 867.24pt>
-File: images/lab-transfers-2021.pdf Graphic file (type pdf)
-<use images/lab-transfers-2021.pdf>
-Package pdftex.def Info: images/lab-transfers-2021.pdf  used on input line 227.
-
-(pdftex.def)             Requested size: 218.94402pt x 132.68729pt.
- [6
-
- <./images/lab-transfers-2021.pdf>]
-<images/prayer.png, id=246, 54.2025pt x 54.2025pt>
+<images/prayer.png, id=152, 54.2025pt x 54.2025pt>
 File: images/prayer.png Graphic file (type png)
 <use images/prayer.png>
-Package pdftex.def Info: images/prayer.png  used on input line 265.
+Package pdftex.def Info: images/prayer.png  used on input line 207.
 (pdftex.def)             Requested size: 18.06749pt x 18.06717pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 265--265
+Underfull \hbox (badness 10000) in paragraph at lines 207--207
 
  []
 
-[7
+[4
 
  <./images/prayer.png>]
 \tf@nav=\write6
@@ -1244,35 +1206,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 265--265
 \tf@snm=\write8
 \openout8 = `presentation.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 270.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 270.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 212.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 212.
 
 (C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-02-23\presentat
 ion\build\presentation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 270.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 270.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 212.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 212.
 Package rerunfilecheck Info: File `presentation.out' has not changed.
-(rerunfilecheck)             Checksum: 77D4CDF7E8D1F1228B1E4706D69E73AB;202.
+(rerunfilecheck)             Checksum: 9E8EED44C044DFE2E782BD4FD244D286;90.
  ) 
 Here is how much of TeX's memory you used:
- 24670 strings out of 480790
- 493886 string characters out of 2897301
- 759002 words of memory out of 3000000
- 40065 multiletter control sequences out of 15000+200000
- 544231 words of font info for 66 fonts, out of 3000000 for 9000
+ 24360 strings out of 480790
+ 489976 string characters out of 2897301
+ 760001 words of memory out of 3000000
+ 39777 multiletter control sequences out of 15000+200000
+ 541911 words of font info for 58 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 81i,19n,68p,818b,913s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 81i,19n,68p,818b,807s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmss10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmss12.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmss8.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/keega/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/keega/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb>
+/type1/public/amsfonts/cm/cmssbx10.pfb>
 Output written on C:\Users\keega\Documents\cannlytics\cannabis-data-science\202
-2-02-23\presentation\build\presentation.pdf (7 pages, 17479389 bytes).
+2-02-23\presentation\build\presentation.pdf (4 pages, 94028 bytes).
 PDF statistics:
- 296 PDF objects out of 1000 (max. 8388607)
- 19 named destinations out of 1000 (max. 500000)
- 195 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 190 PDF objects out of 1000 (max. 8388607)
+ 11 named destinations out of 1000 (max. 500000)
+ 159 words of extra memory for PDF output out of 10000 (max. 10000000)
 

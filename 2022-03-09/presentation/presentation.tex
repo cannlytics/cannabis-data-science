@@ -125,6 +125,10 @@
 
 \begin{frame}{}
 
+\begin{minipage}{0.7\textwidth}
+
+\vspace{-2\baselineskip}
+
 % Question of the day
 \begin{center}
 \begin{minipage}{.9\linewidth}
@@ -132,7 +136,11 @@
 
 \vspace{.5\baselineskip}
 \begin{itemize}
-\item  Does the amount a producer produces affect the number of periods a producer has operated or if a producer has exited?
+\item  Does the amount a producer produces affect the \underline{number of periods} a producer has operated or if a producer has \underline{exited}?
+
+\vspace{.5\baselineskip}
+
+\item Does the amount a retailer sells affect the \underline{number of periods} that they have operated or if they have \underline{exited}?
 \end{itemize}
 
 \vspace{.5\baselineskip}
@@ -141,15 +149,60 @@
 \end{minipage}
 \end{center}
 
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.25\textwidth}
+
+\vspace{0.5\baselineskip}
+
+\begin{figure}
+\includegraphics[height=2.in]{images/free-entry.jpg}
+\caption*{%
+  \tiny
+  {Free entry sign in Germany.\\Author: Lupus in Saxonia\\ License: CC-BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/deed.en}
+ }
+\end{figure}
+
+\end{minipage}
+
+% Free entry sign in Germany.
+% Author: Lupus in Saxonia
+% License: CC-BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/deed.en
+
 \end{frame}
 
 %------------------------------------------%
-% Yield
+% Survival Analysis
 %------------------------------------------%
 
 \begin{frame}{}
 
-{\large \textbf{Yield}}\vspace{\baselineskip}\\
+{\large \textbf{Survival Analysis}}\vspace{0.5\baselineskip}\\
+
+\begin{itemize}
+
+\item {\bfseries Survival analysis} is a branch of statistics for analyzing the \underline{expected duration} of time until \underline{one event occurs}.
+
+\vspace{\baselineskip}
+
+\item Can fit a parametric {\bfseries survival function}
+
+$$S(t \hspace{0.5ex}\vert\hspace{0.5ex} \beta, X) = P(T>t \hspace{0.5ex}\vert\hspace{0.5ex} \beta, X)$$
+
+%\vspace{\baselineskip}
+
+%\item Can handle {\bfseries censored data} -- data where the event of interest has not occurred.
+
+\end{itemize}
+
+\vspace{0.5\baselineskip}
+
+\begin{figure}
+\includegraphics[height=1.5in]{images/treatment-survival-function.png}
+\caption*{%
+  \tiny
+  {Survival function for treated and untreated leukemia.\\Author: Michaelg2015\\ License: CC-BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/deed.en}
+ }
+\end{figure}
 
 \end{frame}
 
@@ -158,11 +211,11 @@
 % Consumption Rates
 %------------------------------------------%
 
-\begin{frame}{}
-
-{\large \textbf{Consumption Rates}}\vspace{\baselineskip}\\
-
-\end{frame}
+%\begin{frame}{}
+%
+%{\large \textbf{Consumption Rates}}\vspace{\baselineskip}\\
+%
+%\end{frame}
 
 
 %------------------------------------------%
@@ -173,15 +226,64 @@
 
 {\large \textbf{Natural Language Processing}}\vspace{\baselineskip}\\
 
-%Machine learning
+\begin{minipage}{0.8\textwidth}
+
+\begin{itemize}
+
+\item {\bfseries Symbolic methods} -- hand--coding a set of rules to be used with dictionary lookup.
+
+%\vspace{0.5\baselineskip}
 %
-%Artificial intelligence
+%\begin{itemize}
+%
+%\item Pros:
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Cons:
+%
+%\end{itemize}
+
+\vspace{0.5\baselineskip}
+
+\item {\bfseries Machine-learning algorithms} -- systems based on automatically learning rules can be made more accurate simply by supplying more input data.
+
+%\vspace{0.5\baselineskip}
+%
+%\begin{itemize}
+%
+%\item Pros:
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Cons:
+%
+%\end{itemize}
+%
+\end{itemize}
+
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.15\textwidth}
+
+\begin{figure}
+\includegraphics[height=1in]{images/parse-tree.png}
+\end{figure}
+
+\end{minipage}
+
 
 \end{frame}
 
 %------------------------------------------%
 % Natural Language Processing with SpaCy
 %------------------------------------------%
+
+%Semantic role labelling
+
+
+% Named entity recognition
+
+%Relationship extraction
 
 %\begin{frame}{}
 %
@@ -230,7 +332,7 @@
 
 \begin{itemize}
 
-\item Yield matters.
+\item Parsing natural language can be complex, but can yield valuable data.
 
 \vspace{0.5\baselineskip}
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  8 MAR 2022 09:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  9 MAR 2022 09:27
 entering extended mode
 **./presentation.tex
 (presentation.tex
@@ -1171,39 +1171,70 @@ erncmss.fd
 File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/ma
 thkerncmss.
 )
-<images/logo.pdf, id=21, 240.89993pt x 99.37125pt>
+<images/logo.pdf, id=17, 240.89993pt x 99.37125pt>
 File: images/logo.pdf Graphic file (type pdf)
 <use images/logo.pdf>
 Package pdftex.def Info: images/logo.pdf  used on input line 119.
 (pdftex.def)             Requested size: 79.49721pt x 32.7926pt.
-<images/cover.pdf, id=22, 597.50786pt x 845.04686pt>
-File: images/cover.pdf Graphic file (type pdf)
-<use images/cover.pdf>
-Package pdftex.def Info: images/cover.pdf  used on input line 119.
-(pdftex.def)             Requested size: 364.19662pt x 273.14122pt.
  [1
 
 {C:/Users/keega/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./images/logo.p
-df> <./images/cover.pdf
+df>]
+<images/free-entry.jpg, id=134, 602.25pt x 1026.83624pt>
+File: images/free-entry.jpg Graphic file (type jpg)
+<use images/free-entry.jpg>
+Package pdftex.def Info: images/free-entry.jpg  used on input line 171.
+(pdftex.def)             Requested size: 84.7739pt x 144.54pt.
 
-pdfTeX warning: pdflatex (file ./images/cover.pdf): PDF inclusion: multiple pdf
-s with page group included in a single page
->] [2
+Overfull \hbox (11.79256pt too wide) in paragraph at lines 171--171
+ [] 
+ []
 
-] [3
 
-]
-<images/prayer.png, id=152, 54.2025pt x 54.2025pt>
-File: images/prayer.png Graphic file (type png)
-<use images/prayer.png>
-Package pdftex.def Info: images/prayer.png  used on input line 191.
-(pdftex.def)             Requested size: 18.06749pt x 18.06717pt.
+Overfull \hbox (38.78459pt too wide) in paragraph at lines 171--171
+\OT1/cmss/m/n/6 https://creativecommons.org/licenses/by- 
+ []
 
-Underfull \hbox (badness 10000) in paragraph at lines 191--191
+[2
 
+ <./images/free-entry.jpg>]
+<images/treatment-survival-function.png, id=143, 840.13875pt x 770.88pt>
+File: images/treatment-survival-function.png Graphic file (type png)
+<use images/treatment-survival-function.png>
+Package pdftex.def Info: images/treatment-survival-function.png  used on input 
+line 207.
+(pdftex.def)             Requested size: 118.14421pt x 108.405pt.
+
+Overfull \vbox (10.96252pt too high) detected at line 207
+ []
+
+[3
+
+ <./images/treatment-survival-function.png>]
+<images/parse-tree.png, id=155, 770.88pt x 770.88pt>
+File: images/parse-tree.png Graphic file (type png)
+<use images/parse-tree.png>
+Package pdftex.def Info: images/parse-tree.png  used on input line 275.
+(pdftex.def)             Requested size: 72.26982pt x 72.26999pt.
+
+Overfull \hbox (28.4828pt too wide) in paragraph at lines 275--275
+ [] 
  []
 
 [4
+
+ <./images/parse-tree.png>]
+<images/prayer.png, id=163, 54.2025pt x 54.2025pt>
+File: images/prayer.png Graphic file (type png)
+<use images/prayer.png>
+Package pdftex.def Info: images/prayer.png  used on input line 350.
+(pdftex.def)             Requested size: 18.06749pt x 18.06717pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 350--350
+
+ []
+
+[5
 
  <./images/prayer.png>]
 \tf@nav=\write6
@@ -1215,33 +1246,43 @@ Underfull \hbox (badness 10000) in paragraph at lines 191--191
 \tf@snm=\write8
 \openout8 = `presentation.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 196.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 196.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 355.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 355.
 
 (C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-03-09\presentat
 ion\build\presentation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 196.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 196.
-Package rerunfilecheck Info: File `presentation.out' has not changed.
-(rerunfilecheck)             Checksum: 9E8EED44C044DFE2E782BD4FD244D286;90.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 355.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 355.
+
+
+Package rerunfilecheck Warning: File `presentation.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `presentation.out':
+(rerunfilecheck)             Before: 4CA0FF56E3EE124326A4720E136735D1;47
+(rerunfilecheck)             After:  9E8EED44C044DFE2E782BD4FD244D286;90.
  ) 
 Here is how much of TeX's memory you used:
- 24380 strings out of 480790
- 490358 string characters out of 2897301
- 758038 words of memory out of 3000000
- 39796 multiletter control sequences out of 15000+200000
- 541617 words of font info for 57 fonts, out of 3000000 for 9000
+ 24390 strings out of 480790
+ 490609 string characters out of 2897301
+ 759993 words of memory out of 3000000
+ 39801 multiletter control sequences out of 15000+200000
+ 542216 words of font info for 59 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 81i,19n,68p,818b,802s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 81i,19n,68p,818b,855s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmss10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmss12.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmss8.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmssbx10.pfb>
+cmmi10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmss10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmss12.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/keega/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/keega/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/keega/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
 Output written on C:\Users\keega\Documents\cannlytics\cannabis-data-science\202
-2-03-09\presentation\build\presentation.pdf (4 pages, 91281 bytes).
+2-03-09\presentation\build\presentation.pdf (5 pages, 426428 bytes).
 PDF statistics:
- 190 PDF objects out of 1000 (max. 8388607)
- 11 named destinations out of 1000 (max. 500000)
- 158 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 211 PDF objects out of 1000 (max. 8388607)
+ 13 named destinations out of 1000 (max. 500000)
+ 166 words of extra memory for PDF output out of 10000 (max. 10000000)
 

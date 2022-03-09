@@ -236,13 +236,13 @@ identification_rate = identified / sample_size
 print('Identified: %.0f%%' % round(identification_rate * 100))
 
 
-def split_on_letter(s):
+def split_on_letter(string):
     """
     Credit: C_Z_ https://stackoverflow.com/a/35610194
     License: CC-BY-SA-3.0 https://creativecommons.org/licenses/by-sa/3.0/
     """
-    match = re.compile("[^\W\d]").search(s)
-    return [s[:match.start()], s[match.start():]]
+    match = re.compile("[^\W\d]").search(string)
+    return [string[:match.start()], string[match.start():]]
 
 
 # Parse quantity and uom now once the quantity string is found.
@@ -293,28 +293,32 @@ milligrams_per_unit = {
 }
 
 
-def calculate_milligrams(row):
+def calculate_milligrams(row, quantity_field='parsed_quantity', units_field='parsed_uom'):
     """Calculate the milligram weight of a given observation."""
-    mg = milligrams_per_unit.get(row['parsed_uom'], 0)
-    return mg * row['parsed_quantity']
+    mg = milligrams_per_unit.get(row[units_field], 0)
+    return mg * row[quantity_field]
 
 
 # Assign weight in mg.
 milligrams = sample_with_weights.apply(lambda x: calculate_milligrams(x), axis=1)
-sample_with_weights = sample_with_weights.assign(weights=milligrams)
+sample_with_weights = sample_with_weights.assign(weight=milligrams)
 
 
 def calculate_price_per_mg_thc(row):
     """Calculate the price per milligram of THC for a given observation.
-    TODO: Source for carboxyl conversion factor.
+    Source for decarboxylated value conversion factor:
+    https://www.conflabs.com/why-0-877/
     """
     try:
         thca = row['cannabinoid_d9_thca_percent'] * 0.877
     except TypeError:
         thca = 0
-    thc_mg = row['weight'] * (row['cannabinoid_d9_thc_percent'] + thca * 0.01)
+    thc_mg = row['weight'] * (row['cannabinoid_d9_thc_percent'] + thca) * 0.01
     # TODO: Apply any multiplier!
-    return row['price_total'] / thc_mg
+    try:
+        return row['price_total'] / thc_mg
+    except ZeroDivisionError:
+        return 0
 
 
 # Assign price per mg of THC.
@@ -323,43 +327,45 @@ sample_with_weights = sample_with_weights.assign(price_per_mg_thc=price_per_mg_t
 
 
 #--------------------------------------------------------------------------
-# TODO: Parse quantity and unit of measure for all of the data.
+# TODO: Parse weights for all of the data.
 #--------------------------------------------------------------------------
 
-# 2 Pk .75 gr Pre-Roll
-# 01g
-# common_weights = {
-#     '1g': {'qty': 1, 'uom': 'gm'},
-#     '1.0g': {'qty': 1, 'uom': 'gm'},
-#     '1.0 g': {'qty': 1, 'uom': 'gm'},
-#  .75 gr
-#     '.75g': {'qty': 0.75, 'uom': 'gm'},
-#     '.8g': {'qty': 0.8, 'uom': 'gm'},
-#     '1.5g': {'qty': 1, 'uom': 'gm'},
-#     '2g': {'qty': 2, 'uom': 'gm'},
-#     '2.5g': {'qty': 2.5, 'uom': 'gm'},
-#     '3.5g': {'qty': 3.5, 'uom': 'gm'},
-#     '3.50 grams': {'qty': 3.5, 'uom': 'gm'},
-#     '3.5 gram': {'qty': 3.5, 'uom': 'gm'},
-#     'eighth': {'qty': 3.5, 'uom': 'gm'},
-#     '7.5g': {'qty': 7.5, 'uom': 'gm'},
-#     # 10PK=100MG | 10pack 100mgTHC
-#     # Joints .5g (2)
-#     # 0.5g x 2
-#     # 1\/8 oz
-# }
-# common_multipliers = {
-#     'x 2': 2,
-#     # '(2)': 2,
-#     '2 Pk': 2,
-#     '2pack': 2,
-#     '3pk': 3,
-#     '7 x ': 7,
-#     '10-pack': 10,
-# }
+def parse_weights(row, field='product_name'):
+    """Parse weights from a dataset."""
+    try:
+        doc = nlp(row[field])
+        for entity in doc.ents:
+            if entity.label_ == 'QUANTITY':
+                parts = split_on_letter(entity.text.replace(' ', ''))
+                weight = float(parts[0])
+                units = parts[1]
+                return (weight, units)
+    except (AttributeError, ValueError):
+        pass
+    return (1, 'ea')
 
-# Ratios:
-# 5:1
+
+def augment_weights(
+        df,
+        field='product_name',
+        weight_name='parsed_quantity',
+        uom_name='parsed_uom'
+):
+    """Augment data with parsed weights from a name field."""
+    df = df.assign(parsed_uom='ea', parsed_quantity=1)
+    parsed_quantities = df.apply(lambda x: parse_weights(x, field), axis=1)
+    df.loc[:, weight_name] = parsed_quantities.map(lambda x: x[0])
+    df.loc[:, uom_name] = parsed_quantities.map(lambda x: x[1])
+    mgs = df.apply(calculate_milligrams, axis=1)
+    df = df.assign(weight=mgs)
+    thc_prices = df.apply(calculate_price_per_mg_thc, axis=1)
+    df = df.assign(price_per_mg_thc=thc_prices)
+    return df
+
+
+# Augment all of the data with weights from the product name.
+print('Augmenting weights for all of the data...')
+data = augment_weights(data, field='product_name')
 
 
 #--------------------------------------------------------------------------
@@ -368,16 +374,17 @@ sample_with_weights = sample_with_weights.assign(price_per_mg_thc=price_per_mg_t
 
 # Look at price per mg of THC (or total cannabinoids) in different sample types.
 
-
-# Identify the time period for analysis.
-# start = '2021-01-01'
-# end = '2021-10-31'
+# # Identify the time period for analysis.
 # data = data.loc[
-#     (data['date'] >= pd.to_datetime(start)) &
-#     (data['date'] <= pd.to_datetime(end))
+#     (data['date'] >= pd.to_datetime('2021-01-01')) &
+#     (data['date'] <= pd.to_datetime('2021-10-31'))
 # ]
-# print('Data cleaned and limited to the period of analysis.')
-# print('{:,} observations.'.format(len(data)))
+
+# # Look at the sample with weights.
+# sample = data.loc[
+#     (data['parsed_uom'] != 'ea') &
+#     (data['total_cannabinoid_percent'] > 0)
+# ]
 
 # # ARCH and GARCH.
 # sample_type = 'concentrate_for_inhalation'

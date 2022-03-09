@@ -7,13 +7,15 @@
 \headcommand {\beamer@framepages {2}{2}}
 \headcommand {\slideentry {1}{0}{2}{3/3}{}{0}}
 \headcommand {\beamer@framepages {3}{3}}
-\headcommand {\beamer@sectionpages {2}{3}}
-\headcommand {\beamer@subsectionpages {2}{3}}
-\headcommand {\sectionentry {2}{Takeaway}{4}{Takeaway}{0}}
-\headcommand {\slideentry {2}{0}{1}{4/4}{}{0}}
+\headcommand {\slideentry {1}{0}{3}{4/4}{}{0}}
 \headcommand {\beamer@framepages {4}{4}}
-\headcommand {\beamer@partpages {1}{4}}
-\headcommand {\beamer@subsectionpages {4}{4}}
-\headcommand {\beamer@sectionpages {4}{4}}
-\headcommand {\beamer@documentpages {4}}
-\headcommand {\gdef \inserttotalframenumber {4}}
+\headcommand {\beamer@sectionpages {2}{4}}
+\headcommand {\beamer@subsectionpages {2}{4}}
+\headcommand {\sectionentry {2}{Takeaway}{5}{Takeaway}{0}}
+\headcommand {\slideentry {2}{0}{1}{5/5}{}{0}}
+\headcommand {\beamer@framepages {5}{5}}
+\headcommand {\beamer@partpages {1}{5}}
+\headcommand {\beamer@subsectionpages {5}{5}}
+\headcommand {\beamer@sectionpages {5}{5}}
+\headcommand {\beamer@documentpages {5}}
+\headcommand {\gdef \inserttotalframenumber {5}}

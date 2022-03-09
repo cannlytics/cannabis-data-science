@@ -10,6 +10,18 @@ License: MIT License <https://opensource.org/licenses/MIT>
 Description: This script calculates various statistics about strains from the
 Washington State traceability data (2018-01-31 to 11-10-2021).
 
+Notes:
+
+    Install SpaCy:
+        
+        1. pip install spacy
+        2. python -m spacy download en_core_web_sm
+           python -m spacy download en_core_web_trf
+
+    Install PyMC3:
+
+        1. pip install pymc3
+
 Data sources:
 
     - Random sample of sales items
@@ -91,6 +103,86 @@ def identify_uom(row, key=''):
 data['quantity'] = data.apply (lambda row: identify_quantity(row), axis=1)
 data['unit_of_measure'] = data.apply (lambda row: identify_uom(row), axis=1)
 
+
+import spacy
+from collections import Counter
+
+# Create natural language processing client.
+nlp = spacy.load("en_core_web_trf")
+
+
+sample = data.sample(20)
+for index, values in sample.iterrows():
+    doc = nlp(values['product_name'])
+    spacy.displacy.render(doc, style='ent')
+
+# Count words, removing stop words and punctuation symbols.
+complete_text = ('Gus Proto is a Python developer currently'
+'working for a London-based Fintech company. He is'
+' interested in learning Natural Language Processing.'
+' There is a developer conference happening on 21 July'
+' 2019 in London. It is titled "Applications of Natural'
+' Language Processing". There is a helpline number '
+' available at +1-1234567891. Gus is helping organize it.'
+' He keeps organizing local Python meetups and several'
+' internal talks at his workplace. Gus is also presenting'
+' a talk. The talk will introduce the reader about "Use'
+' cases of Natural Language Processing in Fintech".'
+' Apart from his work, he is very passionate about music.'
+' Gus is learning to play the Piano. He has enrolled '
+' himself in the weekend batch of Great Piano Academy.'
+' Great Piano Academy is situated in Mayfair or the City'
+' of London and has world-class piano instructors.')
+
+
+complete_doc = nlp(complete_text)
+words = [token.text for token in complete_doc
+     if not token.is_stop and not token.is_punct]
+word_freq = Counter(words)
+
+# Find the 5 most commonly occurring words with their frequencies
+common_words = word_freq.most_common(5)
+print(common_words)
+
+# Compute Similarity.
+token_1=nlp('Blue Cookies OG')
+token_2=nlp('Sour OG')
+similarity_score=token_1.similarity(token_2)
+print(similarity_score)
+
+# Removal of stop words and punctuations
+words=[token for token in doc if token.is_stop==False and token.is_punct==False]
+
+# Calculating frequency count
+freq_dict={}
+for word in words:
+  if word not in freq_dict:
+    freq_dict[word]=1
+  else:
+    freq_dict[word]+=1
+
+# words_all = [token.text for token in complete_doc if not token.is_punct]
+# word_freq_all = Counter(words_all)
+# common_words_all = word_freq_all.most_common(5)
+# print (common_words_all)
+
+# Extract Noun Phrases
+# sample = data.sample(20)
+# for index, values in sample.iterrows():
+#     try:
+#         doc = nlp(values['product_name'])
+#         for entity in doc.ents:
+#             print('Text:', entity.text, entity.label_)
+#         for chunk in doc.noun_chunks:
+#             print(chunk)
+#     except ValueError:
+#         pass
+
+# # Unique words
+# unique_words = [word for (word, freq) in word_freq.items() if freq == 1]
+# print(unique_words)
+
+
 # import spacy
 # from spacy.en import English
 
@@ -167,6 +259,20 @@ data['unit_of_measure'] = data.apply (lambda row: identify_uom(row), axis=1)
 #--------------------------------------------------------------------------
 # Attempt to identify strains by THC to CBD ratio.
 #--------------------------------------------------------------------------
+
+# Calculate total CBD and total THC.
+# sample_data['total_cbd'] = 0.87 * sample_data['cannabinoid_cbda_percent'] + sample_data['cannabinoid_cbd_percent']
+# sample_data['total_thc'] = 0.87 * sample_data['cannabinoid_d9_thca_percent'] + sample_data['cannabinoid_d9_thc_percent']
+
+# Visualize the THC:CBD ratio.
+# fig, ax = plt.subplots(figsize=(15, 7))
+# sns.scatterplot(
+#     x='total_cbd',
+#     y='total_thc',
+#     data=sample_data,
+#     ax=ax
+#     # hue='county',
+# )
 
 # Joint plot.
 # https://seaborn.pydata.org/generated/seaborn.jointplot.html#seaborn.jointplot

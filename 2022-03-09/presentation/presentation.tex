@@ -1,0 +1,253 @@
+%------------------------------------------%
+% Cannabis Data Science
+% Date: 3/9/2022
+%------------------------------------------%
+\documentclass[xcolor={dvipsnames}]{beamer}
+\hypersetup{pdfpagemode = FullScreen}
+\mode<presentation>{
+  \usetheme{Boadilla}
+  \usecolortheme{orchid}
+  \usefonttheme{default}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+}
+\setbeamersize{
+  text margin left = 0.5in,
+  text margin right = 0.5in
+}
+
+%------------------------------------------%
+% Title
+%------------------------------------------%
+\title[\textbf{Cannabis Data Science \#56}]{}
+\author{Cannabis Data Science}
+\institute[]{\Large Cannabis Data Science \#56}
+\date{March \nth{9}, 2022}
+
+%------------------------------------------%
+% Packages
+%------------------------------------------%
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{tikz} % For styling.
+\usepackage{xparse}
+
+%------------------------------------------%
+% Colors
+%------------------------------------------%
+\definecolor{Green}{RGB}{34, 153, 84}
+\definecolor{LightGreen}{RGB}{218, 247, 166}
+\definecolor{DarkGreen}{RGB}{2, 48, 32}
+\definecolor{Orange}{RGB}{255, 87, 51}
+\definecolor{DarkOrange}{RGB}{199, 0, 57}
+\definecolor{Yellow}{RGB}{255, 195, 0}
+
+%------------------------------------------%
+% Theme
+%------------------------------------------%
+\setbeamercolor*{palette primary}{bg=LightGreen, fg=DarkGreen}
+\setbeamercolor*{palette secondary}{bg=LightGreen, fg=DarkGreen}
+\setbeamercolor*{palette tertiary}{bg=LightGreen, fg=DarkGreen}
+
+%------------------------------------------%
+% Packages
+%------------------------------------------%
+\usepackage{amsmath}
+\renewcommand*\footnoterule{} % No separating line on footnote.
+\usepackage{mathtools} % For annotating equations.
+\usepackage{hhline} % for double bars.
+\usepackage[super]{nth} % For formatting 1st, 2nd, 3rd, etc.
+\usepackage{graphicx, caption, subcaption}
+
+%------------------------------------------%
+% Commands
+%------------------------------------------%
+
+% Top space.
+\newcommand\T{\rule{0pt}{2.5ex}}
+
+% Bottom space.
+\newcommand\B{\rule[-1.25ex]{0pt}{0pt}}
+
+% Blocks.
+\newenvironment<>{Block}[2][.9\textwidth]
+  {\setlength{\textwidth}{#1}
+  \begin{actionenv}#3
+    \def\insertblocktitle{#2}\par
+    \usebeamertemplate{block begin}}
+  {\par\usebeamertemplate{block end}
+  \end{actionenv}}
+
+% Balls.
+\defbeamertemplate{enumerate item}{largeball}
+{\begin{pgfpicture}{-1ex}{-0.65ex}{1.5ex}{1.5ex}
+\usebeamercolor[fg]{item projected}
+{\pgftransformscale{2.5}\pgftext{\Large\pgfuseshading{bigsphere}}}
+{\pgftransformshift{\pgfpoint{0pt}{0.5pt}}
+\pgftext{\usebeamerfont*{item projected}\small\insertenumlabel}}
+\end{pgfpicture}}
+
+% Fancy arrows.
+\NewDocumentCommand\UpArrow{O{2.0ex} O{black}}{%
+   \mathrel{\tikz[baseline] \draw [->, line width=0.5pt, #2] (0,0) -- ++(0,#1);}} % Fancy up-arrow.
+\NewDocumentCommand\DownArrow{O{2.0ex} O{black}}{%
+   \mathrel{\tikz[baseline] \draw [<-, line width=0.5pt, #2] (0,0) -- ++(0,#1);}} % Fancy down-arrow.
+
+% Equations with numbers on the left.
+\makeatletter
+\newcommand{\LeftEqNo}{\let\veqno\@@leqno}
+\makeatother
+
+%------------------------------------------%
+% Presentation
+%------------------------------------------%
+\begin{document}
+
+% Title page.
+\begin{frame}{}
+  \includegraphics[scale=0.33]{images/logo.pdf}
+  \vspace*{-2\baselineskip}
+  \titlepage
+
+  % TODO: Add flare to title page?
+  % Background
+%\tikz[remember picture, overlay]
+%\node[opacity=1.0, inner sep=0pt] at (current page.center){
+%  \includegraphics[width=\paperwidth, height=\paperheight]{images/cover.pdf}
+%};  
+  
+\end{frame}
+
+%------------------------------------------%
+% Introduction
+%------------------------------------------%
+\section{Introduction}
+
+\begin{frame}{}
+
+% Question of the day
+\begin{center}
+\begin{minipage}{.9\linewidth}
+\begin{Block}{Yield is the name of the game.}
+
+\vspace{.5\baselineskip}
+\begin{itemize}
+\item  Does the amount a producer produces affect the number of periods a producer has operated or if a producer has exited?
+\end{itemize}
+
+\vspace{.5\baselineskip}
+
+\end{Block}
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+%------------------------------------------%
+% Yield
+%------------------------------------------%
+
+\begin{frame}{}
+
+{\large \textbf{Yield}}\vspace{\baselineskip}\\
+
+\end{frame}
+
+
+%------------------------------------------%
+% Consumption Rates
+%------------------------------------------%
+
+\begin{frame}{}
+
+{\large \textbf{Consumption Rates}}\vspace{\baselineskip}\\
+
+\end{frame}
+
+
+%------------------------------------------%
+% Natural Language Processing
+%------------------------------------------%
+
+\begin{frame}{}
+
+{\large \textbf{Natural Language Processing}}\vspace{\baselineskip}\\
+
+%Machine learning
+%
+%Artificial intelligence
+
+\end{frame}
+
+%------------------------------------------%
+% Natural Language Processing with SpaCy
+%------------------------------------------%
+
+%\begin{frame}{}
+%
+%{\large \textbf{Natural Language Processing with SpaCy}}\vspace{\baselineskip}\\
+%
+%\begin{itemize}
+%
+%\item {\bfseries EntityRecognizer} -- This component is referred as ner. It is responsible for identifying named entities and assigning labels to them.
+%
+%\item {\bfseries EntityRuler} -- This component is called * entity_ruler*.It is responsible for assigning named entitile based on pattern rules. Revisit Rule Based Matching to know more.
+%
+%\end{itemize}
+%
+%\end{frame}
+
+%Tokenizer : It is responsible for segmenting the text into tokens are turning a Doc object. This the first and compulsory step in a pipeline.
+%Tagger : It is responsible for assigning Part-of-speech tags. It takes a Doc as input and createsDoc[i].tag
+%DependencyParser : It is known as parser. It is responsible for assigning the dependency tags to each token. It takes a Doc as input and returns the processed Doc
+%EntityRecognizer : This component is referred as ner. It is responsible for identifying named entities and assigning labels to them.
+%TextCategorizer : This component is called textcat. It will assign categories to Docs.
+%EntityRuler : This component is called * entity_ruler*.It is responsible for assigning named entitile based on pattern rules. Revisit Rule Based Matching to know more.
+%Sentencizer : This component is called **sentencizer** and can perform rule based sentence segmentation.
+%merge_noun_chunks : It is called mergenounchunks. This component is responsible for merging all noun chunks into a single token. It has to be add in the pipeline after tagger and parser.
+%merge_entities : It is called merge_entities .This component can merge all entities into a single token. It has to added after the ner.
+%merge_subtokens : It is called merge_subtokens. This component can merge the subtokens into a single token.
+
+
+
+%------------------------------------------%
+% Takeaway
+%------------------------------------------%
+\section{Takeaway}
+\begin{frame}{}
+
+\begin{center}
+\begin{minipage}{3.85in}
+
+% Thank you.
+\includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\
+
+\begin{center}
+\begin{minipage}{.9\linewidth}
+\begin{Block}{Lesson of the Day}
+
+\vspace{0.5\baselineskip}
+
+\begin{itemize}
+
+\item Yield matters.
+
+\vspace{0.5\baselineskip}
+
+\end{itemize}
+
+\end{Block}
+\end{minipage}
+\end{center}
+
+\vfill
+
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+%------------------------------------------%
+% Fin.
+%------------------------------------------%
+\end{document}

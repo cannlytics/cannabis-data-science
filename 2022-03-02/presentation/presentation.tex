@@ -1,0 +1,253 @@
+%------------------------------------------%
+% Cannabis Data Science
+% Date: 3/2/2022
+%------------------------------------------%
+\documentclass[xcolor={dvipsnames}]{beamer}
+\hypersetup{pdfpagemode = FullScreen}
+\mode<presentation>{
+  \usetheme{Boadilla}
+  \usecolortheme{orchid}
+  \usefonttheme{default}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+}
+\setbeamersize{
+  text margin left = 0.5in,
+  text margin right = 0.5in
+}
+
+%------------------------------------------%
+% Title
+%------------------------------------------%
+\title[\textbf{Cannabis Data Science \#55}]{}
+\author{Cannabis Data Science}
+\institute[]{\Large Cannabis Data Science \#55}
+\date{March \nth{2}, 2022}
+
+%------------------------------------------%
+% Packages
+%------------------------------------------%
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{tikz} % For styling.
+\usepackage{xparse}
+
+%------------------------------------------%
+% Colors
+%------------------------------------------%
+\definecolor{Green}{RGB}{34, 153, 84}
+\definecolor{LightGreen}{RGB}{218, 247, 166}
+\definecolor{DarkGreen}{RGB}{2, 48, 32}
+\definecolor{Orange}{RGB}{255, 87, 51}
+\definecolor{DarkOrange}{RGB}{199, 0, 57}
+\definecolor{Yellow}{RGB}{255, 195, 0}
+
+%------------------------------------------%
+% Theme
+%------------------------------------------%
+\setbeamercolor*{palette primary}{bg=LightGreen, fg=DarkGreen}
+\setbeamercolor*{palette secondary}{bg=LightGreen, fg=DarkGreen}
+\setbeamercolor*{palette tertiary}{bg=LightGreen, fg=DarkGreen}
+
+%------------------------------------------%
+% Packages
+%------------------------------------------%
+\usepackage{amsmath}
+\renewcommand*\footnoterule{} % No separating line on footnote.
+\usepackage{mathtools} % For annotating equations.
+\usepackage{hhline} % for double bars.
+\usepackage[super]{nth} % For formatting 1st, 2nd, 3rd, etc.
+\usepackage{graphicx, caption, subcaption}
+
+%------------------------------------------%
+% Commands
+%------------------------------------------%
+
+% Top space.
+\newcommand\T{\rule{0pt}{2.5ex}}
+
+% Bottom space.
+\newcommand\B{\rule[-1.25ex]{0pt}{0pt}}
+
+% Blocks.
+\newenvironment<>{Block}[2][.9\textwidth]
+  {\setlength{\textwidth}{#1}
+  \begin{actionenv}#3
+    \def\insertblocktitle{#2}\par
+    \usebeamertemplate{block begin}}
+  {\par\usebeamertemplate{block end}
+  \end{actionenv}}
+
+% Balls.
+\defbeamertemplate{enumerate item}{largeball}
+{\begin{pgfpicture}{-1ex}{-0.65ex}{1.5ex}{1.5ex}
+\usebeamercolor[fg]{item projected}
+{\pgftransformscale{2.5}\pgftext{\Large\pgfuseshading{bigsphere}}}
+{\pgftransformshift{\pgfpoint{0pt}{0.5pt}}
+\pgftext{\usebeamerfont*{item projected}\small\insertenumlabel}}
+\end{pgfpicture}}
+
+% Fancy arrows.
+\NewDocumentCommand\UpArrow{O{2.0ex} O{black}}{%
+   \mathrel{\tikz[baseline] \draw [->, line width=0.5pt, #2] (0,0) -- ++(0,#1);}} % Fancy up-arrow.
+\NewDocumentCommand\DownArrow{O{2.0ex} O{black}}{%
+   \mathrel{\tikz[baseline] \draw [<-, line width=0.5pt, #2] (0,0) -- ++(0,#1);}} % Fancy down-arrow.
+
+% Equations with numbers on the left.
+\makeatletter
+\newcommand{\LeftEqNo}{\let\veqno\@@leqno}
+\makeatother
+
+%------------------------------------------%
+% Presentation
+%------------------------------------------%
+\begin{document}
+
+% Title page.
+\begin{frame}{}
+  \includegraphics[scale=0.33]{images/logo.pdf}
+  \vspace*{-2\baselineskip}
+  \titlepage
+\end{frame}
+
+%------------------------------------------%
+% Introduction
+%------------------------------------------%
+\section{Introduction}
+
+\begin{frame}{}
+
+% Question of the day
+\begin{center}
+\begin{minipage}{.9\linewidth}
+\begin{Block}{The Trajectory of Cannabis Science}
+
+\vspace{.5\baselineskip}
+\begin{itemize}
+\item What is the trajectory of cannabis research and science?
+\end{itemize}
+
+\vspace{.5\baselineskip}
+
+\end{Block}
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+%------------------------------------------%
+% Pharmacology
+%------------------------------------------%
+
+\begin{frame}{}
+
+{\large \textbf{The general understanding of the pharmacological is sophisticated.}}\vspace{\baselineskip}\\
+
+\begin{itemize}
+
+\item The effects of terpenes are being researched.
+
+\vspace{0.5\baselineskip}
+
+\item Bioavailability is being measured and optimized.
+
+\vspace{0.5\baselineskip}
+
+\item Clinical trials are now in high demand.
+
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------%
+% Optimized Cultivation
+%------------------------------------------%
+
+\begin{frame}{}
+
+{\large \textbf{Cultivation and manufacturing are being optimized to ever greater extents.}}\vspace{\baselineskip}\\
+
+\begin{itemize}
+
+\item Genetics are being selected and optimized for performance.
+
+\vspace{0.5\baselineskip}
+
+\item Artificial intelligence is being implemented in creative ways.
+
+\vspace{0.5\baselineskip}
+
+\item Further studies and optimization of yields is in demand.
+
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------%
+% Laboratory Testing is Stabalizing
+%------------------------------------------%
+
+\begin{frame}{}
+
+{\large \textbf{Laboratory testing is stabilizing and being refined.}}\vspace{\baselineskip}\\
+
+\begin{itemize}
+
+\item Complex measurements, such as measuring metabolites, can now be performed.
+
+\vspace{0.5\baselineskip}
+
+\item Compounds can be reliably identified down to minute scales.
+
+\vspace{0.5\baselineskip}
+
+\item Further work can be done to connect the understanding, especially of contaminants, by labs to operators who could factor in their knowledge.
+
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------%
+% Takeaway
+%------------------------------------------%
+\section{Takeaway}
+\begin{frame}{}
+
+\begin{center}
+\begin{minipage}{3.85in}
+
+% Thank you.
+\includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\
+
+Please share what you are interested in researching!
+
+% Re-cap the lesson of the week.
+\begin{center}
+\begin{minipage}{.9\linewidth}
+\begin{Block}{Lessons of the Day}
+
+\vspace{0.5\baselineskip}
+
+\begin{itemize}
+
+\item The future is bright for cannabis research and now is the time to apply your best and brightest techniques.
+
+\vspace{0.5\baselineskip}
+
+\end{itemize}
+
+\end{Block}
+\end{minipage}
+\end{center}
+
+\vfill
+
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+%------------------------------------------%
+% End
+%------------------------------------------%
+\end{document}

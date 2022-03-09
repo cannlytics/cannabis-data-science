@@ -4,10 +4,11 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 3/2/2022
-Updated: 3/8/2022
+Updated: 3/9/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 
-Description: This script analyzes yields in Washington State.
+Description: This script parses quantities and units of measure from the
+product name of sales items in the historic Washington State traceability data.
 
 Data sources:
 
@@ -30,14 +31,12 @@ import re
 
 # External imports.
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
 import pandas as pd
-
-# Define the plot style.
-plt.style.use('fivethirtyeight')
-plt.rcParams.update({
-    'font.family': 'Times New Roman',
-    'font.size': 24,
-})
+import seaborn as sns
+import spacy
+from spacy import displacy
+from spacy.matcher import Matcher
 
 
 #--------------------------------------------------------------------------
@@ -57,34 +56,6 @@ data = pd.read_csv(DATA_FILE)
 # data = pd.read_csv(DATA_FILE)
 
 
-#------------------------------------------------------------------------------
-# Get the retail city and county.
-# Licensees data: https://cannlytics.com/data/market/augmented-washington-state-licensees
-# Augment yourself: https://github.com/cannlytics/cannabis-data-science/blob/main/2022-01-26/geocode_licensees.py
-#------------------------------------------------------------------------------
-
-# Augment fields from the licensees data.
-licensee_fields = {
-    'global_id': 'string',
-    'city': 'string',
-    'county': 'string',
-}
-licensees = pd.read_csv(
-    f'{DATA_DIR}/augmented/augmented-washington-state-licensees.csv',
-    usecols=list(licensee_fields.keys()),
-    dtype=licensee_fields,
-)
-data = pd.merge(
-    left=data,
-    right=licensees,
-    how='left',
-    left_on='mme_id',
-    right_on='global_id',
-)
-data.drop(['global_id'], axis=1, inplace=True, errors='ignore')
-print('Augmented the sales data with city and county.')
-
-
 #--------------------------------------------------------------------------
 # Clean the data.
 #--------------------------------------------------------------------------
@@ -95,31 +66,20 @@ print('Augmented the sales data with city and county.')
 data = data.loc[data['sale_type'] != 'wholesale']
 
 # Drop observations with negative prices and prices in the upper quantile.
-data = data.loc[data.price_total > 0]
-data = data[data.price_total < data.price_total.quantile(.95)]
-
-# Add a date column.
-data['date'] = pd.to_datetime(data['created_at'])
-data['day'] = data['date'].dt.date
-
-# Add quarter (e.g. 2022Q1) field.
-data['quarter'] = data.date.dt.to_period('Q')
-
-# Clean the city name and county.
-data['city'] = data['city'].str.title()
-data['county'] = data['county'].str.title().str.replace(' County', '')
+data = data.loc[
+    (data.price_total > 0) &
+    (data.price_total < data.price_total.quantile(.95))
+]
 
 
 #--------------------------------------------------------------------------
 # Natural language processing to determine quantity and unit of measure.
 #--------------------------------------------------------------------------
 
-import spacy
-from spacy import displacy
-from spacy.matcher import Matcher 
-
 # Create natural language processing client.
-nlp = spacy.load('en_core_web_sm') # Or en_core_web_trf for accuracy.
+# en_core_web_trf for efficiency or en_core_web_trf for accuracy.
+# FIXME: Use 'en' vocabulary?
+nlp = spacy.load('en_core_web_trf')
 
 # Optional: Inspect the pipeline.
 print(nlp.pipe_names)
@@ -157,11 +117,11 @@ print('Identified: %.0f%%' % round(identification_rate * 100))
 
 # Example patterns.
 pattern = [{'LOWER': 'g'}]
-# pattern = [{'LOWER': {'IN': ['g', 'gram', 'grams']}}]
-# pattern = [
-#     {'LIKE_NUM': True},
-#     {'LOWER': {'IN': ['g', 'gram', 'grams']}}
-# ]
+pattern = [{'LOWER': {'IN': ['g', 'gram', 'grams']}}]
+pattern = [
+    {'LIKE_NUM': True},
+    {'LOWER': {'IN': ['g', 'gram', 'grams']}}
+]
 # pattern = [
 #     {'LIKE_NUM': True},
 #     {'LOWER': {'IN': ['x', 'pk', 'pack']}}
@@ -177,7 +137,7 @@ for index, values in sample.iterrows():
         doc = nlp(values['product_name'])
         matches = matcher(doc)
         for match_id, start, end in matches:
-            displacy.render(doc, style='ent')
+            # displacy.render(doc, style='ent')
             print('Match found:', doc[start:end].text)
     except ValueError:
         pass
@@ -237,7 +197,7 @@ print('Identified: %.0f%%' % round(identification_rate * 100))
 
 
 def split_on_letter(string):
-    """
+    """Split a string at the first letter.
     Credit: C_Z_ https://stackoverflow.com/a/35610194
     License: CC-BY-SA-3.0 https://creativecommons.org/licenses/by-sa/3.0/
     """
@@ -295,12 +255,12 @@ milligrams_per_unit = {
 
 def calculate_milligrams(row, quantity_field='parsed_quantity', units_field='parsed_uom'):
     """Calculate the milligram weight of a given observation."""
-    mg = milligrams_per_unit.get(row[units_field], 0)
+    mg = milligrams_per_unit.get(row[units_field].lower(), 0)
     return mg * row[quantity_field]
 
 
 # Assign weight in mg.
-milligrams = sample_with_weights.apply(lambda x: calculate_milligrams(x), axis=1)
+milligrams = sample_with_weights.apply(calculate_milligrams, axis=1)
 sample_with_weights = sample_with_weights.assign(weight=milligrams)
 
 
@@ -327,11 +287,12 @@ sample_with_weights = sample_with_weights.assign(price_per_mg_thc=price_per_mg_t
 
 
 #--------------------------------------------------------------------------
-# TODO: Parse weights for all of the data.
+# Parse weights for all of the data.
+# FIXME: It would be best to pass the `nlp` client as an argument.
 #--------------------------------------------------------------------------
 
 def parse_weights(row, field='product_name'):
-    """Parse weights from a dataset."""
+    """Parse weights from an observation's name field."""
     try:
         doc = nlp(row[field])
         for entity in doc.ents:
@@ -345,17 +306,12 @@ def parse_weights(row, field='product_name'):
     return (1, 'ea')
 
 
-def augment_weights(
-        df,
-        field='product_name',
-        weight_name='parsed_quantity',
-        uom_name='parsed_uom'
-):
+def augment_weights(df, field='product_name'):
     """Augment data with parsed weights from a name field."""
     df = df.assign(parsed_uom='ea', parsed_quantity=1)
     parsed_quantities = df.apply(lambda x: parse_weights(x, field), axis=1)
-    df.loc[:, weight_name] = parsed_quantities.map(lambda x: x[0])
-    df.loc[:, uom_name] = parsed_quantities.map(lambda x: x[1])
+    df.loc[:, 'parsed_quantity'] = parsed_quantities.map(lambda x: x[0])
+    df.loc[:, 'parsed_uom'] = parsed_quantities.map(lambda x: x[1])
     mgs = df.apply(calculate_milligrams, axis=1)
     df = df.assign(weight=mgs)
     thc_prices = df.apply(calculate_price_per_mg_thc, axis=1)
@@ -369,65 +325,101 @@ data = augment_weights(data, field='product_name')
 
 
 #--------------------------------------------------------------------------
-# TODO: Calculate price per total cannabinoids ($/mg)
+# Calculate (and visualize!) the average price per mg of THC ($/mg of THC)
+# for different product types over time.
 #--------------------------------------------------------------------------
 
-# Look at price per mg of THC (or total cannabinoids) in different sample types.
+# Specify the time period for analysis and look at only observations with
+# identified weight and cannabinoid results.
+sample = data.loc[
+    (data['date'] >= pd.to_datetime('2020-02-01')) &
+    (data['date'] <= pd.to_datetime('2021-10-31')) &
+    (data['parsed_uom'] != 'ea') &
+    (data['total_cannabinoid_percent'] > 0)
+]
+sample_types = [
+    {'key': 'usable_marijuana', 'name': 'Flower'},
+    {'key': 'concentrate_for_inhalation', 'name': 'Concentrate'},
+]
 
-# # Identify the time period for analysis.
-# data = data.loc[
-#     (data['date'] >= pd.to_datetime('2021-01-01')) &
-#     (data['date'] <= pd.to_datetime('2021-10-31'))
-# ]
+# Define the plot style.
+plt.style.use('fivethirtyeight')
+plt.rc('text', usetex=True)
+plt.rcParams.update({
+    'font.family': 'serif',
+    'font.serif': ['Times'], # Times, Palatino, New Century Schoolbook, Bookman
+    'font.size': 24,
+})
 
-# # Look at the sample with weights.
-# sample = data.loc[
-#     (data['parsed_uom'] != 'ea') &
-#     (data['total_cannabinoid_percent'] > 0)
-# ]
+# Visualize the average price by month for each sample type.
+fig, ax = plt.subplots(figsize=(15, 7))
+colors = sns.color_palette('Set2', n_colors=len(sample_types))
+observations = []
+for i, sample_type in enumerate(sample_types):
 
-# # ARCH and GARCH.
-# sample_type = 'concentrate_for_inhalation'
-# sample_data = data.loc[data.intermediate_type == sample_type]
-# daily_data = sample_data.groupby('day')
+    # Restrict to a given sample type.
+    sample_data = sample.loc[
+        (sample['intermediate_type'] == sample_type['key']) &
+        (sample['price_per_mg_thc'] > 0) &
+        (sample['price_per_mg_thc'] < sample['price_per_mg_thc'].quantile(.95))
+    ]
+    observations.append(len(sample_data))
 
-# avg_price = daily_data.mean()['price_total']
-# avg_price.index = pd.to_datetime(avg_price.index)
+    # Estimate daily average price.
+    daily_data = sample_data.groupby('day')
+    avg_price = daily_data.mean()['price_per_mg_thc']
+    avg_price.index = pd.to_datetime(avg_price.index)
 
-# # Estimate the total tax paid by month.
-# monthly_avg_price = avg_price.groupby(pd.Grouper(freq='M')).mean()
-# monthly_avg_price.plot()
+    # Estimate monthly average price.
+    monthly_avg_price = avg_price.groupby(pd.Grouper(freq='M')).mean()
 
-# # Estimate the total tax paid by month.
-# std_price = daily_data.std()['price_total']
-# std_price.index = pd.to_datetime(std_price.index)
-# monthly_std_price = std_price.groupby(pd.Grouper(freq='M')).mean()
-# monthly_std_price.plot()
+    # Estimate the percent difference from the start to the end.
+    percent_change = (monthly_avg_price[-1] - monthly_avg_price[0]) / monthly_avg_price[0] * 100
+    direction = '+' if percent_change > 0 else ''
 
-
-#--------------------------------------------------------------------------
-# Yield appears to be the name of the game. Does the amount a producer produces
-# affect the number of periods a producer has operated or if a producer has exited.
-#--------------------------------------------------------------------------
-
-# 1. Measure yields.
-
-
-# 2. Determine when producers are operating.
-
-
-# import pymc3 as pm
-# Bayesian linear regression.
-# X, y = linear_training_data()
-# with pm.Model() as linear_model:
-#     parameter_belief = pm.Normal('weights', mu=0, sigma=1)
-#     variance_belief = pm.Gamma('noise', alpha=2, beta=1)
-#     y_observed = pm.Normal(
-#         'y_observed',
-#         mu=X @ parameter_belief,
-#         sigma=variance_belief,
-#         observed=y,
-#     )
-#     prior = pm.sample_prior_predictive()
-#     posterior = pm.sample()
-#     posterior_pred = pm.sample_posterior_predictive(posterior)
+    # Plot monthly prices
+    price_per_gram = (monthly_avg_price * 1000)
+    price_per_gram.plot(
+        ax=ax,
+        label=sample_type['name'] + ' (%s%.1f\%%)' % (direction, percent_change),
+        color=colors[i],
+    )
+    plt.scatter(
+        price_per_gram.index, 
+        price_per_gram,
+        color=colors[i],
+        s=100,
+    )
+    
+plt.title('Average Retail Price per Gram of THC in Washington State', pad=20)
+plt.legend(loc='upper right')
+plt.xlabel('')
+plt.ylabel('Price (\$)')
+ax.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+plt.figtext(
+    x=0.05,
+    y=-0.3,
+    s="""Data: A random sample of {:,} flower and {:,} concentrate sale items.
+Data Source: Washington State cannabis traceability data from {} through {}.
+Notes: Average prices are calculated from retail price data before tax.
+Quantities are identified from each product's name with natural language processing (NLP).
+The top {} of observations by price were excluded as outliers.
+""".format(
+        observations[0],
+        observations[1],
+        'February 2020',
+        'October 2021',
+        '5\%',
+    ),
+    fontsize=21,
+    ha='left',
+)
+fig.savefig(
+    f'{DATA_DIR}/figures/avg-retail-price-per-g-thc.png',
+    format='png',
+    dpi=96,
+    bbox_inches='tight',
+    pad_inches=0.75,
+    transparent=False,
+)
+plt.show()

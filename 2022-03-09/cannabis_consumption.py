@@ -4,7 +4,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 3/2/2022
-Updated: 3/9/2022
+Updated: 3/11/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 
 Description: This script parses quantities and units of measure from the
@@ -73,13 +73,14 @@ data = data.loc[
 
 
 #--------------------------------------------------------------------------
-# Natural language processing to determine quantity and unit of measure.
+# Exploratory analysis: Using natural language processing to determine
+# quantity and unit of measure for a sample for the data.
 #--------------------------------------------------------------------------
 
 # Create natural language processing client.
-# en_core_web_trf for efficiency or en_core_web_trf for accuracy.
-# FIXME: Use 'en' vocabulary?
-nlp = spacy.load('en_core_web_trf')
+# Use `en_core_web_sm` for speed and `en_core_web_trf` for accuracy.
+# For a blank model, use spacy.blank('en')
+nlp = spacy.load('en_core_web_sm')
 
 # Optional: Inspect the pipeline.
 print(nlp.pipe_names)
@@ -196,40 +197,14 @@ identification_rate = identified / sample_size
 print('Identified: %.0f%%' % round(identification_rate * 100))
 
 
-def split_on_letter(string):
-    """Split a string at the first letter.
-    Credit: C_Z_ https://stackoverflow.com/a/35610194
-    License: CC-BY-SA-3.0 https://creativecommons.org/licenses/by-sa/3.0/
-    """
-    match = re.compile("[^\W\d]").search(string)
-    return [string[:match.start()], string[match.start():]]
-
-
-# Parse quantity and uom now once the quantity string is found.
-sample['parsed_uom'] = 'ea'
-sample['parsed_quantity'] = 1
-for index, values in sample.iterrows():
-    try:
-        doc = nlp(values['product_name'])
-        for entity in doc.ents:
-            if entity.label_ == 'QUANTITY':
-                identified += 1
-                texts = split_on_letter(entity.text.replace(' ', ''))
-                sample.loc[index, 'parsed_quantity'] = float(texts[0])
-                sample.loc[index, 'parsed_uom'] = texts[1]
-    except ValueError:
-        pass
-# print(sample[['parsed_quantity', 'parsed_uom']])
-
-# Look at the sample with weights.
-sample_with_weights = sample.loc[
-    (sample['parsed_uom'] != 'ea') &
-    (sample['total_cannabinoid_percent'] > 0)
-]
+#--------------------------------------------------------------------------
+# Natural language processing functions.
+#--------------------------------------------------------------------------
 
 # Calculate weight in milligrams.
+# TODO: Add more keys!
 # print(list(sample_with_weights['parsed_uom'].unique()))
-milligrams_per_unit = {
+MILLIGRAMS_PER_UNIT = {
     'g': 1000,
     'gr': 1000,
     'gram': 1000,
@@ -255,13 +230,8 @@ milligrams_per_unit = {
 
 def calculate_milligrams(row, quantity_field='parsed_quantity', units_field='parsed_uom'):
     """Calculate the milligram weight of a given observation."""
-    mg = milligrams_per_unit.get(row[units_field].lower(), 0)
+    mg = MILLIGRAMS_PER_UNIT.get(row[units_field].lower(), 0)
     return mg * row[quantity_field]
-
-
-# Assign weight in mg.
-milligrams = sample_with_weights.apply(calculate_milligrams, axis=1)
-sample_with_weights = sample_with_weights.assign(weight=milligrams)
 
 
 def calculate_price_per_mg_thc(row):
@@ -281,20 +251,19 @@ def calculate_price_per_mg_thc(row):
         return 0
 
 
-# Assign price per mg of THC.
-price_per_mg_thc = sample_with_weights.apply(lambda x: calculate_price_per_mg_thc(x), axis=1)
-sample_with_weights = sample_with_weights.assign(price_per_mg_thc=price_per_mg_thc)
+def split_on_letter(string):
+    """Split a string at the first letter.
+    Credit: C_Z_ https://stackoverflow.com/a/35610194
+    License: CC-BY-SA-3.0 https://creativecommons.org/licenses/by-sa/3.0/
+    """
+    match = re.compile("[^\W\d]").search(string)
+    return [string[:match.start()], string[match.start():]]
 
 
-#--------------------------------------------------------------------------
-# Parse weights for all of the data.
-# FIXME: It would be best to pass the `nlp` client as an argument.
-#--------------------------------------------------------------------------
-
-def parse_weights(row, field='product_name'):
+def parse_weights(nlp_client, row, field='product_name'):
     """Parse weights from an observation's name field."""
     try:
-        doc = nlp(row[field])
+        doc = nlp_client(row[field])
         for entity in doc.ents:
             if entity.label_ == 'QUANTITY':
                 parts = split_on_letter(entity.text.replace(' ', ''))
@@ -306,10 +275,10 @@ def parse_weights(row, field='product_name'):
     return (1, 'ea')
 
 
-def augment_weights(df, field='product_name'):
+def augment_weights(nlp_client, df, field='product_name'):
     """Augment data with parsed weights from a name field."""
     df = df.assign(parsed_uom='ea', parsed_quantity=1)
-    parsed_quantities = df.apply(lambda x: parse_weights(x, field), axis=1)
+    parsed_quantities = df.apply(lambda x: parse_weights(nlp_client, x, field), axis=1)
     df.loc[:, 'parsed_quantity'] = parsed_quantities.map(lambda x: x[0])
     df.loc[:, 'parsed_uom'] = parsed_quantities.map(lambda x: x[1])
     mgs = df.apply(calculate_milligrams, axis=1)
@@ -319,9 +288,81 @@ def augment_weights(df, field='product_name'):
     return df
 
 
+#--------------------------------------------------------------------------
+# Post-processing testing: Determine the weight in mg and the price per mg of THC
+# for each observation.
+#--------------------------------------------------------------------------
+
+# Parse quantity and uom with the identified quantity.
+sample['parsed_uom'] = 'ea'
+sample['parsed_quantity'] = 1
+for index, values in sample.iterrows():
+    try:
+        doc = nlp(values['product_name'])
+        for entity in doc.ents:
+            if entity.label_ == 'QUANTITY':
+                identified += 1
+                texts = split_on_letter(entity.text.replace(' ', ''))
+                sample.loc[index, 'parsed_quantity'] = float(texts[0])
+                sample.loc[index, 'parsed_uom'] = texts[1]
+    except ValueError:
+        pass
+
+# Look at the sample with weights.
+sample_with_weights = sample.loc[
+    (sample['parsed_uom'] != 'ea') &
+    (sample['total_cannabinoid_percent'] > 0)
+]
+
+# Assign weight in mg.
+milligrams = sample_with_weights.apply(calculate_milligrams, axis=1)
+sample_with_weights = sample_with_weights.assign(weight=milligrams)
+
+# Assign price per mg of THC.
+price_per_mg_thc = sample_with_weights.apply(lambda x: calculate_price_per_mg_thc(x), axis=1)
+sample_with_weights = sample_with_weights.assign(price_per_mg_thc=price_per_mg_thc)
+
+
+#--------------------------------------------------------------------------
+# Process the entire dataset.
+#--------------------------------------------------------------------------
+
+nlp = spacy.load('en_core_web_trf')
+patterns = [
+    {
+        'label': 'MULTIPLIER',
+        'pattern': [
+            {'LIKE_NUM': True},
+            {'LOWER': {'IN': [
+                '(2)', 'x', 'pk', 'pack', 'packs'
+            ]}}
+        ],
+    },
+    {
+        'label': 'QUANTITY',
+        'pattern': [
+            {'LIKE_NUM': True},
+            {'LOWER': {'IN': [
+                'g', 'gr', 'gram', 'grams', 'teenth', 'sixteenth', 'eighth',
+                'quarter', 'ounce', 'ounces', 'oz', 'pound', 'lb', 'mg', 'kg',
+                'milligram', 'milligrams', 'kilogram', 'kilograms',
+                '1\/8 oz'
+            ]}}
+        ],
+    },
+]
+try:
+    ruler = nlp.add_pipe('entity_ruler', before='ner')
+except ValueError:
+    nlp.remove_pipe('entity_ruler')
+    ruler = nlp.add_pipe('entity_ruler', before='ner')
+ruler.add_patterns(patterns)
+
 # Augment all of the data with weights from the product name.
 print('Augmenting weights for all of the data...')
-data = augment_weights(data, field='product_name')
+data = augment_weights(nlp, data, field='product_name')
+data.to_csv(f'{DATA_DIR}/samples/random-sales-items-2022-03-09a.csv')
+print('Augmented all data.')
 
 
 #--------------------------------------------------------------------------
@@ -352,7 +393,7 @@ plt.rcParams.update({
 })
 
 # Visualize the average price by month for each sample type.
-fig, ax = plt.subplots(figsize=(15, 7))
+fig, ax = plt.(figsize=(15, 7))
 colors = sns.color_palette('Set2', n_colors=len(sample_types))
 observations = []
 for i, sample_type in enumerate(sample_types):
@@ -377,20 +418,20 @@ for i, sample_type in enumerate(sample_types):
     percent_change = (monthly_avg_price[-1] - monthly_avg_price[0]) / monthly_avg_price[0] * 100
     direction = '+' if percent_change > 0 else ''
 
-    # Plot monthly prices
-    price_per_gram = (monthly_avg_price * 1000)
+    # Plot monthly prices.
+    price_per_gram = monthly_avg_price * 1000
     price_per_gram.plot(
         ax=ax,
         label=sample_type['name'] + ' (%s%.1f\%%)' % (direction, percent_change),
         color=colors[i],
     )
     plt.scatter(
-        price_per_gram.index, 
+        price_per_gram.index,
         price_per_gram,
         color=colors[i],
         s=100,
     )
-    
+
 plt.title('Average Retail Price per Gram of THC in Washington State', pad=20)
 plt.legend(loc='upper right')
 plt.xlabel('')
@@ -404,12 +445,16 @@ Data Source: Washington State cannabis traceability data from {} through {}.
 Notes: Average prices are calculated from retail price data before tax.
 Quantities are identified from each product's name with natural language processing (NLP).
 The top {} of observations by price were excluded as outliers.
+THC is measured as the sum of {} and {} after its known
+decarboxylated value conversion factor (0.877) has been applied.
 """.format(
         observations[0],
         observations[1],
         'February 2020',
         'October 2021',
         '5\%',
+        '\delta 9-THC',
+        '\delta 9-THCA',
     ),
     fontsize=21,
     ha='left',

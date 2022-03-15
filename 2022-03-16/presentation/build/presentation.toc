@@ -1,0 +1,5 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{Background}{2}{0}{1}
+\beamer@sectionintoc {2}{Data Science}{3}{0}{2}
+\beamer@sectionintoc {3}{Introduction}{4}{0}{3}
+\beamer@sectionintoc {4}{Takeaway}{6}{0}{4}

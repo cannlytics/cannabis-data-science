@@ -100,6 +100,7 @@
         "ylabel",
         "ylim",
         "yticklabels",
+        "yticks",
         "zorder"
     ]
 }

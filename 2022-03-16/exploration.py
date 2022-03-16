@@ -69,7 +69,7 @@ flower_data = data.loc[
     (data['intermediate_type'] == 'usable_marijuana') &
     (data['parsed_uom'] != 'ea')
 ]
-concentate_data = data.loc[
+concentrate_data = data.loc[
     (data['intermediate_type'] == 'concentrate_for_inhalation') &
     (data['parsed_uom'] != 'ea')
 ]
@@ -77,14 +77,8 @@ beverage_data = data.loc[data['intermediate_type'] == 'liquid_edible']
 
 
 #--------------------------------------------------------------------------
-# Visualize standard deviation, mean, etc.
-#--------------------------------------------------------------------------
-
-
-
-
-#--------------------------------------------------------------------------
 # Look at the distribution of weight and prices (histograms).
+# TODO: Visualize standard deviation, mean, etc.
 #--------------------------------------------------------------------------
 
 # Plot the distribution of weight of flower sold.
@@ -96,9 +90,9 @@ sns.histplot(weight, stat='density', kde=True, bins=100)
 plt.show()
 
 # Plot the distribution of weight of concentrates sold.
-weight = concentate_data.loc[
-    (concentate_data['weight'] > 0) &
-    (concentate_data['weight'] <= concentate_data['weight'].quantile(0.99))
+weight = concentrate_data.loc[
+    (concentrate_data['weight'] > 0) &
+    (concentrate_data['weight'] <= concentrate_data['weight'].quantile(0.99))
 ]['weight']
 sns.histplot(weight, stat='density', kde=True, bins=100)
 plt.show()
@@ -109,7 +103,95 @@ plt.show()
 
 
 #--------------------------------------------------------------------------
-# Get Census Data
+# Correlation and regression
+#--------------------------------------------------------------------------
+
+# Create a correlation heatmap between flower price and shelf days.
+corr = flower_data[['price_total', 'shelf_days']].corr()
+sns.heatmap(corr, annot=True, square=True)
+plt.yticks(rotation=0)
+plt.show()
+
+# Create a correlation heatmap between concentrate price and shelf days.
+corr = concentrate_data[['price_total', 'shelf_days']].corr()
+sns.heatmap(corr, annot=True, square=True)
+plt.yticks(rotation=0)
+plt.show()
+
+
+#--------------------------------------------------------------------------
+# Bivariate analysis
+#--------------------------------------------------------------------------
+
+# Compare Eastern and Western Washington counties.
+comparison = concentrate_data.loc[
+    (concentrate_data['county'] == 'Spokane') |
+    (concentrate_data['county'] == 'King')
+]
+sns.relplot(
+    x='shelf_days',
+    y='price_total',
+    hue='county',
+    data=comparison
+)
+plt.show()
+
+# Plot a comparison of median shelf days of flower.
+comparison.groupby('county')[['shelf_days']].median().T.plot(kind='barh', figsize=(10,10))
+
+# Plot a comparison of median prices of flower.
+comparison.groupby('county')[['price_total']].median().T.plot(kind='barh', figsize=(10,10))
+
+# Plot a comparison of median shelf days for various types.
+comparison = data.loc[
+    (data['intermediate_type'] == 'usable_marijuana') |
+    (data['intermediate_type'] == 'concentrate_for_inhalation') |
+    (data['intermediate_type'] == 'liquid_edible')
+]
+comparison.groupby('intermediate_type')[['shelf_days']].median().T.plot(kind='barh', figsize=(10,10))
+
+
+# TODO: Try to estimate velocity?
+
+
+# TODO: Try to plot cumulative density functions (CDFs)?
+
+
+#--------------------------------------------------------------------------
+# Modelling of beverage brands.
+#--------------------------------------------------------------------------
+
+# Andrew S. C. Ehrenberg
+# negative binomial distribution to the numbers of purchases of
+# a brand of consumer goods.
+
+
+# NBD-Dirichlet model of brand choice successfully modelled the
+# repeated category and brand purchases within a wide variety of markets.
+
+
+# Estimate market share (percent) for the top brands in each category.
+
+
+# Estimate penetration rate (percent).
+# The percentage of the relevant population that has purchased
+# a given brand.
+# or category at least once in the time period under study.
+
+
+# Estimate average purchase frequency.
+
+
+# Are there any brands that are only sold at 1 retail location?
+
+
+#--------------------------------------------------------------------------
+# TODO: Seasonality statistics.
+#--------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------
+# TODO: Correlate with Census Data
 # API Key: https://api.census.gov/data/key_signup.html
 # Attribution: This product uses the Census Bureau Data API but is not
 # endorsed or certified by the Census Bureau.
@@ -154,104 +236,3 @@ plt.show()
 
 
 # Calculate avg. monthly consumption per capita.
-
-#--------------------------------------------------------------------------
-# Correlation and regression
-#--------------------------------------------------------------------------
-
-# Create a correlation heatmap between flower price and shelf days.
-corr = flower_data[['price_total', 'shelf_days']].corr()
-sns.heatmap(corr, annot=True, square=True)
-plt.yticks(rotation=0)
-plt.show()
-
-# Create a correlation heatmap between concentrate price and shelf days.
-corr = concentate_data[['price_total', 'shelf_days']].corr()
-sns.heatmap(corr, annot=True, square=True)
-plt.yticks(rotation=0)
-plt.show()
-
-
-#--------------------------------------------------------------------------
-# Bivariate analysis
-#--------------------------------------------------------------------------
-
-# x = flower_data['price_total']
-# y = flower_data['shelf_days']
-
-comparison = concentate_data.loc[
-    (concentate_data['county'] == 'Spokane') |
-    (concentate_data['county'] == 'King')
-    # (flower_data['county'] == 'Clark') |
-    # (flower_data['county'] == 'Pierce') |
-    # (flower_data['county'] == 'Thurston') |
-    # (flower_data['county'] == 'Yakima') |
-    # (flower_data['county'] == 'Walla Walla')
-]
-
-sns.relplot(
-    x='shelf_days',
-    y='price_total',
-    hue='county',
-    data=comparison
-)
-plt.show()
-
-
-#
-# data.groupby('intermediate_type')[['price_total', 'shelf_days']].mean().T.plot(figsize=(12,8))
-
-# Plot a comparison of mean shelf days of flower.
-comparison.groupby('county')[['shelf_days']].median().T.plot(kind='barh', figsize=(10,10))
-
-# Plot a comparison of mean prices of flower.
-comparison.groupby('county')[['price_total']].median().T.plot(kind='barh', figsize=(10,10))
-
-
-comparison = data.loc[
-    (data['intermediate_type'] == 'usable_marijuana') |
-    (data['intermediate_type'] == 'concentrate_for_inhalation') |
-    (data['intermediate_type'] == 'liquid_edible')
-]
-comparison.groupby('intermediate_type')[['shelf_days']].median().T.plot(kind='barh', figsize=(10,10))
-
-
-
-# Velocity?
-
-
-# CDFs?
-
-#--------------------------------------------------------------------------
-# Modelling of beverage brands.
-#--------------------------------------------------------------------------
-
-# Andrew S. C. Ehrenberg
-# negative binomial distribution to the numbers of purchases of
-# a brand of consumer goods.
-
-
-# NBD-Dirichlet model of brand choice successfully modelled the
-# repeated category and brand purchases within a wide variety of markets.
-
-
-# Estimate market share (percent) for the top brands in each category.
-
-
-# Estimate penetration rate (percent).
-# The percentage of the relevant population that has purchased
-# a given brand.
-# or category at least once in the time period under study.
-
-
-# Estimate average purchase frequency.
-
-
-# Are there any brands that are only sold at 1 retail location?
-
-
-#--------------------------------------------------------------------------
-# TODO: Seasonality statistics.
-#--------------------------------------------------------------------------
-
-

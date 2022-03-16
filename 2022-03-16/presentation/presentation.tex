@@ -119,40 +119,146 @@
 \end{frame}
 
 %------------------------------------------%
+% Data Science
+%------------------------------------------%
+\section{Data Science}
+
+\begin{frame}{What Data Science Brings to the Table}
+
+\vspace*{0.125\baselineskip}
+
+\begin{figure}
+\includegraphics[height=1.5in]{images/winds-of-britain.png}
+\caption*{%
+  \tiny Daily wind patterns of Britain mapped by Francis Galton, {\itshape Meteorographica} (1863).
+ }
+\end{figure}
+
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+{\footnotesize\itshape ``...by \underline{drawing diagrams}, and \underline{by countings}. This much suffices to give a correct idea of the {\bfseries distribution} of any given set of variables ; it is also sufficient to give a fair idea of the closeness of {\bfseries correlation}, or of kinship, between any two sets of variables.''}
+\end{minipage}
+\end{center}
+
+%\vspace*{0.05\baselineskip}
+
+\begin{flushright}
+\begin{minipage}{0.6\textwidth}
+{\footnotesize -- {\bfseries Francis Galton} in a letter to the editor of {\itshape The Times} on {\itshape Alcoholism and Offspring}.}
+\end{minipage}
+\end{flushright}
+
+%Measurements vary.
+
+\end{frame}
+
+
+%------------------------------------------%
 % Background
 %------------------------------------------%
 \section{Background}
 
-\begin{frame}{A Brief History of Data Exploration}
-%
-%\begin{figure}
-%\includegraphics[height=2.in]{images/andrew-sc-ehrenberg.jpg}
-%\caption*{%
-%  \tiny 
-% }
-%\end{figure}
+\begin{frame}{An Odd History of Data Exploration}
 
-Sir Francis Galton opened a anthropometric laboratory to
+\vspace*{0.5\baselineskip}
 
-\begin{minipage}{0.55\textwidth}
-{\itshape ``show the public the simplicity of the instruments and methods by which the chief physical characteristics of man may be measured and recorded.''}
-\end{minipage}%
-\begin{minipage}{0.4\textwidth}
+Sir Francis Galton opened an anthropometric laboratory to
+
+\vspace*{0.25\baselineskip}
+
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+{\footnotesize\itshape ``show the public the \underline{simplicity} of the instruments and methods by which the chief physical characteristics of man may be \underline{measured} and \underline{recorded}.''}
+\end{minipage}
+\end{center}
+
+\vspace*{0.25\baselineskip}
+
+\begin{center}
+\begin{minipage}{0.45\textwidth}
+
 \begin{figure}
-\includegraphics[height=2.in]{images/sir-francis-galton-1850s.jpg}
+\includegraphics[height=1.8in]{images/sir-francis-galton-1850s.jpg}
 \caption*{%
   \tiny Sir Francis Galton (1822 – 1911) in the 1850s.\\
  }
 \end{figure}
 
-  \begin{itemize}
-  \item Founded the biometric approach to the study of heredity.
-  \item Penchant for counting and measuring.
-  \item Introduced the {\bfseries standard deviation}.
-  \end{itemize}
- 
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.45\textwidth}
+
+
+\begin{figure}
+\includegraphics[height=1.8in]{images/anthro-lab-poster.jpg}
+\caption*{%
+  \tiny Flyer advertising the Anthropometric Laboratory.\\
+ }
+\end{figure}
+
+\end{minipage}
+\end{center}
+
+
+\end{frame}
+
+%------------------------------------------%
+% Francis Galton
+%------------------------------------------%
+
+\begin{frame}{Francis Galton's Fingerprint on Data Science}
+
+\begin{minipage}{0.45\textwidth}
+
+\begin{itemize}
+\item Penchant for \underline{counting} and \underline{measuring}.
+
+\vspace*{0.25\baselineskip}
+
+\item Founded the biometric approach to the study of heredity.
+
+\vspace*{0.25\baselineskip}
+
+\item Taught and founded {\itshape Biometrika} with Karl Pearson.
+
+\vspace*{0.25\baselineskip}
+
+\item Introduced the concepts:
+
+\begin{itemize}
+\item {\bfseries standard deviation};
+\item {\bfseries correlation};
+\item {\bfseries regressions}.
+\end{itemize}
+  
+\end{itemize}
+
+
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.45\textwidth}
+
+\begin{figure}
+\includegraphics[height=1.5in]{images/distribution-of-successful-men.png}
+\caption*{%
+  \tiny Distribution of Successes and of Natural Ability Among the Kinsfolk of Fellows of the Royal Society (1904).\\
+ }
+\end{figure}
+
 \end{minipage}
 
+\end{frame}
+
+%------------------------------------------%
+% Francis Galton's work
+%------------------------------------------%
+
+\begin{frame}{Francis Galton's Work}
+
+\begin{figure}
+\includegraphics[height=2in]{images/rate-of-regression.png}
+\caption*{%
+  \tiny An application of regression and prediction by Francis Galton in {\itshape Anthropological Miscellanea} (1886).\\
+ }
+\end{figure}
 
 \begin{itemize}
 
@@ -160,91 +266,79 @@ Sir Francis Galton opened a anthropometric laboratory to
 
 \item After applying the \underline{liner regression} to sweat peas, Francis Galton applied regressions to the human data.
 
-\item Defined co-relation.
-
 \end{itemize}
-
-
-% TODO: Figure
-%Distribution of Successes and of Natural Ability Among the Kinsfolk of Fellows of the Royal Society
-%August 11, 1904
-
-
-\end{frame}
-
-
-%------------------------------------------%
-% Data Science
-%------------------------------------------%
-\section{Data Science}
-
-\begin{frame}{What Data Science Brings to the Table}
-
-{\itshape ``...by drawing diagrams, and by countings. This much suffices to give a correct idea of the distribution of any given set of variables ; it is also sufficient to give a fair idea of the closeness of correlation, or of kinship, between any two sets of variables.''}
-
-- Francis Galton in a letter to the editor of The Times on Alcoholism and Offspring.
-
-Measurements vary.
 
 \end{frame}
 
 %------------------------------------------%
-% Introduction
+% FIXME: Introduction
 %------------------------------------------%
-\section{Introduction}
-
-\begin{frame}{}
-
-\begin{minipage}{0.7\textwidth}
-
-\vspace{-2\baselineskip}
-
-% Question of the day
-\begin{center}
-\begin{minipage}{.9\linewidth}
-\begin{Block}{Question of the day}
-
-\vspace{.5\baselineskip}
-\begin{itemize}
-\item What insights does our data hold that we may not know?
-\end{itemize}
-
-\vspace{.5\baselineskip}
-
-\end{Block}
-\end{minipage}
-\end{center}
-
-\end{minipage}\hspace{0.05\textwidth}%
-%\begin{minipage}{0.25\textwidth}
+%\section{Introduction}
 %
-%\vspace{0.5\baselineskip}
+%\begin{frame}{}
 %
+%\begin{minipage}{0.7\textwidth}
+%
+%\vspace{-2\baselineskip}
+%
+%% Question of the day
+%\begin{center}
+%\begin{minipage}{.9\linewidth}
+%\begin{Block}{Question of the day}
+%
+%\vspace{.5\baselineskip}
+%\begin{itemize}
+%\item What insights does our data hold that we may not know?
+%\end{itemize}
+%
+%\vspace{.5\baselineskip}
+%
+%\end{Block}
 %\end{minipage}
-
-\end{frame}
+%\end{center}
+%
+%\end{minipage}\hspace{0.05\textwidth}%
+%%\begin{minipage}{0.25\textwidth}
+%%
+%%\vspace{0.5\baselineskip}
+%%
+%%\end{minipage}
+%
+%\end{frame}
 
 %------------------------------------------%
 % Exploratory Data Analysis
 %------------------------------------------%
 
-\begin{frame}{}
+\begin{frame}{An aside on studying}
 
-Weekly Evening Meeting
-By Francis Galton
-On Men of Science, their Nature and their Nurture
+{\itshape Weekly Evening Meeting} By Francis Galton
+
+{\itshape On Men of Science, their Nature and their Nurture}
+
+\vspace{0.75\baselineskip}
 
 \begin{itemize}
 
-\item Not tied down to old courses of classics and mathematics.
+\item \underline{Not tied down} to old courses of classics and mathematics.
+
+\vspace{.5\baselineskip}
 
 \item Sufficient groundwork in many subjects to avoid error.
 
-\item Early introduced to many subjects of interest.
+\vspace{.5\baselineskip}
 
-\item A well--balanced education, including chemistry, botany, logic, and political economy.
+\item Early introduced to \underline{many subjects} of interest.
 
-\item A variety of subjects, and attention to details.
+\vspace{.5\baselineskip}
+
+\item A well--balanced education, including {\bfseries chemistry}, {\bfseries botany}, {\bfseries logic}, and {\bfseries political economy}.
+
+\vspace{.5\baselineskip}
+
+\item A variety of subjects, and \underline{attention to details}.
+
+\vspace{.5\baselineskip}
 
 \item Coming in contact with persons of every rank and sitting in the same form.
 
@@ -266,11 +360,15 @@ On Men of Science, their Nature and their Nurture
 
 \begin{center}
 \begin{minipage}{.9\linewidth}
-\begin{Block}{Lesson of the Day}
+\begin{Block}{Lessons of the Day}
 
 \vspace{0.5\baselineskip}
 
 \begin{itemize}
+
+\item Measurements vary.
+
+\vspace{0.5\baselineskip}
 
 \item Exploring your data is an critical, yet often overlooked, step in gleaming insights.
 

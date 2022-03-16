@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  15 MAR 2022 12:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.10.5)  16 MAR 2022 07:54
 entering extended mode
 **./presentation.tex
 (presentation.tex
@@ -1180,39 +1180,88 @@ Package pdftex.def Info: images/logo.pdf  used on input line 119.
 
 {C:/Users/keega/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./images/logo.p
 df>]
-<images/sir-francis-galton-1850s.jpg, id=126, 401.5pt x 545.03625pt>
+<images/winds-of-britain.png, id=126, 407.02063pt x 335.75438pt>
+File: images/winds-of-britain.png Graphic file (type png)
+<use images/winds-of-britain.png>
+Package pdftex.def Info: images/winds-of-britain.png  used on input line 153.
+(pdftex.def)             Requested size: 131.41064pt x 108.405pt.
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
+(Font)              using `OT1/cmss/b/it' instead on input line 153.
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/b/it' undefined
+(Font)              using `OT1/cmss/b/n' instead on input line 153.
+
+LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <9> not available
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 153.
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
+(Font)              using `OT1/cmss/b/it' instead on input line 153.
+
+LaTeX Font Info:    Font shape `OT1/cmss/b/it' in size <9> not available
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 153.
+
+[2
+
+ <./images/winds-of-britain.png>]
+<images/sir-francis-galton-1850s.jpg, id=138, 401.5pt x 545.03625pt>
 File: images/sir-francis-galton-1850s.jpg Graphic file (type jpg)
 <use images/sir-francis-galton-1850s.jpg>
 Package pdftex.def Info: images/sir-francis-galton-1850s.jpg  used on input lin
-e 169.
-(pdftex.def)             Requested size: 106.4705pt x 144.54pt.
+e 202.
+(pdftex.def)             Requested size: 95.82283pt x 130.08621pt.
 
 (C:\Users\keega\AppData\Local\Programs\MiKTeX\tex/latex/ucs\uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 )
-Overfull \vbox (157.46687pt too high) detected at line 169
+<images/anthro-lab-poster.jpg, id=139, 398.48875pt x 587.19376pt>
+File: images/anthro-lab-poster.jpg Graphic file (type jpg)
+<use images/anthro-lab-poster.jpg>
+Package pdftex.def Info: images/anthro-lab-poster.jpg  used on input line 202.
+(pdftex.def)             Requested size: 88.27583pt x 130.08621pt.
+
+[3
+
+ <./images/sir-francis-galton-1850s.jpg> <./images/anthro-lab-poster.jpg>]
+<images/distribution-of-successful-men.png, id=148, 377.91188pt x 266.49562pt>
+File: images/distribution-of-successful-men.png Graphic file (type png)
+<use images/distribution-of-successful-men.png>
+Package pdftex.def Info: images/distribution-of-successful-men.png  used on inp
+ut line 248.
+(pdftex.def)             Requested size: 153.72815pt x 108.405pt.
+
+Overfull \hbox (22.36263pt too wide) in paragraph at lines 248--248
+ [] 
  []
 
-[2
+[4
 
- <./images/sir-francis-galton-1850s.jpg>] [3
+ <./images/distribution-of-successful-men.png>]
+<images/rate-of-regression.png, id=158, 681.04437pt x 429.10312pt>
+File: images/rate-of-regression.png Graphic file (type png)
+<use images/rate-of-regression.png>
+Package pdftex.def Info: images/rate-of-regression.png  used on input line 271.
 
-] [4
+(pdftex.def)             Requested size: 229.4009pt x 144.54pt.
+ [5
 
-] [5
+ <./images/rate-of-regression.png>] [6
 
 ]
-<images/prayer.png, id=169, 54.2025pt x 54.2025pt>
+<images/prayer.png, id=172, 54.2025pt x 54.2025pt>
 File: images/prayer.png Graphic file (type png)
 <use images/prayer.png>
-Package pdftex.def Info: images/prayer.png  used on input line 282.
+Package pdftex.def Info: images/prayer.png  used on input line 388.
 (pdftex.def)             Requested size: 18.06749pt x 18.06717pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 282--282
+Underfull \hbox (badness 10000) in paragraph at lines 388--388
 
  []
 
-[6
+[7
 
  <./images/prayer.png>]
 \tf@nav=\write6
@@ -1224,41 +1273,43 @@ Underfull \hbox (badness 10000) in paragraph at lines 282--282
 \tf@snm=\write8
 \openout8 = `presentation.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 287.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 287.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 393.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 393.
 
 (C:\Users\keega\Documents\cannlytics\cannabis-data-science\2022-03-16\presentat
 ion\build\presentation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 287.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 287.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 393.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 393.
+Package rerunfilecheck Info: File `presentation.out' has not changed.
+(rerunfilecheck)             Checksum: 94ABD896CEB923238358F86FF755EEFC;135.
 
 
-Package rerunfilecheck Warning: File `presentation.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package rerunfilecheck Info: Checksums for `presentation.out':
-(rerunfilecheck)             Before: BAD416BB46E675683FC3E27DE00E9409;135
-(rerunfilecheck)             After:  1A31A9095FB1655F4640BA91307225DD;182.
  ) 
 Here is how much of TeX's memory you used:
- 24637 strings out of 480790
- 493248 string characters out of 2897301
- 759996 words of memory out of 3000000
- 40042 multiletter control sequences out of 15000+200000
- 542278 words of font info for 59 fonts, out of 3000000 for 9000
+ 24713 strings out of 480790
+ 494967 string characters out of 2897301
+ 760995 words of memory out of 3000000
+ 40106 multiletter control sequences out of 15000+200000
+ 545527 words of font info for 70 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 81i,19n,68p,818b,854s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 81i,19n,68p,818b,912s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmss10.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmss12.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmss8.pfb><C:/Users/keega/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/keega/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb>
+/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/keega/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/keega/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/keega/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi8.pfb><C:/Users/kee
+ga/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi9.pfb><C:/
+Users/keega/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/m
+sam7.pfb>
 Output written on C:\Users\keega\Documents\cannlytics\cannabis-data-science\202
-2-03-16\presentation\build\presentation.pdf (6 pages, 192848 bytes).
+2-03-16\presentation\build\presentation.pdf (7 pages, 1099612 bytes).
 PDF statistics:
- 213 PDF objects out of 1000 (max. 8388607)
- 17 named destinations out of 1000 (max. 500000)
- 172 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 231 PDF objects out of 1000 (max. 8388607)
+ 18 named destinations out of 1000 (max. 500000)
+ 156 words of extra memory for PDF output out of 10000 (max. 10000000)
 

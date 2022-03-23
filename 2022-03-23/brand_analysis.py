@@ -4,7 +4,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 3/21/2022
-Updated: 3/21/2022
+Updated: 3/22/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 
 Description: This script performs brand analysis of the top cannabis-infused
@@ -180,9 +180,9 @@ print(monthly_market_shares)
 # Estimate market penetration rate (percent).
 #--------------------------------------------------------------------------
 
-def calculate_penetration_rate(series, n):
+def calculate_penetration_rate(series, total):
     """Calculate retailer penetration for a distributor."""
-    return round(len(series.unique()) / n * 100, 2)
+    return round(len(series.unique()) / total * 100, 2)
 
 
 # Calculate overall penetration rates.
@@ -194,11 +194,21 @@ for mme_id, value in penetration_rates[:5].iteritems():
     name = data.loc[data['producer_mme_id'] == mme_id].iloc[0]['producer_name']
     print(name.title(), value)
 
-# Calculate monthly penetration rates.
-monthly_penetration_rates = product_data.groupby(group)['mme_id'].apply(
-    # FIXME: Use count of retailers that bought that product in that month.
-    lambda x: calculate_penetration_rate(x, len(retailers))
-)
+# Calculate monthly penetration rates, counting only the number of retailers
+# that sold the product in a given month.
+mpr = []
+unique_retailers = product_data.groupby(group)['mme_id'].unique()
+for index, value in unique_retailers.iteritems():
+    date =  index[1]
+    months = product_data['date'].dt.to_period('M').dt.to_timestamp('M')
+    month_sales = product_data.loc[months == pd.Timestamp(date.date())]
+    total = len(month_sales['mme_id'].unique())
+    try:
+        rate = round(len(value) / total * 100, 2)
+    except ZeroDivisionError:
+        rate = pd.NA
+    mpr.append(rate)
+monthly_penetration_rates = pd.Series(mpr, index=unique_retailers.index)
 
 
 #--------------------------------------------------------------------------
@@ -231,7 +241,7 @@ for index, value in apf.iteritems():
     tbps.append(days / value)
 monthly_tbp = pd.Series(tbps, index=apf.index)
 
-# Look at highest frequency of sales.
+# Look at the highest frequency of sales.
 for index, value in monthly_tbp.nsmallest(10).iteritems():
     mme_id = index[0]
     name = data.loc[data['producer_mme_id'] == mme_id].iloc[0]['producer_name']
@@ -303,7 +313,7 @@ plt.xlabel('Monthly Number of Beverages Sold')
 plt.xlim(0)
 plt.show()
 
-# Try to fit a negative binomial distribution!
+# Saturday Morning Statistics teaser: Fit a negative binomial distribution!
 import numpy as np
 from scipy.stats import nbinom
 
@@ -339,40 +349,81 @@ plt.show()
 
 
 #--------------------------------------------------------------------------
-# TODO: Estimate customer lifetime value for each vendor.
+# Estimate customer lifetime value for each vendor.
 # The number of transactions (T) multiplied by the average order value (AOV)
 # multiplied by the average retention rate (R), multiplied by the
 # average gross margin (AGM).
 #--------------------------------------------------------------------------
 
-# TODO: Estimate the average number of transactions (T) per retailer by vendor.
-transactions = None
+# Estimate the average number of transactions (T) per retailer by vendor.
+transactions = product_data.groupby(['producer_mme_id', 'mme_id'])['product_name'].count()
+avg_transactions = transactions.groupby('producer_mme_id').mean().apply(lambda x: round(x, 2))
+avg_transactions.name = 'average_transactions'
+pd.merge(
+    left=avg_transactions.nlargest(10),
+    right=licensees[['global_id', 'name']],
+    how='left',
+    left_index=True,
+    right_on='global_id'
+)
 
+# Estimate the average order value (AOV).
+price_markup = 0.50
+aov = product_data.groupby('producer_mme_id')['price_total'].mean().apply(lambda x: round(x, 2))
+aov = aov.multiply(1 / (1 + price_markup))
+aov.name = 'average_order_value'
+pd.merge(
+    left=aov.nsmallest(10),
+    right=licensees[['global_id', 'name']],
+    how='left',
+    left_index=True,
+    right_on='global_id'
+)
 
-# TODO: Estimate average order value (AOV).
-aov = None
+# Estimate the average retention rate (R).
+# Defined here as the percent of retailers who bought products on multiple dates
+# out of all of the retailers who bought products.
+bought_products = product_data.groupby('producer_mme_id')['mme_id'].apply(list)
+retention_rate =  bought_products.apply(
+    lambda x: round(len(find_repeating(x)) / len(set(x)) * 100, 2)
+)
+pd.merge(
+    left=retention_rate.nlargest(10),
+    right=licensees[['global_id', 'name']],
+    how='left',
+    left_index=True,
+    right_on='global_id'
+)
 
+# Estimate the average gross margin (AGM).
+# Gross profit margin for general retail (24.27%).
+# Net profit margin for general retail (2.79%).
+# Source: https://cfohub.com/what-is-a-good-gross-profit-margin/
+# Net profit margin for alcoholic beverages (7.94%).
+# Net profit margin for soft beverages (18.50%).
+# Source: https://www.brex.com/blog/what-is-a-good-profit-margin/ 
+agm = 0.0794
 
-# TODO: Estimate the average retention rate (R).
-retention_rate = None
+# Finally, estimate customer lifetime value by vendor.
+# CLV = T x AOV x R x AGM.
+customer_lifetime_value = avg_transactions * aov * retention_rate * agm * 1000
 
-
-# TODO: Estimate the average gross margin (AGM).
-agm = 0.15
-
-
-# TODO: Finally, estimate customer lifetime value by vendor (LV = T x AOV x R x AGM).
-customer_lifetime_value = transactions * aov * retention_rate * agm
-
-
-# TODO: Question: How much commission should each vendor pay their marketers for
+# Question: How much commission should each vendor pay their marketers for
 # a customer (retailer) acquisition?
 commission_rates = [0.05, 0.15, 0.25, 0.45]
+for rate in commission_rates:
+    expected_commission = rate * customer_lifetime_value
+    print(expected_commission.mean())
 
 
 #--------------------------------------------------------------------------
 # Begin analyzing key performance indicators and their correlation.
 #--------------------------------------------------------------------------
+
+# Calculate a few more KPIs.
+avg_monthly_sales = product_data.groupby(group)['price_total'].sum().apply(lambda x: round(x, 2))
+avg_monthly_price = product_data.groupby(group)['price_total'].mean().apply(lambda x: round(x, 2))
+monthly_number_of_products = product_data.groupby(group)['product_name'].nunique()
 
 # Aggregate the fields for analysis.
 datasets = {
@@ -382,14 +433,18 @@ datasets = {
     'avg_purchase_frequency': apf,
     'avg_time_between_purchases': monthly_tbp,
     'purchases': purchases,
+    'avg_price': avg_monthly_price,
+    'number_of_products': monthly_number_of_products,
+    'sales': avg_monthly_sales,
 }
 sample = pd.concat(datasets.values(), axis=1)
 sample.columns = datasets.keys()
 
 # Begin to look at correlation.
 fig, ax = plt.subplots(figsize=(15, 8))
-sns.heatmap(sample.corr(), annot=True, square=True)
+sns.heatmap(sample.corr().round(2), annot=True, square=True, cmap='vlag_r')
 plt.yticks(rotation=0)
+plt.title('Correlation Between Key Performance Indicators', pad=20)
 plt.show()
 
 # Estimate a regression of market share on penetration rate.
@@ -413,7 +468,196 @@ plt.show()
 
 
 #--------------------------------------------------------------------------
-# Correlate key performance indicators (KPIs) with Census data.
+# Next week: Analyze seasonality statistics.
+#--------------------------------------------------------------------------
+
+colors = sns.color_palette('Set1', n_colors=12)
+
+# Calculate relative sales over time.
+daily = pd.Grouper(key='date', freq='D')
+monthly = pd.Grouper(key='date', freq='M')
+timeseries = product_data.groupby(monthly)['price_total'].count()
+timeseries.name = 'sales'
+monthly_mean = timeseries.mean()
+relative_difference = round((1 + (timeseries - monthly_mean) / monthly_mean) * 100, 2)
+
+# Estimate a 3-month moving average.
+moving_average = relative_difference.rolling(window=3).mean()
+
+# Show the trend over time.
+fig, ax = plt.subplots(figsize=(18, 5))
+relative_difference.plot(label='', color=colors[1])
+moving_average.plot(label='3 Month Moving Average', color=colors[2])
+plt.hlines(
+    relative_difference.mean(),
+    xmin=relative_difference.index.min(),
+    xmax=relative_difference.index.max(),
+    label='Mean',
+    color=colors[4],
+    alpha=0.6
+)
+plt.xlabel('')
+plt.ylabel('Trends')
+plt.title('Relative Number of Beverages Sold by Month in Washington State')
+plt.legend(loc='lower right')
+plt.show()
+
+# Estimate daily relative percent difference.
+daily_timeseries = product_data.groupby(daily)['price_total'].count()
+daily_mean = daily_timeseries.mean()
+daily_relative_difference = round((1 + (daily_timeseries - daily_mean) / daily_mean) * 100, 2)
+
+# Estimate seasonal effects.
+# Future work: group by year.
+X = pd.get_dummies(daily_relative_difference.index.strftime('%B'))
+X.drop(columns='January', inplace=True)
+X = sm.add_constant(X)
+regression = sm.OLS(daily_relative_difference.values, X).fit()
+# print(regression.summary())
+
+# Visualize seasonal effects.
+fig, ax = plt.subplots(figsize=(18, 5))
+effects = pd.Series({
+    'January': regression.params.const,
+    'February': regression.params.const + regression.params.February,
+    'March': regression.params.const + regression.params.March,
+    'April': regression.params.const + regression.params.April,
+    'May': regression.params.const + regression.params.May,
+    'June': regression.params.const + regression.params.June,
+    'July': regression.params.const + regression.params.July,
+    'August': regression.params.const + regression.params.August,
+    'September': regression.params.const + regression.params.September,
+    'October': regression.params.const + regression.params.October,
+    'November': regression.params.const + regression.params.November,
+    'December': regression.params.const + regression.params.December,
+})
+effects.plot(label='')
+plt.hlines(
+    100,
+    xmin=0,
+    xmax=len(effects),
+    label='Mean',
+    color=colors[4],
+    alpha=0.6
+)
+plt.ylabel('Seasonal Effect')
+plt.title('Relative Number of Beverages Sold in Washington State')
+plt.legend(loc='lower right')
+plt.show()
+
+# Estimate day-of-the-week effects.
+# Future work: group by year.
+X = pd.get_dummies(daily_relative_difference.index.strftime('%A'))
+X.drop(columns='Monday', inplace=True)
+X = sm.add_constant(X)
+regression = sm.OLS(daily_relative_difference.values, X).fit()
+# print(regression.summary())
+
+# Visualize day-of-the-week effects.
+fig, ax = plt.subplots(figsize=(18, 5))
+effects = pd.Series({
+    'Monday': regression.params.const,
+    'Tuesday': regression.params.const + regression.params.Tuesday,
+    'Wednesday': regression.params.const + regression.params.Wednesday,
+    'Thursday': regression.params.const + regression.params.Thursday,
+    'Friday': regression.params.const + regression.params.Friday,
+    'Saturday': regression.params.const + regression.params.Saturday,
+    'Sunday': regression.params.const + regression.params.Sunday,
+})
+effects.plot(label='')
+plt.hlines(
+    100,
+    xmin=0,
+    xmax=6,
+    label='Mean',
+    color=colors[4],
+    alpha=0.6
+)
+plt.ylabel('Day of the Week Effect')
+plt.title('Relative Number of Beverages Sold in Washington State')
+plt.legend(loc='upper right')
+plt.show()
+
+# Identify holidays. Optional: Improve with the `holidays` package.
+holiday_dates = {
+    "New Year's Day": [pd.to_datetime('2020-01-01'), pd.to_datetime('2021-01-01')],
+    "Valentine's Day": [pd.to_datetime('2020-02-14'), pd.to_datetime('2021-02-14')],
+    'Leap Day': [pd.to_datetime('2020-02-29')],
+    'April 20th': [pd.to_datetime('2020-04-20'), pd.to_datetime('2021-04-20')],
+    'Memorial Day': [pd.to_datetime('2020-05-25'), pd.to_datetime('2021-05-31')],
+    'Independence Day': [pd.to_datetime('2020-07-04'), pd.to_datetime('2021-07-04')],
+    'Labor Day': [pd.to_datetime('2020-09-07'), pd.to_datetime('2021-09-06')],
+    'Halloween': [pd.to_datetime('2020-10-31'), pd.to_datetime('2021-10-31')],
+    'Thanksgiving': [pd.to_datetime('2020-11-26')],
+    'Christmas': [pd.to_datetime('2020-12-25')],
+}
+all_holidays = [x for l in holiday_dates.values() for x in l]
+
+
+def identify_holiday(date, dates):
+    """Identify if a given date is a holiday."""
+    for name, days in dates.items():
+        if date in days:
+            return name
+    return None
+
+
+# Assign known holidays.
+known_holidays = []
+for date, values in daily_relative_difference.iteritems():
+    if date in all_holidays:
+        known_holiday = identify_holiday(date, holiday_dates)
+        known_holidays.append(known_holiday)
+        continue
+    known_holidays.append(pd.NA)
+
+# Estimate day-of-the-year effects.
+daily_holidays = pd.Series(known_holidays, index=daily_relative_difference.index)
+Y = daily_relative_difference.values
+X = pd.get_dummies(daily_holidays)
+X = sm.add_constant(X)
+regression = sm.OLS(Y, X).fit()
+# print(regression.summary())
+
+# Visualize day-of-the-year effects, annotating holidays!
+fig, ax = plt.subplots(figsize=(18, 5))
+params = pd.Series(regression.params)
+params.drop('const', inplace=True)
+daily_relative_difference.plot(label='', ax=ax, zorder=1)
+for name, _ in params.iteritems():
+    dates = holiday_dates[name]
+    for date in dates:
+        value = daily_relative_difference[date]
+        if value > 100:
+            ax.annotate(name, (date, value + 20), fontsize=22, ha='center')
+            ax.vlines(date, ymin=100, ymax=value + 10,  colors=['black'], linestyle=':')
+        else:
+            ax.annotate(name, (date, value - 20), fontsize=22)
+            ax.vlines(date, ymax=100, ymin=value - 10, colors=['black'], linestyle=':')
+
+plt.hlines(
+    100,
+    xmin=daily_relative_difference.index.min(),
+    xmax=daily_relative_difference.index.max(),
+    label='Mean',
+    color=colors[4],
+    alpha=0.6
+)
+plt.ylabel('Day of the Year Effect')
+plt.xlabel('')
+plt.title('Relative Number of Beverages Sold in Washington State', pad=20)
+plt.legend(loc='upper right')
+plt.show()
+
+
+# Optional: Research what happened 2020-06-04, 2020-07-14?
+import holidays
+us_holidays = holidays.US()
+special_events = [us_holidays.get(x) for x in daily_relative_difference.nlargest(10).index]
+
+
+#--------------------------------------------------------------------------
+# Bonus: Correlate key performance indicators (KPIs) with Census data.
 #
 # Attribution: This product uses the Census Bureau Data API but
 # is not endorsed or certified by the Census Bureau.
@@ -429,58 +673,45 @@ plt.show()
 # - Education levels
 #--------------------------------------------------------------------------
 
-# Augment with producer's data. (necessary?)
-# product_data = pd.merge(
-#     left=product_data,
-#     right=licensees[['global_id', 'name', 'county']],
-#     how='left',
-#     left_on='producer_mme_id',
-#     right_on='global_id'
-# )
-
-
 # TODO: Get Census Data
+from dotenv import dotenv_values
+from census import Census # pip install census
+from us import states # pip install us
+import requests
 
+# Create a request session.
+session = requests.session()
+session.headers.update({'User-Agent': 'census-demo/0.0'})
 
-# from dotenv import dotenv_values
-# from census import Census # pip install census
-# from us import states # pip install us
-# import requests
+# Read your Census API key.
+config = dotenv_values('../.env')
+census_api_key = config['CENSUS_API_KEY']
 
-# # Create a request session.
-# session = requests.session()
-# session.headers.update({'User-Agent': 'census-demo/0.0'})
-
-# # Read your Census API key.
-# config = dotenv_values('../.env')
-# census_api_key = api_key=config['CENSUS_API_KEY']
-
+# FIXME: Get Census data fields.
 # # Make requests to the Census API.
 # client = Census(census_api_key, session=session)
 # census_data = client.acs5.get(
-#     ('NAME', 'B25034_010E'),
-#     {'for': 'state:{}'.format(states.MD.fips)}
+#     ('NAME', 'B07411_001E'),
+#     {'for': 'state:{}'.format(states.WA.fips)}
 # )
 
-# # Examples:
-# # c.acs5.get('B01001_004E', {'for': 'state:*'})
-# # c.acs5.state('B01001_004E', Census.ALL)
-# # c.sf1.state_county_tract('NAME', states.AK.fips, '170', Census.ALL)
-
 # Optional: Calculate avg. monthly consumption per capita.
+
+
+# TODO: Augment the product data with census data.
+
 
 
 # TODO: Regress various brand metrics on various explanatory factors.
 
 
-# How does number of sales relate to county-level factors?
+# Question: How does number of sales relate to county-level factors?
 
 
-# How does sales relate to county-level factors?
+# Question: How does sales relate to county-level factors?
 
 
-# How does market penetration relate to county-level factors?
-
+# Question: How does market penetration relate to county-level factors?
 
 
 
@@ -489,44 +720,7 @@ plt.show()
 # Use an ordered probit to predict the brand rank given various factors.
 #--------------------------------------------------------------------------
 
+# Fit various ordered probits to try to predict brand rank.
+
+
 # Optional: Use a Chi square test to determine the most appropriate model.
-
-
-#--------------------------------------------------------------------------
-# Next week: Analyze seasonality statistics.
-#--------------------------------------------------------------------------
-
-# Calculate relative sales over time.
-
-
-# Estimate trends.
-
-
-# Estimate day of the week effects.
-
-
-# Estimate seasonal effects.
-
-
-# Estimate day of the year effects.
-# New Year
-# Valentine's Day
-# Leap Day
-# April 20th (Chronukkah)
-# Memorial Day
-# July 4th (Independence Day)
-# Labor Day
-# Halloween
-# Thanksgiving
-# Christmas
-
-# days_of_interest = {
-#     'New Year': [pd.to_datetime('2020-01-01'), pd.to_datetime('2021-01-01')],
-#     "Valentine's Day": [pd.to_datetime('2020-01-01'), pd.to_datetime('2021-01-01')],
-# }
-# from pandas.tseries.holiday import USFederalHolidayCalendar
-# cal = USFederalHolidayCalendar()
-# holidays = cal.holidays(start='2014-01-01', end='2014-12-31').to_pydatetime()
-# if datetime.datetime(2014,01,01) in holidays:
-#     print True
-

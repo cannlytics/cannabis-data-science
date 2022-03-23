@@ -58,6 +58,7 @@
 \usepackage{hhline} % for double bars.
 \usepackage[super]{nth} % For formatting 1st, 2nd, 3rd, etc.
 \usepackage{graphicx, caption, subcaption}
+\usepackage{setspace}
 
 %------------------------------------------%
 % Commands
@@ -119,32 +120,207 @@
 \end{frame}
 
 %------------------------------------------%
-% Topic of the Day
+% Data Science
 %------------------------------------------%
-\section{Topic of the Day}
-\begin{frame}{Topic of the Day}
 
-{\Large {\bfseries Brand Analysis}: Can we measure marketing performance?}\\[-0.5\baselineskip]
+\section{When did data science begin?}
+\begin{frame}{When did data science begin?\\}
 
-%Estimate {\bfseries penetration rate} (percent).
+\vspace*{0.125\baselineskip}
 
-% Optional: Recap panel data?
+% TODO: Write synopsis and add image.:
+\begin{minipage}{.4\textwidth}
+\begin{figure}
+\includegraphics[width=\textwidth]{images/john-graunt.png}
+\caption*{\scriptsize
+{\bfseries John Graunt} (1620 -- 1674)\\
+An early champion of statistics.
+}
+\end{figure}
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.55\textwidth}
+\vspace{-2\baselineskip}
+Known for early work on:
+\vspace{0.5\baselineskip}
+\begin{itemize}
+    
+    \item Descriptive statistics;
+
+    \vspace{0.5\baselineskip}
+  
+    \item Census methods that lead to modern demography;
+
+    \vspace{0.5\baselineskip}    
+    
+    \item Epidemiology.
+
+\end{itemize}
+\end{minipage}
+
+%https://en.wikipedia.org/wiki/John_Graunt
+
+%Table of Casualties in Natural and Political Observations Made Upon the Bills of Mortality (5th edition, published 1676)
+
+\end{frame}
+
+
+\section{Where did these techniques come from?}
+\begin{frame}{Where did these techniques come from?}
+
+
+% TODO: Write synopsis and add image:
+\begin{minipage}{0.55\textwidth}
 
 \begin{itemize}
 
-\item market share
+\item Fit {\bfseries negative binomial distributions} to the numbers of purchases of a brand of consumer goods.
 
-\item market penetration rate
+\vspace{0.5\baselineskip}
 
-\item purchase frequency / time between purchases
+\item Modeled repeated category and brand purchases within a wide variety of markets.
+% NBD-Dirichlet model of brand choice successfully modelled the
 
-\item repeat purchase rate
+\vspace{0.5\baselineskip}
 
-\item items sold
+\item Studied the percentage of the relevant population that has purchased a given brand (or category) at least once in the time period under study.
 
-\item customer lifetime value
+\end{itemize}
 
-\item product price
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.35\textwidth}
+\begin{figure}
+\includegraphics[width=\textwidth]{images/andrew-sc-ehrenberg.jpg}
+\caption*{
+{\bfseries\scriptsize Andrew S. C. Ehrenberg}\\ Statistician and marketing scientist.
+}
+\end{figure}
+\end{minipage}
+
+\end{frame}
+
+%------------------------------------------%
+% A Sprinkle of Economics
+%------------------------------------------%
+%\section{A Sprinkle of Economics}
+%\begin{frame}{A Sprinkle of Economics}
+%
+%\vspace*{0.125\baselineskip}
+%
+%\begin{itemize}
+%
+%\item Cournot
+%
+%\item Joseph Bertrand
+%
+%\item Pareto
+%
+%\item Irving Fisher
+%
+%\end{itemize}
+%
+%\end{frame}
+
+
+%------------------------------------------%
+% Application to the Cannabis Industry
+%------------------------------------------%
+\section{Application to the Cannabis Industry}
+\begin{frame}{Application to the Cannabis Industry}
+
+\begin{minipage}{0.45\textwidth}
+\begin{center}
+\vspace{0.25\baselineskip}
+\begin{figure}
+\includegraphics[height=2.5in]{images/beverage-label.jpg}
+\vspace{-0.25\baselineskip}
+\caption*{
+\scriptsize Cannabis--infused beverage label\\[0.125\baselineskip]
+\tiny {\color{WildStrawberry} 10mg per serving} | {\color{WildStrawberry} 100mg THC per bottle}\\[0.5\baselineskip]
+\tiny\color{Gray}
+Author: kiliweb {\tiny https://world.openfoodfacts.org/editor/kiliweb}\\
+License: CC BY-SA 3.0 {\tiny https://creativecommons.org/licenses/by-sa/3.0}
+}
+\end{figure}
+\end{center}
+\end{minipage}\hspace{0.0\textwidth}%
+\begin{minipage}{0.55\textwidth}
+
+\vspace{0.5\baselineskip}
+
+\begin{minipage}{0.75\textwidth}
+
+{\footnotesize\itshape ``Oh Hi’s THC {\color{Mulberry} Pomegranate} Seltzer is our number one seller. When deciding on a new product to launch, we look at \underline{trending flavors}.''}
+
+\vspace{0.5\baselineskip}
+
+{\footnotesize\itshape ``negotiate pricing structures to sell the \underline{customer volume} helps greatly.''}
+
+\vspace{0.5\baselineskip}
+
+{\footnotesize\itshape ``\underline{Expansion can be complex} as it is a capital-intensive investment.''}
+
+\vspace{-0.5\baselineskip}
+\begin{flushright}
+{\footnotesize - Matt Vincent\\ {\tiny Co-Founder of OH-Hi Beverages}}
+\end{flushright}
+
+\end{minipage}
+
+\vspace{0.5\baselineskip}
+
+{\tiny\color{Gray} Reference: https://cannabisdrinksexpo.com/en/blog/producer-profiles-70/consumer-education-is-key-says-matt-vincent-301.htm}
+
+\end{minipage}
+
+% pre-roll brands?
+
+% solid edible brands? Overlap with beverage brands?
+
+% What are the top brands in Washington State and 
+
+
+\end{frame}
+
+
+%------------------------------------------%
+% Question of the Day
+%------------------------------------------%
+\section{Question of the Day}
+\begin{frame}{Question of the Day}
+
+{\Large {\bfseries Brand Analysis}: Can we measure marketing performance for a cannabis brand?}\\[0.5\baselineskip]
+
+Here is a list of potential metrics:
+
+\vspace{0.25\baselineskip}
+
+\begin{itemize}
+
+\item Market share
+
+\vspace{0.125\baselineskip}
+
+\item Market penetration rate
+
+\vspace{0.125\baselineskip}
+
+\item Purchase frequency / time between purchases
+
+\vspace{0.125\baselineskip}
+
+\item Repeat purchase rate
+
+\vspace{0.125\baselineskip}
+
+\item Items sold
+
+\vspace{0.125\baselineskip}
+
+\item Customer lifetime value
+
+\vspace{0.125\baselineskip}
+
+\item Average product price
 
 \end{itemize}
 
@@ -163,97 +339,6 @@
 \end{frame}
 
 %------------------------------------------%
-% Data Science
-%------------------------------------------%
-\section{When did data science begin? Where did these techniques come from?}
-\begin{frame}{When did data science begin?\\Where did these techniques come from?}
-
-\vspace*{0.125\baselineskip}
-
-% TODO: Write synopsis and add image.:
-{\bfseries John Graunt}
-%https://en.wikipedia.org/wiki/John_Graunt
-
-
-% TODO: Write synopsis and add image:
-{\bfseries Andrew S. C. Ehrenberg}
- 
-\begin{itemize}
-
-\item negative binomial distribution to the numbers of purchases of a brand of consumer goods.
-
-\item NBD-Dirichlet model of brand choice successfully modelled the repeated category and brand purchases within a wide variety of markets.
-
-\item The percentage of the relevant population that has purchased a given brand (or category) at least once in the time period under study.
-
-\end{itemize}
-
-\end{frame}
-
-%------------------------------------------%
-% A Sprinkle of Economics
-%------------------------------------------%
-\section{A Sprinkle of Economics}
-\begin{frame}{A Sprinkle of Economics}
-
-\vspace*{0.125\baselineskip}
-
-\begin{itemize}
-
-\item Cournot
-
-\item Joseph Bertrand
-
-\item Pareto
-
-\item Irving Fisher
-
-\end{itemize}
-
-\end{frame}
-
-
-%------------------------------------------%
-% Application to the Cannabis Industry
-%------------------------------------------%
-\section{Application to the Cannabis Industry}
-\begin{frame}{Application to the Cannabis Industry}
-
-\begin{minipage}{0.8\textwidth}
-{\small\itshape ``negotiate pricing structures to sell the customer volume helps greatly.''}
-\begin{flushright}
-- Matt Vincent
-\end{flushright}
-\end{minipage}
-
-\begin{itemize}
-
-\vspace{2\baselineskip}
-
-\item cannabis--infused beverage brands?
-
-\end{itemize}
-
-
-\vspace{4\baselineskip}
-
-{\scriptsize Reference: https://cannabisdrinksexpo.com/en/blog/producer-profiles-70/consumer-education-is-key-says-matt-vincent-301.htm}
-
-
-% pre-roll brands?
-
-% solid edible brands? Overlap with beverage brands?
-
-% What are the top brands in Washington State and 
-
-
-\end{frame}
-
-
-
-
-
-%------------------------------------------%
 % Takeaway
 %------------------------------------------%
 \section{Takeaway}
@@ -265,7 +350,7 @@
 % Thank you.
 \includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\[-0.5\baselineskip]
 
-We've gone over what it means to be a successful beverage producer in Washington State and we've seen how data can contain insights for marketers.
+We've gone over what it means to be a successful {\color{TealBlue} beverage} producer in Washington State and we've seen how data can contain insights for marketers.
 
 \begin{center}
 \begin{minipage}{.9\linewidth}
@@ -275,11 +360,26 @@ We've gone over what it means to be a successful beverage producer in Washington
 
 \begin{itemize}
 
-\item \underline{Product proliferation}, \underline{market penetration}, and certain other KPIs correlate with {\bfseries market share}.
+\item Certain KPIs correlate with {\bfseries market share}:
+
+\vspace{0.25\baselineskip}
+\begin{itemize}
+
+\item Market penetration
+
+\vspace{0.25\baselineskip}
+
+\item Product proliferation
+
+\end{itemize}
+
+\vspace{0.25\baselineskip}
+
+\item Spread the word, {\bfseries build your brand}!
 
 \vspace{0.5\baselineskip}
 
-\item Spread the word, {\bfseries build your brand}!
+\item {\bfseries Shelf-space}. Get there while you {\itshape can}!
 
 \vspace{0.5\baselineskip}
 

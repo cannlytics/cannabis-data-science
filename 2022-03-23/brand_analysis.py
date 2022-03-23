@@ -4,7 +4,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 3/21/2022
-Updated: 3/22/2022
+Updated: 3/23/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 
 Description: This script performs brand analysis of the top cannabis-infused
@@ -458,7 +458,7 @@ print(regression.summary())
 fig, ax = plt.subplots(figsize=(15, 8))
 sns.regplot(
     y='market_share',
-    x='repeat_purchase_rate',
+    x='penetration_rate',
     data=sample,
     ci=99,
     robust=True,
@@ -513,7 +513,7 @@ X = pd.get_dummies(daily_relative_difference.index.strftime('%B'))
 X.drop(columns='January', inplace=True)
 X = sm.add_constant(X)
 regression = sm.OLS(daily_relative_difference.values, X).fit()
-# print(regression.summary())
+print(regression.summary())
 
 # Visualize seasonal effects.
 fig, ax = plt.subplots(figsize=(18, 5))
@@ -551,7 +551,7 @@ X = pd.get_dummies(daily_relative_difference.index.strftime('%A'))
 X.drop(columns='Monday', inplace=True)
 X = sm.add_constant(X)
 regression = sm.OLS(daily_relative_difference.values, X).fit()
-# print(regression.summary())
+print(regression.summary())
 
 # Visualize day-of-the-week effects.
 fig, ax = plt.subplots(figsize=(18, 5))
@@ -601,7 +601,6 @@ def identify_holiday(date, dates):
             return name
     return None
 
-
 # Assign known holidays.
 known_holidays = []
 for date, values in daily_relative_difference.iteritems():
@@ -617,7 +616,7 @@ Y = daily_relative_difference.values
 X = pd.get_dummies(daily_holidays)
 X = sm.add_constant(X)
 regression = sm.OLS(Y, X).fit()
-# print(regression.summary())
+print(regression.summary())
 
 # Visualize day-of-the-year effects, annotating holidays!
 fig, ax = plt.subplots(figsize=(18, 5))
@@ -630,7 +629,7 @@ for name, _ in params.iteritems():
         value = daily_relative_difference[date]
         if value > 100:
             ax.annotate(name, (date, value + 20), fontsize=22, ha='center')
-            ax.vlines(date, ymin=100, ymax=value + 10,  colors=['black'], linestyle=':')
+            ax.vlines(date, ymin=100, ymax=value + 10, colors=['black'], linestyle=':')
         else:
             ax.annotate(name, (date, value - 20), fontsize=22)
             ax.vlines(date, ymax=100, ymin=value - 10, colors=['black'], linestyle=':')

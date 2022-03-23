@@ -1,6 +1,6 @@
 \babel@toc {english}{}
-\beamer@sectionintoc {1}{Topic of the Day}{2}{0}{1}
-\beamer@sectionintoc {2}{When did data science begin? Where did these techniques come from?}{3}{0}{2}
-\beamer@sectionintoc {3}{A Sprinkle of Economics}{4}{0}{3}
-\beamer@sectionintoc {4}{Application to the Cannabis Industry}{5}{0}{4}
+\beamer@sectionintoc {1}{When did data science begin?}{2}{0}{1}
+\beamer@sectionintoc {2}{Where did these techniques come from?}{3}{0}{2}
+\beamer@sectionintoc {3}{Application to the Cannabis Industry}{4}{0}{3}
+\beamer@sectionintoc {4}{Question of the Day}{5}{0}{4}
 \beamer@sectionintoc {5}{Takeaway}{6}{0}{5}

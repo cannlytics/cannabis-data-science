@@ -6,3 +6,14 @@
 
 # Ignore large datasets.
 *.datasets
+
+# Ignore extraneous LaTeX files.
+*.aux
+*.bbl
+*.blg
+*.log
+*.nav
+*.out
+*.snm
+*.gz
+*.toc

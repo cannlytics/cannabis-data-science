@@ -104,6 +104,7 @@
         "xlim",
         "xmax",
         "xmin",
+        "xticks",
         "xycoords",
         "xytext",
         "yaxis",

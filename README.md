@@ -6,7 +6,7 @@ This is the source repository for the [Cannabis Data Science Meetup Group](https
 - [📅 Events](#events)
 - [🏃‍♀️ Getting Started](#getting-started)
 - [📡 Data Sources](#data-sources)
-- [🧐 Resources](#resources)
+- [📚 Resources](#resources)
 - [🤝 Contributing](#contributing)
 - [❤️ Support](#support)
 - [🏛️ License](#license)
@@ -52,7 +52,7 @@ Below is a non-exhaustive list of some of the public cannabis data sets that we 
 | WA State Traceability Data January 2018 - November 2021 | <https://lcb.app.box.com/s/e89t59s0yb558tjoncjsid710oirqbgd> |
 | WA Traceability Data - Jan. 18 to Dec. 2020 | <https://lcb.app.box.com/s/fnku9nr22dhx04f6o646xv6ad6fswfy9> |
 
-## 🧐 Resources <a name="resources"></a>
+## 📚 Resources <a name="resources"></a>
 
 | Resource | URL |
 |----------|-----|
@@ -69,7 +69,7 @@ The Cannabis Data Science meetup group and the accompanying source code is made 
 
 | | |
 |-|-|
-| 💸 PayPal Donation | <form action="https://www.paypal.com/donate" method="post" target="_top"><input type="hidden" name="hosted_button_id" value="UQ5FBWHEKHA2N" /><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" /><img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" /></form> |
+| 💸 PayPal Donation | <https://cannlytics.page.link/donate> |
 | 🪙 Bitcoin donation address| 34CoUcAFprRnLnDTHt6FKMjZyvKvQHb6c6 |
 | ⚡ Ethereum donation address | 0x8997cA09B3FAe2ce4039E295A5269cf4ae7a0BA5 |
 
@@ -78,7 +78,7 @@ Thank you 🙏
 ## 🏛️ License <a name="license"></a>
 
 ```
-Copyright (c) 2021 Cannlytics and The Cannabis Data Science Meetup Group
+Copyright (c) 2021-2022 Cannlytics
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

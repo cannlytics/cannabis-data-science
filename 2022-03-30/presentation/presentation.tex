@@ -128,130 +128,218 @@
 % History of Data Science
 %------------------------------------------%
 
-\begin{frame}{The Importance of Computers}
+\begin{frame}{Looking back at the history of computing...}
 
-\begin{itemize}
-
-\item Machine--independent programming languages.
-
-\item First compiler in 1952, the A-0 system.
-
-\end{itemize}
-
-%Mathematician Grace Hopper completes A-0, a program that allows a computer user to use English-like words instead of numbers to give the computer instructions.
-
-%The company's fourth cable, named Grace Hopper, connects landing points in New York, US, Bude, UK and Bilbao, Spain, and is expected to become operational in 2022
-
-% Grace Murray Hopper, in her office in Washington DC, 1978, 
-% Author: Lynn Gilbert
-%CC BY-SA 4.0
-%https://creativecommons.org/licenses/by-sa/4.0
-
-% 1960
-% Jan Arkesteijn
-% CC BY 2.0 https://creativecommons.org/licenses/by/2.0
-
-%American mathematician and rear admiral in the U.S. Navy who was a pioneer in developing computer technology, helping to devise UNIVAC I. the first commercial electronic computer, and naval applications for COBOL (common-business-oriented language).
-
+\begin{figure}
+\includegraphics[width=0.9\textwidth]{images/grace-hopper-univac.jpg}
+\end{figure}
 
 \end{frame}
 
-``There are two kinds of people in the world: Johnny Von Neumann ...''
 
+%------------------------------------------%
+\begin{frame}{The Importance of Computers}
 
-``...and the rest of us.''
+\vspace{0.5\baselineskip}
 
+\begin{minipage}{0.6\textwidth}
+
+\scriptsize
+
+\vspace{0.5\baselineskip}
+
+\begin{itemize}
+
+\item Mathematician {\bfseries Grace Hopper} (``Grandma COBOL'') completes A-0, a program that allows a computer user to use \underline{English-like words} instead of numbers to give the computer instructions in 1952.
+
+\vspace{0.25\baselineskip}
+
+\item Helped the first commercial electronic computer and applications for COBOL (common-business-oriented language).
+
+\vspace{0.25\baselineskip}
+
+\item 70 years later, Google's fourth undersea internet cable, named Grace Hopper, connecting the US, UK, Spain, and is expected to soon be operational (2022).
+
+\end{itemize}
+
+\begin{figure}
+\includegraphics[width=1in]{images/first-computer-bug-1945.jpg}
+\caption*{\tiny
+First actual case of a bug being found (1960).\\
+\tiny\color{Gray}
+Author: Jan Arkesteijn
+License: CC BY 2.0
+https://creativecommons.org/licenses/by/2.0
+}
+\end{figure}
+
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.345\textwidth}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{images/grace-hopper-computer.jpg}
+\caption*{\setstretch{.75}{\tiny Grace Hopper, Washington DC, 1978.}\\[0.5\baselineskip]
+{\setstretch{.75}\tiny\color{Gray} Author: Lynn Gilbert\\
+License: CC BY-SA 4.0\\
+creativecommons.org/licenses/by-sa/4.0}
+}
+\end{figure}
+
+\end{minipage}
+
+\end{frame}
+
+%------------------------------------------%
+
+\begin{frame}{From Top Secret to Open Access}
+
+\begin{minipage}{0.5\textwidth}
+
+\begin{figure}
+\includegraphics[height=0.75\paperheight]{images/minutes-1945.jpg}
+\end{figure}
+
+\end{minipage}\hspace{0.1\textwidth}%
+\begin{minipage}{0.4\textwidth}
+
+\small
+
+The Electronic Computer Project (1945-1947)
+
+\vspace{0.25\baselineskip}
+\begin{itemize}
+
+\item Led by Professor John von Neumann.
+
+\vspace{0.125\baselineskip}
+
+\item Put into the public domain.
+
+\vspace{0.125\baselineskip}
+
+\item 20,000,000 multiplications took 6 hours of continuous computing.
+
+\end{itemize}
+
+\end{minipage}
+
+\end{frame}
+
+%------------------------------------------%
+\begin{frame}
+
+\vspace{0.5\baselineskip}
+
+{\itshape ``There are two kinds of people in the world:\\ Johnny von Neumann ...''}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{images/john-von-neumann-team.jpg}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+
+\begin{figure}
+\includegraphics[width=0.65\paperheight]{images/computer-team.jpg}
+\end{figure}
+
+\begin{flushright}
+{\itshape``...and the rest of us.''}
+
+\vspace{0.125\baselineskip}
 - Eugene Wigner
+\end{flushright}
+
+\end{frame}
 
 %Source: Institute for Advanced Study
-
+%------------------------------------------%
 
 
 \begin{frame}{Searching for the origins of data science}
 
-The Electronic Computer Project (1945-1947)
+John von Neumann founded the field of {\bfseries game theory}.
 
-\item Led by Professor John von Neumann
-
-\item Put into the public domain.
-
-\item 20,000,000 multiplications took 6 hours of continuous computing.
-
-John Von Neumann founded the field of {\bfseries game theory} as a mathematical discipline.
+\vspace{0.5\baselineskip}
 
 \begin{itemize}
 
-\item {\itshape Theory of Games and Economic Behavior}, Von Neumann and Morgenstern (1944).
+\item {\itshape Theory of Games and Economic Behavior},\\ von Neumann and Morgenstern (1944).
 
-\item Savage extended von Neumann and Morgenstern's axioms of rational preferences to endogenize probability and make it subjective. He then used Bayes' theorem to update these subject probabilities in light of new information, thus linking rational choice and inference.
+\vspace{0.25\baselineskip}
+
+\item von Neumann–-Morgenstern utility function:
+
+\vspace{-0.25\baselineskip}
+$$
+U(p) = \sum_{k=1}^K u(x_k)p_k
+$$
+
+where $p_{k}$ is the probability of outcome $k$ that, if realized, provides payoff $x_k$, and function $u$ expresses the utility of each respective payoff.
+
+\vspace{0.25\baselineskip}
+
+\item Today, {\bfseries Bayes' Theorem} is used to  endogenized probability, making it subjective. Subjective probabilities are updated in light of new information, thus connecting the concepts of {\bfseries rational choice} and inference.
 
 \end{itemize}
 
 \end{frame}
 
 
-
-% pre-roll brands?
-
-% solid edible brands? Overlap with beverage brands?
-
-% What are the top brands in Washington State and 
-
-
 %------------------------------------------%
-% A Sprinkle of Economics
+% A Sprinkle of Economics (excluded for time?)
 %------------------------------------------%
-\section{A Sprinkle of Economics}
-\begin{frame}{A Sprinkle of Economics: Competing for Profits}
-
-\vspace*{0.125\baselineskip}
-
-Market Effects
-
-- Michael Porter
-
-Competitive rivalry
-
-  - Degree of advertising
-  - Competitive Advantage / Comparative Advantage
-
-Buyer power
-
-  - Buyer concentration to firm concentration ratio
-  - Price elasticity of demand.
-
-Supplier power
-
-  - Input costs
-
-Threat of new entry
-
-Threat of substitution
-
-Observe:
-
-Markets of substitute goods tend to experience great volatility in prices, driving down producer profits.
-
-Prices tend to be reduced in attempts of producers to capture market share.
-
-Consumers may be able to attain more utility when there are available substitute products.
-
-In interdependent markets, game theory must be used to derive a profit maximizing solution.
-
-%\begin{itemize}
+%\section{A Brief Sprinkle of Economics}
+%\begin{frame}{A Sprinkle of Economics: Competing for Profits}
 %
-%\item Cournot
+%\vspace*{0.125\baselineskip}
 %
-%\item Joseph Bertrand
+%Market Effects
 %
-%\item Pareto
+%- Michael Porter
 %
-%\item Irving Fisher
+%Competitive rivalry
 %
-%\end{itemize}
-
-\end{frame}
-
+%  - Degree of advertising
+%  - Competitive Advantage / Comparative Advantage
+%
+%Buyer power
+%
+%  - Buyer concentration to firm concentration ratio
+%  - Price elasticity of demand.
+%
+%Supplier power
+%
+%  - Input costs
+%
+%Threat of new entry
+%
+%Threat of substitution
+%
+%Observe:
+%
+%Markets of substitute goods tend to experience great volatility in prices, driving down producer profits.
+%
+%Prices tend to be reduced in attempts of producers to capture market share.
+%
+%Consumers may be able to attain more utility when there are available substitute products.
+%
+%In interdependent markets, game theory must be used to derive a profit maximizing solution.
+%
+%%\begin{itemize}
+%%
+%%\item Cournot
+%%
+%%\item Joseph Bertrand
+%%
+%%\item Pareto
+%%
+%%\item Irving Fisher
+%%
+%%\end{itemize}
+%
+%\end{frame}
 
 % TODO: Talk about sbustitutes in production.
 
@@ -264,18 +352,23 @@ In interdependent markets, game theory must be used to derive a profit maximizin
 %------------------------------------------%
 % Game Theory
 %------------------------------------------%
-\section{Game Theory}
-\begin{frame}{Game Theory}
+\section{Jumping into Game Theory}
+\begin{frame}{Jumping into Game Theory}
 
 \vspace*{0.125\baselineskip}
 
 Repeated Games
 
+\vspace*{0.5\baselineskip}
 \begin{itemize}
 
-\item Finite games: Usually solved by backwards induction.
+\item {\bfseries Finite games}: Usually solved by backwards induction.
 
-\item Infinite games: Difficult to solve.
+\vspace*{0.25\baselineskip}
+
+\item {\bfseries Infinite games}: Typically, difficult to solve.
+
+\vspace*{0.25\baselineskip}
 
 \item Even if the game being played in each round is identical, repeating that game a finite or an infinite number of times can, in general, lead to very different outcomes (equilibria), as well as very different optimal strategies.
 
@@ -286,13 +379,20 @@ Repeated Games
 
 \begin{frame}{Modeling Player Preferences}
 
-Given that player $i$'s valuation of the game diminishes with time depending on a discount factor $\delta < 1$, then player $i$'s utility is
+Given that player $i$'s valuation of the game diminishes with time depending on a {\bfseries discount factor} $\delta < 1$, then player $i$'s utility is
 
 $$
 U_i = \sum_{t \geq 0}\delta^t u_i(x_t)
 $$
 
-The cutting edge: Repeated games with incomplete information.
+where
+
+$$
+u_i(x_t) = \sum_{k=1}^K u_i(x_k)p_k
+$$
+
+\vspace{0.5\baselineskip}
+The cutting edge is repeated games with incomplete information, where players have to formulate beliefs about probabilities, $p$.
 
 \end{frame}
 
@@ -300,11 +400,19 @@ The cutting edge: Repeated games with incomplete information.
 \begin{frame}{Solving Games}
 
 
-{\bfseries Nash Equilibrium}
+{\bfseries Nash Equilibrium} -- A strategy profile for a game in which no player has a profitable unilateral deviation.
 
 
-{\bfseries Subgame perfect Nash equilibrium}
+\vspace{2\baselineskip}
 
+{\bfseries Subgame Perfect Nash Equilibrium} -- A strategy profile for a dynamic game with Nash equilibrium for every subgame.
+
+
+\vspace{2\baselineskip}
+
+{\bfseries Bayesian Nash Equilibrium} -- A strategy profile that maximizes the expected payoff for each player given their beliefs and given the strategies played by the other players.
+
+%Every player's strategy maximizes their expected payoff given their beliefs about the state of nature.
 
 \end{frame}
 
@@ -339,7 +447,7 @@ Under the following assumptions:
 
 \item The {\itshape cost} to produce an item of any type is $c=0$.
 
-\item A {\color{RedOrange}producer} can change the type of {\color{ForestGreen}product} it produces at a set {\itshape interval}, $t_i$.
+\item A {\color{RedOrange}producer} can change the type of {\color{ForestGreen}product} it produces at a set {\itshape interval}, $t_i$.\footnote{\tiny\itshape ``The Calvo Fairy is a mythical creature who arrives according to a Poisson process (i.e. inter-arrival times are exponentially-distributed).'' -Anonymous Economist}
 
 \end{itemize}
 
@@ -377,12 +485,6 @@ Under the following assumptions:
 %
 %\end{itemize}
 
-von Neumann–-Morgenstern utility function:
-
-$$
-U(p) = \sum_{k=1}^K u(x_k)p_k
-$$
-
 
 %------------------------------------------%
 % Question and Hypothesis
@@ -398,7 +500,7 @@ $$
 \vspace{.5\baselineskip}
 \begin{itemize}
 
-\item What is the {\bfseries Nash Equilibrium} of the game?
+\item What is the {\bfseries Nash Equilibrium} of the congestion game?
 
 \end{itemize}
 
@@ -423,17 +525,15 @@ $$
 % Thank you.
 \includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\[-0.5\baselineskip]
 
-%We've gone over what it means to be a successful {\color{TealBlue} beverage} producer in Washington State and we've seen how data can contain insights for marketers.
-
 \begin{center}
 \begin{minipage}{.9\linewidth}
-\begin{Block}{Insights of the Day}
+\begin{Block}{Insight of the Day}
 
 \vspace{0.5\baselineskip}
 
 \begin{itemize}
 
-\item ?
+\item It's all fun and {\bfseries games}, until someone makes a profit!
 
 \vspace{0.5\baselineskip}
 

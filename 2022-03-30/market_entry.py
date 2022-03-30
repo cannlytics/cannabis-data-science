@@ -4,7 +4,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 3/27/2022
-Updated: 3/28/2022
+Updated: 3/29/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 
 Description: This script studies the choice of licensees to produce various
@@ -21,17 +21,15 @@ Data sources:
 """
 # Standard imports.
 from calendar import monthrange
-# from datetime import timedelta
 import math
 
 # External imports.
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-# import numpy as np
+import numpy as np
 import pandas as pd
 import seaborn as sns
-# import statsmodels.api as sm
 
 # Define the plot style.
 plt.style.use('fivethirtyeight')
@@ -312,75 +310,165 @@ plt.show()
 
 
 #--------------------------------------------------------------------------
-# TODO: Build the model: Create a congestion game.
+# Build the model: Create a congestion game.
 #--------------------------------------------------------------------------
 
-# # 1. Assign t_i to each producer, i=1,...,I
+# 1. Assign t_i to each producer, i = 1,...,I
 
-# # 1.a. Build model assuming producers can change products every
-# t_i =  pd.Series(np.random.uniform(1, 24, size=N))
-# sns.histplot(t_i, kde=True, bins=24)
+# 1.a. Build model assuming producers can change products at uniformally
+# distributed intervals.
+t_i =  pd.Series(np.random.uniform(1, 24, size=N))
+sns.histplot(t_i, kde=True, bins=24)
 
-# # ***Saturday Morning Statistics Teaser***
-# # 1.b. Build model assuming producers can change products where
-# # t_i is Poisson distributed.
-# expected_interval = 12
-# t_i = pd.Series(np.random.poisson(lam=expected_interval, size=N))
-# sns.histplot(t_i, kde=True, bins=expected_interval * 2)
-# print('Sample mean:', t_i.mean())
-# print('Sample variance:', t_i.var())
-
-# # Optional: Assign an initial product type to each licensee.
-
-# # 2. Iterate over the time horizon, t=0,...,T
-# for t in range(len(T)):
-
-#     # Determine the number of licensees that can change type.
-#     choosers = t % t_i == 0
-
-#     # Estimate the number of licensees that will change type in the coming t_i
-#     # periods for each product.
-
-#     # Estimate the profit.
-#     profits = []
-#     n_m = N_m.iloc[t]
-#     for product in products:
-
-#         n_m_t = n_m[product]
-#         print('Time:', t, 'Product:' , product, 'n_m:', n_m_t)
-
-#         # TODO: Calculate average sales for product m at time t.
-
-
-#         # Advanced: Estimate expected profits over interval.
-#         # for h in range(len(t_i)):
-#         #     # Estimate the number of producers of each type for the next t_h periods.
-
-#         # TODO: Forecast average sales by
-#         # forecasting number of entries and exits and n_m in each future period
-#         # and forecast the total revenue.
-
-#     # Make a decision for each producer that can change!
-#     decision = max(profits)
-
-#     # Calculate summary stats for that time period!
-#     # Number of exits from each product type.
-#     # Number of entries for each product type.
+# ***Saturday Morning Statistics Teaser***
+# 1.b. Build model assuming producers can change products where
+# t_i is Poisson distributed.
+expected_interval = 12
+t_i = pd.Series(np.random.poisson(lam=expected_interval, size=N))
+sns.histplot(t_i, kde=True, bins=expected_interval * 2)
+print('Sample mean:', t_i.mean())
+print('Sample variance:', t_i.var())
 
 
 #--------------------------------------------------------------------------
-# TODO: Predict:
-# - The number of entries for each product type
-# - The quantity produced for each product type.
-# - The average price for each product type.
-# - The expected revenue (profits) for product type.
+# About the model:
+#
+# Profits are normalized to 1 for all products, implying that
+# firms compete for market share. All firms are assumed to be equally
+# competitive and the market share is divided by the number of firms
+# producing that product.
+
+# Future work: Allow the pie to be split by observed consumer
+# preferences for various types.
+
+# Future work: All interval of change to vary depending on product
+# type chosen.
+
+# Future work: Allow for the producers to split among products?
+
 #--------------------------------------------------------------------------
+
+# 2. Iterate over the time horizon, t=0,...,T.
+# Will need to keep track of each choice for each licensee.
+M = 5
+n_m = [0, 0, 0, 0, 0]
+n_t = pd.DataFrame(columns=range(M), index=range(len(T)))
+entries_t = pd.DataFrame(columns=range(M), index=range(len(T)))
+exits_t = pd.DataFrame(columns=range(M), index=range(len(T)))
+for t, date in enumerate(T):
+
+    if t <= 1: # Need to let players pick their initial product.
+        continue
+
+    # Determine the number of licensees that can change type.
+    calvo_fairy = t % t_i == 0
+    choosers = calvo_fairy.loc[calvo_fairy == True]
+    number_of_choosers = len(choosers)
+
+    # Estimate the number of licensees that will change type in the
+    # coming t_i periods for each product.
+    estimated_choosers = round((1 / expected_interval) * N)
+    print(
+        'Number of choosers:', number_of_choosers,
+        '| Belief of number of choosers:', estimated_choosers,
+    )
+
+    # If no one is producing anything yet, pick a random product.
+    if set(n_m) == {0}:
+
+        # Pick a random product m = 0,...,M for each chooser.
+        picks = np.random.randint(0, M - 1, size=number_of_choosers)
+        for i, m in enumerate(picks):
+            n_m[m] += 1
+            value = n_t.loc[t, m]
+            try:
+                n_t.at[t, m] = value.append(choosers.index[i])
+            except AttributeError:
+                n_t.at[t, m] = [choosers.index[i]]
+        continue
+
+    # Otherwise, pick the min n_m, aftering adding estimated_choosers,
+    # 1 by 1 to the min n_m.
+    existing_producers = n_t.loc[t - 1]
+    n_m_belief = n_m
+    for i in range(estimated_choosers):
+        best_strategy = min(n_m_belief)
+        n_m_belief[best_strategy] += 1
+    pick = min(n_m_belief)
+    # Note: Does everyone who can choose choose the same?
+
+    # Keep track of picked product for entry.
+    n_t.loc[t] = n_t.loc[t - 1]
+    for index, _ in choosers.iteritems():
+
+        # Identify the product the chooser is currently producing.
+        current_type = 0
+        for m in range(M):
+            try:
+                if index in existing_producers.loc[m]:
+                    current_type = m
+                    break
+            except TypeError:
+                continue
+
+        # If the new pick is different from the product currently
+        # being produced, then:
+        if current_type != pick:
+        
+            # Exit: Reduce n_m(t-1) and keep track of the exit.
+            exits_t.loc[t, current_type] += 1
+            n_t.loc[t, current_type].remove(index)
+
+            # Entry: Increase n_m(t) and keep track of the entry.
+            entries_t.loc[t, pick] += 1
+            n_t.loc[t, current_type].append(index)
+
+print('Final outcome of the game:', n_m)
+# Note: Is this a Bayesian Nash Equilibrium? ;)
+
+
+#--------------------------------------------------------------------------
+# Extensions: Use a von Neumann-Morgenstern expected utility function.
+#--------------------------------------------------------------------------
+
+    # # Estimate expected profits.
+    # profits = []
+    # n_m = N_m.iloc[t]
+    # for product in products:
+
+    #     n_m_t = n_m[product]
+    #     print('Time:', t, 'Product:' , product, 'n_m:', n_m_t)
+
+    #     # TODO: Calculate average sales for product m at time t.
+
+
+    #     # Advanced: Estimate expected profits over interval.
+    #     # for h in range(len(t_i)):
+    #     #     # Estimate the number of producers of each type for the
+    #           next t_h periods.
+
+    #     # TODO: Forecast average sales by
+    #     # forecasting number of entries and exits and n_m in each future period
+    #     # and forecast the total revenue.
+
+        # # Make a decision for each producer that can change!
+        # decision = max(profits)
+
+
+#--------------------------------------------------------------------------
+# TODO: Visualize model predictions.
+#--------------------------------------------------------------------------
+
+# 1. The predicted number of entries and exits for each product type
+# Optional: The predicted quantity produced for each product type.
+# Optional: The predicted average price for each product type.
+# Optional: The predicted expected revenue (profits) for product type.
 
 
 #--------------------------------------------------------------------------
 # TODO: Compare model predictions with empirical observations!
 #--------------------------------------------------------------------------
 
-# - Plot predicted entries with actual entries.
-# - Plot predicted exits with actual exits.
-# - Optional: Compare predicted with actual quantity, price, and revenue.
+# 1. Plot predicted entries with actual entries.
+# 2. Plot predicted exits with actual exits.
+# 3. (Optional) Compare predicted with actual quantity, price, and revenue.

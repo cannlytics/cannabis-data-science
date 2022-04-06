@@ -7,6 +7,9 @@
 # Ignore large datasets.
 *.datasets
 
+# Ignore PyCache.
+*.pyc
+
 # Ignore extraneous LaTeX files.
 *.aux
 *.bbl

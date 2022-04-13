@@ -4,7 +4,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 4/5/2022
-Updated: 4/5/2022
+Updated: 4/6/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 
 Data sources:
@@ -13,6 +13,8 @@ Data sources:
     https://masscannabiscontrol.com/open-data/data-catalog/
 
 TODO: Create a data guide.
+
+FIXME: SQL queries do not appear to work.
 
 """
 import os
@@ -125,7 +127,7 @@ class CCC(object):
 
 
     def get(self, endpoint, params=None):
-        """Make a request to an API."""
+        """Make a request to the API."""
         url = os.path.join(self.base, f'{endpoint}.json')
         try:
             response = self.session.get(url, headers=self.headers, params=params)

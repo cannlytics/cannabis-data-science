@@ -1,6 +1,6 @@
 # 🌱 Cannabis Data Science 📈
 
-This is the source repository for the [Cannabis Data Science Meetup Group](https://www.meetup.com/cannabis-data-science). The group meets Wednesdays at 8:30am PST / 10:30am CDT / 11:30am EST / [your time](http://www.timebie.com/std/pst.php?q=8.5). You are always welcome to join us for a fun time crunching cannabis statistics. You can catch up with prior meetups here: [cannlytics.com/videos](https://cannlytics.com/videos)
+This is the source repository for the [Cannabis Data Science Meetup Group](https://www.meetup.com/cannabis-data-science). The group meets Wednesdays at 8:30am PST / 10:30am CDT / 11:30am EST / [your time](http://www.timebie.com/std/pst.php?q=8.5). You are always welcome to join us for a fun time crunching cannabis statistics. You can also catch up with prior meetups here: [cannlytics.com/videos](https://cannlytics.com/videos)
 
 - [👩‍🔬 About](#about)
 - [📅 Events](#events)
@@ -49,6 +49,7 @@ Below is a non-exhaustive list of some of the public cannabis data sets that we 
 | Dataset | URL |
 |---------|-----|
 | Massachusetts Cannabis Control Commission Data Catalog |<https://masscannabiscontrol.com/open-data/data-catalog/> |
+| CCRS PRR All Data Up To 3-12-2022 | <https://lcb.app.box.com/s/7pi3wqrmkuo3bh5186s5pqa6o5fv8gbs> |
 | WA State Traceability Data January 2018 - November 2021 | <https://lcb.app.box.com/s/e89t59s0yb558tjoncjsid710oirqbgd> |
 | WA Traceability Data - Jan. 18 to Dec. 2020 | <https://lcb.app.box.com/s/fnku9nr22dhx04f6o646xv6ad6fswfy9> |
 
@@ -63,12 +64,15 @@ Below is a non-exhaustive list of some of the public cannabis data sets that we 
 
 Contributions are always welcome! You are encouraged to submit issues, functionality, and features that you want to be addressed. You can also develop your own new features, fix known issues, and add documentation, tests, and examples. Anyone is welcome to contribute anything. You can refer to the [Cannlytics contributing guide](https://docs.cannlytics.com/developers/contributing) for more information about contributing to the Cannlytics ecosystem in general.
 
+> 💬 Join the [Cannabis Data Science Slack channel](https://join.slack.com/t/cannlytics/shared_invite/zt-17pisyd00-YCYgpqbdj2cGcrLCv9tm6A) to keep the conversation going!
+
 ## ❤️ Support <a name="support"></a>
 
-The Cannabis Data Science meetup group and the accompanying source code is made available with ❤️ and <a href="https://opencollective.com/cannlytics-company">your good will</a>. Please consider making a contribution to help us continue crafting useful code and wrangling new datasets for you.
+The Cannabis Data Science meetup group and the accompanying source code is made available with ❤️ and <a href="https://cannlytics.com/contributors">your good will</a>. Please consider making a contribution to help us continue crafting useful code and wrangling new datasets for you.
 
 | | |
 |-|-|
+| 👐 OpenCollective | <https://opencollective.com/cannlytics-company/donate> |
 | 💸 PayPal Donation | <https://cannlytics.page.link/donate> |
 | 🪙 Bitcoin donation address| 34CoUcAFprRnLnDTHt6FKMjZyvKvQHb6c6 |
 | ⚡ Ethereum donation address | 0x8997cA09B3FAe2ce4039E295A5269cf4ae7a0BA5 |

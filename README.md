@@ -74,6 +74,7 @@ The Cannabis Data Science meetup group and the accompanying source code is made 
 |-|-|
 | 👐 OpenCollective | <https://opencollective.com/cannlytics-company/donate> |
 | 💸 PayPal Donation | <https://cannlytics.page.link/donate> |
+| 💵 Venmo Donation | <https://www.venmo.com/u/cannlytics> |
 | 🪙 Bitcoin donation address| 34CoUcAFprRnLnDTHt6FKMjZyvKvQHb6c6 |
 | ⚡ Ethereum donation address | 0x8997cA09B3FAe2ce4039E295A5269cf4ae7a0BA5 |
 

@@ -13,8 +13,7 @@ USA by state and nationally from a 2019-2020 Census survey.
 
 Data Source:
 
-    - SAMHSA, Center for Behavioral Health Statistics and Quality,
-    National Survey on Drug Use and Health, 2019 and Q1 and Q4 2020.
+    - SAMHSA, Center for Behavioral Health Statistics and Quality, National Survey on Drug Use and Health, 2019 and Q1 and Q4 2020.
     https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health
 
     - National Survey on Drug Use and Health (NSDUH) Population Data
@@ -45,7 +44,7 @@ import seaborn as sns
 from statadict import parse_stata_dict # pip install statadict
 
 # Internal imports
-from constants import states
+from constants import states, state_names
 from data import (
     format_millions,
     format_thousands,
@@ -194,6 +193,27 @@ state_data = state_data.sort_values(key, ascending=False)
 series = (state_data[key] * 1000).apply(format_thousands)
 print(series)
 
+# Augment population.
+state_data.index.name = 'state_name'
+for index, state in state_data.iterrows():
+    if index == 'US':
+        state_data.loc[index, 'population'] = us_population
+        state_data.loc[index, 'state'] = 'US'
+        continue
+    abbreviation = state_names[index]
+    population = populations[abbreviation]
+    state_data.loc[index, 'population'] = population * 1000
+    state_data.loc[index, 'state'] = abbreviation
+
+# Look at percent of first-time consumers by state.
+series = (state_data['first_use_of_cannabis_in_the_past_year'] * 1000 / state_data['population'])
+series = series.sort_values(ascending=False) * 100
+fig, ax = plt.subplots(figsize=(12, 8))
+series.plot(kind='bar')
+plt.title('Percent of Population that were First Time Users in 2020 by State')
+plt.ylabel('Percent')
+plt.xticks(fontsize=16)
+plt.show()
 
 #-----------------------------------------------------------------------
 # Read NSDUH percentages from their PDFs with PDF plumber!
@@ -276,8 +296,24 @@ percentages.columns = [
 ]
 
 # Remove regions.
-regions = ['North', 'East', 'South', 'West']
+regions = ['North', 'Northeast', 'East', 'South', 'West', 'Midwest']
 percentages.drop(index=regions, inplace=True, errors='ignore')
+
+# Augment population (just in case).
+percentages.index.name = 'state_name'
+percentages.rename(index={
+    'District Of Col': 'District of Columbia',
+    'National': 'US',
+}, inplace=True)
+for index, state in percentages.iterrows():
+    if index == 'US':
+        percentages.loc[index, 'population'] = us_population
+        percentages.loc[index, 'state'] = 'US'
+        continue
+    abbreviation = state_names[index]
+    population = populations[abbreviation]
+    percentages.loc[index, 'population'] = population * 1000
+    percentages.loc[index, 'state'] = abbreviation
 
 
 #-----------------------------------------------------------------------
@@ -803,3 +839,16 @@ print(f'Satiated demand, given priors: {proportion}% (${amount}B)')
 #-----------------------------------------------------------------------
 
 # Create a choropleth of cannabis use rates by state in the USA!!!
+
+#-----------------------------------------------------------------------
+# Save the data!
+#-----------------------------------------------------------------------
+
+# Save state-level totals.
+state_data.to_excel(f'{DATA_DIR}/stats/nsduh-state-level-adult-totals.xlsx')
+
+# Save percentages.
+percentages.to_excel(f'{DATA_DIR}/stats/nsduh-state-level-adult-percentages.xlsx')
+
+# Save survey fields.
+survey_fields.to_excel(f'{DATA_DIR}/stats/nsduh-survey-fields.xlsx')

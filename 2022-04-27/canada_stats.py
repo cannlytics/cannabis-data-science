@@ -43,3 +43,7 @@ Data Sources:
 
 
 # Attempt to measure benefits and harms of cannabis use.
+
+
+# Question: Does the concentration of products (high THC) correlate with
+# a greater likelihood of adverse health events?

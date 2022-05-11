@@ -50,7 +50,7 @@ Below is a non-exhaustive list of some of the public cannabis data sets that we 
 |---------|-----|
 | Massachusetts Cannabis Control Commission Data Catalog |<https://masscannabiscontrol.com/open-data/data-catalog/> |
 | CCRS PRR All Data Up To 3-12-2022 | <https://lcb.app.box.com/s/7pi3wqrmkuo3bh5186s5pqa6o5fv8gbs> |
-| WA State Traceability Data January 2018 - November 2021 | <https://lcb.app.box.com/s/e89t59s0yb558tjoncjsid710oirqbgd> |
+| WA State Traceability Data January 2018 - November 2021 | <https://lcb.app.box.com/s/q1gd4lo7fyzlx2nm58qxhap4zs57ko4r> |
 | WA Traceability Data - Jan. 18 to Dec. 2020 | <https://lcb.app.box.com/s/fnku9nr22dhx04f6o646xv6ad6fswfy9> |
 
 ## 📚 Resources <a name="resources"></a>

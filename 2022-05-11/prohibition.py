@@ -69,7 +69,6 @@ params = {
     'commodity_desc': commodity,
     'year__GE': 2021,
     'state_alpha': 'NC',
-    
 }
 url = base + endpoint
 response = requests.get(url, params=params)
@@ -128,7 +127,7 @@ def parse_nass_data(response, freq='M'):
 url = base + 'api_GET'
 params = {
     'key': api_key,
-    'year__GE': 2021,
+    'year__GE': 2000,
 }
 
 # Get potassium and phosphorous price.
@@ -203,6 +202,32 @@ plt.ylabel('Acres')
 plt.title('Acres of Harvested Hemp in the US by State in 2021')
 plt.show()
 
+
+#------------------------------------------------------------------------------
+
+params['short_desc'] = 'HEMP, INDUSTRIAL, IN THE OPEN - ACRES PLANTED'
+response = requests.get(url, params=params)
+planted = parse_nass_data(response, freq='Y')
+planted['state'] = planted['location_desc'].str.title()
+planted.sort_values(
+    by='value',
+    inplace=True,
+    ascending=False,
+)
+
+# Visualize planted canopy.
+fig, ax = plt.subplots(figsize=(18, 11.5))
+sns.barplot(
+    x='state',
+    y='value',
+    data=planted.loc[~planted['state_alpha'].isin(['US', 'OT'])],
+    dodge=False,
+)
+plt.xticks(rotation=90)
+plt.xlabel('')
+plt.ylabel('Acres')
+plt.title('Acres of Planted Hemp in the US by State in 2021')
+plt.show()
 
 #------------------------------------------------------------------------------
 

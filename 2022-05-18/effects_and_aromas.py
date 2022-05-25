@@ -134,7 +134,7 @@ def curate_lab_results(
     compounds.drop(columns=['thca'], inplace=True)
     cannabinoid_names.remove('thca')
 
-    # Calculate totals.
+    # FIXME: Calculate totals.
     compounds['total_terpenes'] = compounds[terpene_names].sum(axis=1).round(2)
     compounds['total_cannabinoids'] = compounds[cannabinoid_names].sum(axis=1).round(2)
     compounds['total_thc'] = (compounds['delta_9_thc'] + compounds['delta_9_thca'].mul(DECARB)).round(2)
@@ -357,10 +357,10 @@ if __name__ == '__main__':
     strain_data = curate_lab_results(DATA_DIR)
 
     # Curate the reviews.
-    # reviews = curate_strain_reviews(DATA_DIR, strain_data)
+    reviews = curate_strain_reviews(DATA_DIR, strain_data)
 
     # Save the reviews.
-    # reviews.to_excel(DATA_DIR + '/strain-reviews.xlsx')
+    reviews.to_excel(DATA_DIR + '/strain-reviews.xlsx')
 
     # Read back in the reviews.
     reviews = pd.read_excel(DATA_DIR + '/strain-reviews.xlsx', index_col=0)
@@ -405,6 +405,7 @@ if __name__ == '__main__':
         # - Top 1-3 terpenes
         # - Top 1-3 terpenes + total cannabinoids
         # - Compare with random forest?
+        # - Use terpene ratios!!!
     
     # Do it Bayesian!!!
 
@@ -469,7 +470,7 @@ if __name__ == '__main__':
         'cymene': 0.00,
         'eucalyptol': 0.00,
         'gamma_terpinene': 0.00,
-        'terpinolene': 0.08,
+        'terpinolene': 0.80,
         'isopulegol': 0.00,
         'geraniol': 0.00,
         'humulene': 0.06,

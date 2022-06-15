@@ -368,6 +368,14 @@ def get_patent_details(
     return patent
 
 
+def get_strain_name(x):
+    """Get a strain name in text surrounded by tildes."""
+    try:
+        return re.search('`(.*)`', x).group(1)
+    except AttributeError:
+        return ''
+
+
 if __name__ == '__main__':
 
     #-------------------------------------------------------------------
@@ -379,10 +387,12 @@ if __name__ == '__main__':
     queries = [
         # 'cannabis',
         # 'cannabis plant',
-        # 'hemp plant',
+        # 'cannabis cultivar',
+        # 'cannabis variety',
+        'hemp plant',
         # 'hemp cultivar',
         # 'hemp variety',
-        'marijuana plant',
+        # 'marijuana plant',
     ]
     limit = 1000
     for query in queries:
@@ -402,20 +412,10 @@ if __name__ == '__main__':
         # Isolate plant patents.
         # Note: There is probably a better way to identify plant patents.
         cultivars = patents.loc[
-            (patents['patent_title'].str.contains('cannabis plant', case=False)) |
-            (patents['patent_title'].str.contains('hemp plant', case=False)) |
+            (patents['patent_title'].str.contains('plant', case=False)) |
             (patents['patent_title'].str.contains('cultivar', case=False))
         ]
         print('Found %i cultivar patents.' % len(cultivars))
-
-
-        def get_strain_name(x):
-            """Get a strain name in text surrounded by tildes."""
-            try:
-                return re.search('`(.*)`', x).group(1)
-            except AttributeError:
-                return ''
-
 
         # Get strain names.
         strain_names = cultivars['patent_title'].apply(get_strain_name)
@@ -440,21 +440,21 @@ if __name__ == '__main__':
         to_excel_with_style(cultivar_data, datafile, sheet_name='Patent Details')
 
 
-    # Lookup referenced cultivars:
-    # - Santhica 27
-    # - BLK03
-    # - AVI-1
-    patent = get_patent_details(pd.Series({
-        'patent_number': 'PP34051',
-        'patent_number_formatted': 'PP34,051',
-        'patent_title': 'Cannabis plant named `AVI-1`',
-        'patent_url': 'https://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=7&f=G&l=50&d=PTXT&p=1&S1=%22marijuana+plant%22&OS=%22marijuana+plant%22&RS=%22marijuana+plant%22',
-        'strain_name': 'AVI-1',
+    # # Lookup referenced cultivars:
+    # # - Santhica 27
+    # # - BLK03
+    # # - AVI-1
+    # patent = get_patent_details(pd.Series({
+    #     'patent_number': 'PP34051',
+    #     'patent_number_formatted': 'PP34,051',
+    #     'patent_title': 'Cannabis plant named `AVI-1`',
+    #     'patent_url': 'https://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=7&f=G&l=50&d=PTXT&p=1&S1=%22marijuana+plant%22&OS=%22marijuana+plant%22&RS=%22marijuana+plant%22',
+    #     'strain_name': 'AVI-1',
         
-    }))
-    today = kebab_case(datetime.now().isoformat()[:16])
-    datafile = f'../../.datasets/ai/plant-patents/plant-patent-{today}.xlsx'
-    to_excel_with_style(patent.to_frame().T, datafile, sheet_name='Patent Details')
+    # }))
+    # today = kebab_case(datetime.now().isoformat()[:16])
+    # datafile = f'../../.datasets/ai/plant-patents/plant-patent-{today}.xlsx'
+    # to_excel_with_style(patent.to_frame().T, datafile, sheet_name='Patent Details')
 
 
     #-------------------------------------------------------------------
@@ -467,6 +467,19 @@ if __name__ == '__main__':
     # - Relation to other variables?
     #-------------------------------------------------------------------
 
+    # Read programmatically collected plant patent data.
+    datafile = '../../.datasets/ai/plant-patents/plant-patents.xlsx'
+    details = pd.read_excel(datafile, sheet_name='Patent Details')
+
+    # Read manually collected plant patent data.
+    datafile = '../../.datasets/ai/plant-patents/plant-patents.xlsx'
+    results = pd.read_excel(datafile, sheet_name='Patent Lab Results')
+
+
+    # Count plant patents over time.
+    details['date'] = pd.to_datetime(details['patent_issue_date'])
+    yearly = details.groupby(pd.Grouper(key='date', freq='Y'))['patent_number'].count()
+    yearly.value_counts()
 
 
     #-------------------------------------------------------------------
@@ -474,6 +487,7 @@ if __name__ == '__main__':
     #-------------------------------------------------------------------
 
     # Upload the data to Firebase Firestore for API access.
+    # docs = 
     # 'public/data/plant_patents/{patent_number}
 
 

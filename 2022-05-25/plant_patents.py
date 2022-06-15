@@ -57,8 +57,7 @@ print('Found %i patents.' % len(patents))
 
 # Restrict to plant patents.
 cultivars = patents.loc[
-    (patents['patent_title'].str.contains('cannabis plant', case=False)) |
-    (patents['patent_title'].str.contains('hemp plant', case=False)) |
+    (patents['patent_title'].str.contains('plant', case=False)) |
     (patents['patent_title'].str.contains('cultivar', case=False))
 ]
 print('Found %i cultivar patents.' % len(cultivars))
@@ -142,6 +141,25 @@ for line in range(0, sample.shape[0]):
 #-----------------------------------------------------------------------
 
 # Optional: Calculate CBD / CBC / THC ratio.
+
+
+#-----------------------------------------------------------------------
+
+# Calculate `beta_myrcene` to `d_limonene` ratio.
+sample = results.loc[
+    (~results['d_limonene'].isna()) &
+    (~results['beta_pinene'].isna())
+]
+fig = sns.scatterplot(
+    x='d_limonene',
+    y='beta_pinene',
+    data=results,
+    hue='strain_name',
+)
+for line in range(0, sample.shape[0]):
+    plt.text(sample['d_limonene'].iloc[line], sample['beta_pinene'].iloc[line], sample['strain_name'].iloc[line], horizontalalignment='left', size='small')
+plt.legend([],[], frameon=False)
+plt.show()
 
 
 #-----------------------------------------------------------------------

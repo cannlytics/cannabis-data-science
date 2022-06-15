@@ -68,17 +68,15 @@ Contributions are always welcome! You are encouraged to submit issues, functiona
 
 ## ❤️ Support <a name="support"></a>
 
-The Cannabis Data Science meetup group and the accompanying source code is made available with ❤️ and <a href="https://cannlytics.com/contributors">your good will</a>. Please consider making a contribution to help us continue crafting useful code and wrangling new datasets for you.
+The Cannabis Data Science meetup group and the accompanying source code is made available with ❤️ and <a href="https://cannlytics.com/contributors">your good will</a>. Please consider making a contribution to help us continue crafting useful code and wrangling new datasets for you. Thank you 🙏
 
-| | |
-|-|-|
+| Provider | Link |
+|----------|------|
 | 👐 OpenCollective | <https://opencollective.com/cannlytics-company/donate> |
 | 💸 PayPal Donation | <https://cannlytics.page.link/donate> |
 | 💵 Venmo Donation | <https://www.venmo.com/u/cannlytics> |
 | 🪙 Bitcoin donation address| 34CoUcAFprRnLnDTHt6FKMjZyvKvQHb6c6 |
 | ⚡ Ethereum donation address | 0x8997cA09B3FAe2ce4039E295A5269cf4ae7a0BA5 |
-
-Thank you 🙏
 
 ## 🏛️ License <a name="license"></a>
 

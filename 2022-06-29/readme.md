@@ -13,14 +13,14 @@ The idea is to input a review(s) for a product, then get back measures for:
 
 ## Polarity Classification
 
- POSITIVE, NEGATIVE, or NEUTRAL.
+Given review(s), a classification of `positive`, `negative`, or `neutral` is assigned to each review.
 
 - http://sentic.net/senticnet-6.pdf
 - http://sentic.net/sentic-patterns.pdf
 
 ## Intensity Ranking
 
-A floating-point number between 0 (lowest intensity) and 1 (highest intensity).
+Given review(s), a floating-point number between 0 (lowest intensity) and 1 (highest intensity) is output.
 
 - http://sentic.net/predicting-intensities-of-emotions-and-sentiments.pdf
 
@@ -50,9 +50,7 @@ Given review(s), the algorithm outputs a depression score between zero (no depre
 
 ## Engagement Measure
 
-can provide actionable insights into how users view and use a specific service or product.
-
-Given review(s), the algorithm outputs an engagement score between -100 (high disengagement) and 100 (high engagement.
+Given review(s), the algorithm outputs an engagement score between -100 (high disengagement) and 100 (high engagement. This analysis can provide actionable insights into how users view and use a specific service or product.
 
 - http://sentic.net/predicting-video-engagement.pdf
 

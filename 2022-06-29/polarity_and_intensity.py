@@ -11,8 +11,8 @@ License: MIT License <https://opensource.org/licenses/MIT>
 Description:
 
     This script attempts to estimate the average intensity
-    ranking and polarity classification by user and by
-    strain to see if there are any low-hanging insights.
+    ranking and polarity classification by user, strain, and brand
+    to see if there are any low-hanging insights.
 
 Data Sources:
 
@@ -30,15 +30,12 @@ Resources:
     License: MIT License <https://github.com/SenticNet/personality-detection/blob/master/LICENSE>
     URL: <https://github.com/SenticNet/personality-detection>
 
+    Personality Attribution using Natural Language Processing
     - https://github.com/desaichirayu/Personality-Attribution-using-Natural-Language-Processing
-
-    - https://github.com/amirmohammadkz/personality_detection
-
-    - https://github.com/D2KLab/twitpersonality/blob/master/training/Train_SVM_models.py
 
 Setup:
 
-    1. pip install cannlytics, keras
+    1. pip install cannlytics, nltk
 
     2. Download all data to `../.datasets/effects`
 
@@ -49,10 +46,12 @@ from statistics import mean
 
 # External imports.
 import matplotlib.pyplot as plt
+import nltk
+from nltk.sentiment.util import *
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 import pandas as pd
 import random
 from scipy import stats
-import seaborn as sns
 
 # Internal imports.
 from personality_test import (
@@ -105,9 +104,17 @@ scores = tests.apply(
 )
 tests = pd.concat([tests, scores], axis='columns')
 
-# Plot the average distribution of personality types.
-scores.hist(bins=100)
-# Optional: Add horizontal line at median, mode, and mean.
+# Plot the average distribution of personality types,
+# with horizontal lines at the median and mean.
+means = list(scores.mean())
+medians = list(scores.median())
+figs = scores.hist(bins=100)
+for i, fig in enumerate(figs.flatten()):
+    try:
+        fig.vlines(means[i], ymin=0, ymax=7500, color='black')
+        fig.vlines(medians[i], ymin=0, ymax=7500, color='gray')
+    except:
+        pass
 plt.show()
 
 
@@ -160,12 +167,10 @@ word_count = essays.apply(len)
 plt.title('Average Review Word Count by User')
 plt.show()
 
+
 #------------------------------------------------------------------------------
 # Quick repeat of intensity ranking.
 #------------------------------------------------------------------------------
-import nltk
-from nltk.sentiment.util import *
-from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 
 # Remove stopwords from each essay.
 stopwords = nltk.corpus.stopwords.words('english')
@@ -281,7 +286,49 @@ plt.show()
 favorite = strain_ranking.loc[strain_ranking == strain_ranking.max()]
 print('User favorite strain:', print(favorite))
 
+
+#------------------------------------------------------------------------------
+# Brand sentiment analysis.
 #------------------------------------------------------------------------------
 
-# Question: Is there any way to use the 50 questions from the
+# Get rankings for entire corpus of reviews.
+corpus = reviews.loc[reviews['user'] != 'Anonymous']['review']
+words = corpus.apply(lambda x: [w.lower() for w in x.replace('. ', ' ').split(' ') if w.isalpha()])
+words = words.apply(lambda x: [w for w in x if w not in stopwords])
+rankings = corpus.apply(avg_positivity)
+rankings = rankings.loc[rankings != 0.5]
+
+# Determine if brand sentiment is above or below average.
+jungle_boyz = pd.DataFrame(columns=['reviews'])
+for key, value in words.iteritems():
+    if 'jungle' in value and ('boyz' in value or 'boy' in value or 'boys' in value):
+        jungle_boyz.loc[key] = pd.Series({'reviews': value})
+
+# Predict intensity and polarity for the brand.
+y_hat = jungle_boyz['reviews'].apply(' '.join).apply(avg_positivity)
+percentile = stats.percentileofscore(rankings, y_hat.mean())
+print("Percentile of intensity for brand's reviews:", round(percentile))
+if percentile > 50:
+    print('Above average intensity.')
+elif percentile == 50:
+    print('Average intensity.')
+else:
+    print('Below average intensity.')
+
+# Visualize the brand's place on the distribution!
+rankings.hist(bins=100)
+plt.vlines(rankings.mean(), ymin=0, ymax=1000, color='black')
+plt.vlines(y_hat.mean(), ymin=0, ymax=1000, color='green')
+plt.show()
+
+
+#------------------------------------------------------------------------------
+# Repeat analysis: Look at relation of intensity ranking to cannabinoids.
+#------------------------------------------------------------------------------
+
+
+#------------------------------------------------------------------------------
+# Future work: Is there any way to use the 50 questions from the
 # personality test in the prediction model?
+#------------------------------------------------------------------------------
+

@@ -64,7 +64,7 @@ Below is a non-exhaustive list of some of the public cannabis data sets that we 
 
 Contributions are always welcome! You are encouraged to submit issues, functionality, and features that you want to be addressed. You can also develop your own new features, fix known issues, and add documentation, tests, and examples. Anyone is welcome to contribute anything. You can refer to the [Cannlytics contributing guide](https://docs.cannlytics.com/developers/contributing) for more information about contributing to the Cannlytics ecosystem in general.
 
-> 💬 Join the [Cannabis Data Science Slack channel](https://join.slack.com/t/cannlytics/shared_invite/zt-17pisyd00-YCYgpqbdj2cGcrLCv9tm6A) to keep the conversation going!
+> 💬 Join the [Cannabis Data Science Slack channel](https://join.slack.com/t/cannlytics/shared_invite/zt-1bcdkq1dw-VKY45cIQitFqSqAj~0gr3A) to keep the conversation going!
 
 ## ❤️ Support <a name="support"></a>
 

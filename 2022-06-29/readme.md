@@ -1,6 +1,6 @@
 # Psychology API
 
-The idea is to input a review(s) for a product, then get back measures for:
+The idea is to input reviews for cannabis products, grouped by user, strain, or brand, then get back measures for:
 
 - [x] Polarity;
 - [x] Intensity;

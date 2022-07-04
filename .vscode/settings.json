@@ -133,6 +133,7 @@
         "statadict",
         "statsmodels",
         "stopwords",
+        "tablefmt",
         "terpenoid",
         "terpinene",
         "terpinolene",

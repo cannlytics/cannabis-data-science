@@ -1,6 +1,6 @@
 %------------------------------------------%
 % Cannabis Data Science
-% Date: 3/16/2022
+% Date: 3/9/2022
 %------------------------------------------%
 \documentclass[xcolor={dvipsnames}]{beamer}
 \hypersetup{pdfpagemode = FullScreen}
@@ -19,10 +19,10 @@
 %------------------------------------------%
 % Title
 %------------------------------------------%
-\title[\textbf{Cannabis Data Science \#57}]{}
+\title[\textbf{Cannabis Data Science \#56}]{}
 \author{Cannabis Data Science}
-\institute[]{\Large Cannabis Data Science \#57}
-\date{March \nth{16}, 2022}
+\institute[]{\Large Cannabis Data Science \#56}
+\date{March \nth{9}, 2022}
 
 %------------------------------------------%
 % Packages
@@ -119,232 +119,198 @@
 \end{frame}
 
 %------------------------------------------%
-% Data Science
+% Introduction
 %------------------------------------------%
-\section{Data Science}
+\section{Introduction}
 
-\begin{frame}{What Data Science Brings to the Table}
+\begin{frame}{}
 
-\vspace*{0.125\baselineskip}
+\begin{minipage}{0.7\textwidth}
 
-\begin{figure}
-\includegraphics[height=1.5in]{images/winds-of-britain.png}
-\caption*{%
-  \tiny Daily wind patterns of Britain mapped by Francis Galton, {\itshape Meteorographica} (1863).
- }
-\end{figure}
+\vspace{-2\baselineskip}
 
+% Question of the day
 \begin{center}
-\begin{minipage}{0.8\textwidth}
-{\footnotesize\itshape ``...by \underline{drawing diagrams}, and \underline{by countings}. This much suffices to give a correct idea of the {\bfseries distribution} of any given set of variables ; it is also sufficient to give a fair idea of the closeness of {\bfseries correlation}, or of kinship, between any two sets of variables.''}
+\begin{minipage}{.9\linewidth}
+\begin{Block}{Yield is the name of the game.}
+
+\vspace{.5\baselineskip}
+\begin{itemize}
+\item  Does the amount a producer produces affect the \underline{number of periods} a producer has operated or if a producer has \underline{exited}?
+
+\vspace{.5\baselineskip}
+
+\item Does the amount a retailer sells affect the \underline{number of periods} that they have operated or if they have \underline{exited}?
+\end{itemize}
+
+\vspace{.5\baselineskip}
+
+\end{Block}
 \end{minipage}
 \end{center}
-
-%\vspace*{0.05\baselineskip}
-
-\begin{flushright}
-\begin{minipage}{0.6\textwidth}
-{\footnotesize -- {\bfseries Francis Galton} in a letter to the editor of {\itshape The Times} on {\itshape Alcoholism and Offspring}.}
-\end{minipage}
-\end{flushright}
-
-%Measurements vary.
-
-\end{frame}
-
-
-%------------------------------------------%
-% Background
-%------------------------------------------%
-\section{Background}
-
-\begin{frame}{An Odd History of Data Exploration}
-
-\vspace*{0.5\baselineskip}
-
-Sir Francis Galton opened an anthropometric laboratory to
-
-\vspace*{0.25\baselineskip}
-
-\begin{center}
-\begin{minipage}{0.8\textwidth}
-{\footnotesize\itshape ``show the public the \underline{simplicity} of the instruments and methods by which the chief physical characteristics of man may be \underline{measured} and \underline{recorded}.''}
-\end{minipage}
-\end{center}
-
-\vspace*{0.25\baselineskip}
-
-\begin{center}
-\begin{minipage}{0.45\textwidth}
-
-\begin{figure}
-\includegraphics[height=1.8in]{images/sir-francis-galton-1850s.jpg}
-\caption*{%
-  \tiny Sir Francis Galton (1822 – 1911) in the 1850s.\\
- }
-\end{figure}
 
 \end{minipage}\hspace{0.05\textwidth}%
-\begin{minipage}{0.45\textwidth}
+\begin{minipage}{0.25\textwidth}
 
-
-\begin{figure}
-\includegraphics[height=1.8in]{images/anthro-lab-poster.jpg}
-\caption*{%
-  \tiny Flyer advertising the Anthropometric Laboratory.\\
- }
-\end{figure}
-
-\end{minipage}
-\end{center}
-
-
-\end{frame}
-
-%------------------------------------------%
-% Francis Galton
-%------------------------------------------%
-
-\begin{frame}{Francis Galton's Fingerprint on Data Science}
-
-\begin{minipage}{0.45\textwidth}
-
-\begin{itemize}
-\item Penchant for \underline{counting} and \underline{measuring}.
-
-\vspace*{0.25\baselineskip}
-
-\item Founded the biometric approach to the study of heredity.
-
-\vspace*{0.25\baselineskip}
-
-\item Taught and founded {\itshape Biometrika} with Karl Pearson.
-
-\vspace*{0.25\baselineskip}
-
-\item Introduced the concepts:
-
-\begin{itemize}
-\item {\bfseries standard deviation};
-\item {\bfseries correlation};
-\item {\bfseries regressions}.
-\end{itemize}
-  
-\end{itemize}
-
-
-\end{minipage}\hspace{0.05\textwidth}%
-\begin{minipage}{0.45\textwidth}
+\vspace{0.5\baselineskip}
 
 \begin{figure}
-\includegraphics[height=1.5in]{images/distribution-of-successful-men.png}
+\includegraphics[height=2.in]{images/free-entry.jpg}
 \caption*{%
-  \tiny Distribution of Successes and of Natural Ability Among the Kinsfolk of Fellows of the Royal Society (1904).\\
+  \tiny
+  {Free entry sign in Germany.\\Author: Lupus in Saxonia\\ License: CC-BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/deed.en}
  }
 \end{figure}
 
 \end{minipage}
 
+% Free entry sign in Germany.
+% Author: Lupus in Saxonia
+% License: CC-BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/deed.en
+
 \end{frame}
 
 %------------------------------------------%
-% Francis Galton's work
+% Survival Analysis
 %------------------------------------------%
 
-\begin{frame}{Francis Galton's Work}
+\begin{frame}{}
 
-\begin{figure}
-\includegraphics[height=2in]{images/rate-of-regression.png}
-\caption*{%
-  \tiny An application of regression and prediction by Francis Galton in {\itshape Anthropological Miscellanea} (1886).\\
- }
-\end{figure}
+{\large \textbf{Survival Analysis}}\vspace{0.5\baselineskip}\\
 
 \begin{itemize}
 
-\item Created a dataset of 9,337 respondents, each measured in 17 categories.
+\item {\bfseries Survival analysis} is a branch of statistics for analyzing the \underline{expected duration} of time until \underline{one event occurs}.
 
-\item After applying the \underline{liner regression} to sweat peas, Francis Galton applied regressions to the human data.
+\vspace{\baselineskip}
+
+\item Can fit a parametric {\bfseries survival function}
+
+$$S(t \hspace{0.5ex}\vert\hspace{0.5ex} \beta, X) = P(T>t \hspace{0.5ex}\vert\hspace{0.5ex} \beta, X)$$
+
+%\vspace{\baselineskip}
+
+%\item Can handle {\bfseries censored data} -- data where the event of interest has not occurred.
 
 \end{itemize}
 
+\vspace{0.5\baselineskip}
+
+\begin{figure}
+\includegraphics[height=1.5in]{images/treatment-survival-function.png}
+\caption*{%
+  \tiny
+  {Survival function for treated and untreated leukemia.\\Author: Michaelg2015\\ License: CC-BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/deed.en}
+ }
+\end{figure}
+
 \end{frame}
 
+
 %------------------------------------------%
-% FIXME: Introduction
+% Consumption Rates
 %------------------------------------------%
-%\section{Introduction}
-%
+
 %\begin{frame}{}
 %
-%\begin{minipage}{0.7\textwidth}
-%
-%\vspace{-2\baselineskip}
-%
-%% Question of the day
-%\begin{center}
-%\begin{minipage}{.9\linewidth}
-%\begin{Block}{Question of the day}
-%
-%\vspace{.5\baselineskip}
-%\begin{itemize}
-%\item What insights does our data hold that we may not know?
-%\end{itemize}
-%
-%\vspace{.5\baselineskip}
-%
-%\end{Block}
-%\end{minipage}
-%\end{center}
-%
-%\end{minipage}\hspace{0.05\textwidth}%
-%%\begin{minipage}{0.25\textwidth}
-%%
-%%\vspace{0.5\baselineskip}
-%%
-%%\end{minipage}
+%{\large \textbf{Consumption Rates}}\vspace{\baselineskip}\\
 %
 %\end{frame}
 
+
 %------------------------------------------%
-% Exploratory Data Analysis
+% Natural Language Processing
 %------------------------------------------%
 
-\begin{frame}{An aside on studying}
+\begin{frame}{}
 
-{\itshape Weekly Evening Meeting} By Francis Galton
+{\large \textbf{Natural Language Processing}}\vspace{\baselineskip}\\
 
-{\itshape On Men of Science, their Nature and their Nurture}
-
-\vspace{0.75\baselineskip}
+\begin{minipage}{0.8\textwidth}
 
 \begin{itemize}
 
-\item \underline{Not tied down} to old courses of classics and mathematics.
+\item {\bfseries Symbolic methods} -- hand--coding a set of rules to be used with dictionary lookup.
 
-\vspace{.5\baselineskip}
+%\vspace{0.5\baselineskip}
+%
+%\begin{itemize}
+%
+%\item Pros:
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Cons:
+%
+%\end{itemize}
 
-\item Sufficient groundwork in many subjects to avoid error.
+\vspace{0.5\baselineskip}
 
-\vspace{.5\baselineskip}
+\item {\bfseries Machine-learning algorithms} -- systems based on automatically learning rules can be made more accurate simply by supplying more input data.
 
-\item Early introduced to \underline{many subjects} of interest.
-
-\vspace{.5\baselineskip}
-
-\item A well--balanced education, including {\bfseries chemistry}, {\bfseries botany}, {\bfseries logic}, and {\bfseries political economy}.
-
-\vspace{.5\baselineskip}
-
-\item A variety of subjects, and \underline{attention to details}.
-
-\vspace{.5\baselineskip}
-
-\item Coming in contact with persons of every rank and sitting in the same form.
-
+%\vspace{0.5\baselineskip}
+%
+%\begin{itemize}
+%
+%\item Pros:
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Cons:
+%
+%\end{itemize}
+%
 \end{itemize}
 
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.15\textwidth}
+
+\begin{figure}
+\includegraphics[height=1in]{images/parse-tree.png}
+\end{figure}
+
+\end{minipage}
+
+
 \end{frame}
+
+%------------------------------------------%
+% Natural Language Processing with SpaCy
+%------------------------------------------%
+
+%Semantic role labelling
+
+
+% Named entity recognition
+
+%Relationship extraction
+
+%\begin{frame}{}
+%
+%{\large \textbf{Natural Language Processing with SpaCy}}\vspace{\baselineskip}\\
+%
+%\begin{itemize}
+%
+%\item {\bfseries EntityRecognizer} -- This component is referred as ner. It is responsible for identifying named entities and assigning labels to them.
+%
+%\item {\bfseries EntityRuler} -- This component is called * entity_ruler*.It is responsible for assigning named entitile based on pattern rules. Revisit Rule Based Matching to know more.
+%
+%\end{itemize}
+%
+%\end{frame}
+
+%Tokenizer : It is responsible for segmenting the text into tokens are turning a Doc object. This the first and compulsory step in a pipeline.
+%Tagger : It is responsible for assigning Part-of-speech tags. It takes a Doc as input and createsDoc[i].tag
+%DependencyParser : It is known as parser. It is responsible for assigning the dependency tags to each token. It takes a Doc as input and returns the processed Doc
+%EntityRecognizer : This component is referred as ner. It is responsible for identifying named entities and assigning labels to them.
+%TextCategorizer : This component is called textcat. It will assign categories to Docs.
+%EntityRuler : This component is called * entity_ruler*.It is responsible for assigning named entitile based on pattern rules. Revisit Rule Based Matching to know more.
+%Sentencizer : This component is called **sentencizer** and can perform rule based sentence segmentation.
+%merge_noun_chunks : It is called mergenounchunks. This component is responsible for merging all noun chunks into a single token. It has to be add in the pipeline after tagger and parser.
+%merge_entities : It is called merge_entities .This component can merge all entities into a single token. It has to added after the ner.
+%merge_subtokens : It is called merge_subtokens. This component can merge the subtokens into a single token.
+
+
 
 %------------------------------------------%
 % Takeaway
@@ -360,17 +326,13 @@ Sir Francis Galton opened an anthropometric laboratory to
 
 \begin{center}
 \begin{minipage}{.9\linewidth}
-\begin{Block}{Lessons of the Day}
+\begin{Block}{Lesson of the Day}
 
 \vspace{0.5\baselineskip}
 
 \begin{itemize}
 
-\item Measurements vary.
-
-\vspace{0.5\baselineskip}
-
-\item Exploring your data is an critical, yet often overlooked, step in gleaming insights.
+\item Parsing natural language can be complex, but can yield valuable data.
 
 \vspace{0.5\baselineskip}
 

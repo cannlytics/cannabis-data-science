@@ -1,9 +1,6 @@
 %------------------------------------------%
-%
-% Cannabis Data Science #59
-%
-% Date: 3/30/2022
-%
+% Cannabis Data Science #58
+% Date: 3/23/2022
 %------------------------------------------%
 \documentclass[xcolor={dvipsnames}]{beamer}
 \hypersetup{pdfpagemode = FullScreen}
@@ -22,10 +19,10 @@
 %------------------------------------------%
 % Title
 %------------------------------------------%
-\title[\textbf{Cannabis Data Science \#59}]{}
+\title[\textbf{Cannabis Data Science \#58}]{}
 \author{Cannabis Data Science}
-\institute[]{\Large Cannabis Data Science \#59}
-\date{March \nth{30}, 2022}
+\institute[]{\Large Cannabis Data Science \#58}
+\date{March \nth{23}, 2022}
 
 %------------------------------------------%
 % Packages
@@ -103,9 +100,7 @@
 \makeatother
 
 %------------------------------------------%
-%
 % Presentation
-%
 %------------------------------------------%
 \begin{document}
 
@@ -125,353 +120,209 @@
 \end{frame}
 
 %------------------------------------------%
-% History of Data Science
+% Data Science
 %------------------------------------------%
 
-\begin{frame}{Looking back at the history of computing...}
-
-\begin{figure}
-\includegraphics[width=0.9\textwidth]{images/grace-hopper-univac.jpg}
-\end{figure}
-
-\end{frame}
-
-
-%------------------------------------------%
-\begin{frame}{The Importance of Computers}
-
-\vspace{0.5\baselineskip}
-
-\begin{minipage}{0.6\textwidth}
-
-\scriptsize
-
-\vspace{0.5\baselineskip}
-
-\begin{itemize}
-
-\item Mathematician {\bfseries Grace Hopper} (``Grandma COBOL'') completes A-0, a program that allows a computer user to use \underline{English-like words} instead of numbers to give the computer instructions in 1952.
-
-\vspace{0.25\baselineskip}
-
-\item Helped the first commercial electronic computer and applications for COBOL (common-business-oriented language).
-
-\vspace{0.25\baselineskip}
-
-\item 70 years later, Google's fourth undersea internet cable, named Grace Hopper, connecting the US, UK, Spain, and is expected to soon be operational (2022).
-
-\end{itemize}
-
-\begin{figure}
-\includegraphics[width=1in]{images/first-computer-bug-1945.jpg}
-\caption*{\tiny
-First actual case of a bug being found (1960).\\
-\tiny\color{Gray}
-Author: Jan Arkesteijn
-License: CC BY 2.0
-https://creativecommons.org/licenses/by/2.0
-}
-\end{figure}
-
-\end{minipage}\hspace{0.05\textwidth}%
-\begin{minipage}{0.345\textwidth}
-
-\begin{figure}
-\includegraphics[width=\textwidth]{images/grace-hopper-computer.jpg}
-\caption*{\setstretch{.75}{\tiny Grace Hopper, Washington DC, 1978.}\\[0.5\baselineskip]
-{\setstretch{.75}\tiny\color{Gray} Author: Lynn Gilbert\\
-License: CC BY-SA 4.0\\
-creativecommons.org/licenses/by-sa/4.0}
-}
-\end{figure}
-
-\end{minipage}
-
-\end{frame}
-
-%------------------------------------------%
-
-\begin{frame}{From Top Secret to Open Access}
-
-\begin{minipage}{0.5\textwidth}
-
-\begin{figure}
-\includegraphics[height=0.75\paperheight]{images/minutes-1945.jpg}
-\end{figure}
-
-\end{minipage}\hspace{0.1\textwidth}%
-\begin{minipage}{0.4\textwidth}
-
-\small
-
-The Electronic Computer Project (1945-1947)
-
-\vspace{0.25\baselineskip}
-\begin{itemize}
-
-\item Led by Professor John von Neumann.
-
-\vspace{0.125\baselineskip}
-
-\item Put into the public domain.
-
-\vspace{0.125\baselineskip}
-
-\item 20,000,000 multiplications took 6 hours of continuous computing.
-
-\end{itemize}
-
-\end{minipage}
-
-\end{frame}
-
-%------------------------------------------%
-\begin{frame}
-
-\vspace{0.5\baselineskip}
-
-{\itshape ``There are two kinds of people in the world:\\ Johnny von Neumann ...''}
-
-\begin{figure}
-\includegraphics[width=\textwidth]{images/john-von-neumann-team.jpg}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}
-
-\begin{figure}
-\includegraphics[width=0.65\paperheight]{images/computer-team.jpg}
-\end{figure}
-
-\begin{flushright}
-{\itshape``...and the rest of us.''}
-
-\vspace{0.125\baselineskip}
-- Eugene Wigner
-\end{flushright}
-
-\end{frame}
-
-%Source: Institute for Advanced Study
-%------------------------------------------%
-
-
-\begin{frame}{Searching for the origins of data science}
-
-John von Neumann founded the field of {\bfseries game theory}.
-
-\vspace{0.5\baselineskip}
-
-\begin{itemize}
-
-\item {\itshape Theory of Games and Economic Behavior},\\ von Neumann and Morgenstern (1944).
-
-\vspace{0.25\baselineskip}
-
-\item von Neumann–-Morgenstern utility function:
-
-\vspace{-0.25\baselineskip}
-$$
-U(p) = \sum_{k=1}^K u(x_k)p_k
-$$
-
-where $p_{k}$ is the probability of outcome $k$ that, if realized, provides payoff $x_k$, and function $u$ expresses the utility of each respective payoff.
-
-\vspace{0.25\baselineskip}
-
-\item Today, {\bfseries Bayes' Theorem} is used to  endogenized probability, making it subjective. Subjective probabilities are updated in light of new information, thus connecting the concepts of {\bfseries rational choice} and inference.
-
-\end{itemize}
-
-\end{frame}
-
-
-%------------------------------------------%
-% A Sprinkle of Economics (excluded for time?)
-%------------------------------------------%
-%\section{A Brief Sprinkle of Economics}
-%\begin{frame}{A Sprinkle of Economics: Competing for Profits}
-%
-%\vspace*{0.125\baselineskip}
-%
-%Market Effects
-%
-%- Michael Porter
-%
-%Competitive rivalry
-%
-%  - Degree of advertising
-%  - Competitive Advantage / Comparative Advantage
-%
-%Buyer power
-%
-%  - Buyer concentration to firm concentration ratio
-%  - Price elasticity of demand.
-%
-%Supplier power
-%
-%  - Input costs
-%
-%Threat of new entry
-%
-%Threat of substitution
-%
-%Observe:
-%
-%Markets of substitute goods tend to experience great volatility in prices, driving down producer profits.
-%
-%Prices tend to be reduced in attempts of producers to capture market share.
-%
-%Consumers may be able to attain more utility when there are available substitute products.
-%
-%In interdependent markets, game theory must be used to derive a profit maximizing solution.
-%
-%%\begin{itemize}
-%%
-%%\item Cournot
-%%
-%%\item Joseph Bertrand
-%%
-%%\item Pareto
-%%
-%%\item Irving Fisher
-%%
-%%\end{itemize}
-%
-%\end{frame}
-
-% TODO: Talk about sbustitutes in production.
-
-
-% TODO: Correlate concentration ratio for various product types and the vendors total sales (hue by producer type).
-
-% that can produce cannabis products as {\bfseries substitutes in production}
-
-
-%------------------------------------------%
-% Game Theory
-%------------------------------------------%
-\section{Jumping into Game Theory}
-\begin{frame}{Jumping into Game Theory}
+\section{When did data science begin?}
+\begin{frame}{When did data science begin?\\}
 
 \vspace*{0.125\baselineskip}
 
-Repeated Games
+% TODO: Write synopsis and add image.:
+\begin{minipage}{.4\textwidth}
+\begin{figure}
+\includegraphics[width=\textwidth]{images/john-graunt.png}
+\caption*{\scriptsize
+{\bfseries John Graunt} (1620 -- 1674)\\
+An early champion of statistics.
+}
+\end{figure}
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.55\textwidth}
+\vspace{-2\baselineskip}
+Known for early work on:
+\vspace{0.5\baselineskip}
+\begin{itemize}
+    
+    \item Descriptive statistics;
 
-\vspace*{0.5\baselineskip}
+    \vspace{0.5\baselineskip}
+  
+    \item Census methods that lead to modern demography;
+
+    \vspace{0.5\baselineskip}    
+    
+    \item Epidemiology.
+
+\end{itemize}
+\end{minipage}
+
+%https://en.wikipedia.org/wiki/John_Graunt
+
+%Table of Casualties in Natural and Political Observations Made Upon the Bills of Mortality (5th edition, published 1676)
+
+\end{frame}
+
+
+\section{Where did these techniques come from?}
+\begin{frame}{Where did these techniques come from?}
+
+
+% TODO: Write synopsis and add image:
+\begin{minipage}{0.55\textwidth}
+
 \begin{itemize}
 
-\item {\bfseries Finite games}: Usually solved by backwards induction.
+\item Fit {\bfseries negative binomial distributions} to the numbers of purchases of a brand of consumer goods.
 
-\vspace*{0.25\baselineskip}
+\vspace{0.5\baselineskip}
 
-\item {\bfseries Infinite games}: Typically, difficult to solve.
+\item Modeled repeated category and brand purchases within a wide variety of markets.
+% NBD-Dirichlet model of brand choice successfully modelled the
 
-\vspace*{0.25\baselineskip}
+\vspace{0.5\baselineskip}
 
-\item Even if the game being played in each round is identical, repeating that game a finite or an infinite number of times can, in general, lead to very different outcomes (equilibria), as well as very different optimal strategies.
+\item Studied the percentage of the relevant population that has purchased a given brand (or category) at least once in the time period under study.
 
 \end{itemize}
 
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.35\textwidth}
+\begin{figure}
+\includegraphics[width=\textwidth]{images/andrew-sc-ehrenberg.jpg}
+\caption*{
+{\bfseries\scriptsize Andrew S. C. Ehrenberg}\\ Statistician and marketing scientist.
+}
+\end{figure}
+\end{minipage}
+
 \end{frame}
 
+%------------------------------------------%
+% A Sprinkle of Economics
+%------------------------------------------%
+%\section{A Sprinkle of Economics}
+%\begin{frame}{A Sprinkle of Economics}
+%
+%\vspace*{0.125\baselineskip}
+%
+%\begin{itemize}
+%
+%\item Cournot
+%
+%\item Joseph Bertrand
+%
+%\item Pareto
+%
+%\item Irving Fisher
+%
+%\end{itemize}
+%
+%\end{frame}
 
-\begin{frame}{Modeling Player Preferences}
 
-Given that player $i$'s valuation of the game diminishes with time depending on a {\bfseries discount factor} $\delta < 1$, then player $i$'s utility is
+%------------------------------------------%
+% Application to the Cannabis Industry
+%------------------------------------------%
+\section{Application to the Cannabis Industry}
+\begin{frame}{Application to the Cannabis Industry}
 
-$$
-U_i = \sum_{t \geq 0}\delta^t u_i(x_t)
-$$
-
-where
-
-$$
-u_i(x_t) = \sum_{k=1}^K u_i(x_k)p_k
-$$
+\begin{minipage}{0.45\textwidth}
+\begin{center}
+\vspace{0.25\baselineskip}
+\begin{figure}
+\includegraphics[height=2.5in]{images/beverage-label.jpg}
+\vspace{-0.25\baselineskip}
+\caption*{
+\scriptsize Cannabis--infused beverage label\\[0.125\baselineskip]
+\tiny {\color{WildStrawberry} 10mg per serving} | {\color{WildStrawberry} 100mg THC per bottle}\\[0.5\baselineskip]
+\tiny\color{Gray}
+Author: kiliweb {\tiny https://world.openfoodfacts.org/editor/kiliweb}\\
+License: CC BY-SA 3.0 {\tiny https://creativecommons.org/licenses/by-sa/3.0}
+}
+\end{figure}
+\end{center}
+\end{minipage}\hspace{0.0\textwidth}%
+\begin{minipage}{0.55\textwidth}
 
 \vspace{0.5\baselineskip}
-The cutting edge is repeated games with incomplete information, where players have to formulate beliefs about probabilities, $p$.
 
-\end{frame}
+\begin{minipage}{0.75\textwidth}
 
+{\footnotesize\itshape ``Oh Hi’s THC {\color{Mulberry} Pomegranate} Seltzer is our number one seller. When deciding on a new product to launch, we look at \underline{trending flavors}.''}
 
-\begin{frame}{Solving Games}
+\vspace{0.5\baselineskip}
 
+{\footnotesize\itshape ``negotiate pricing structures to sell the \underline{customer volume} helps greatly.''}
 
-{\bfseries Nash Equilibrium} -- A strategy profile for a game in which no player has a profitable unilateral deviation.
+\vspace{0.5\baselineskip}
 
+{\footnotesize\itshape ``\underline{Expansion can be complex} as it is a capital-intensive investment.''}
 
-\vspace{2\baselineskip}
+\vspace{-0.5\baselineskip}
+\begin{flushright}
+{\footnotesize - Matt Vincent\\ {\tiny Co-Founder of OH-Hi Beverages}}
+\end{flushright}
 
-{\bfseries Subgame Perfect Nash Equilibrium} -- A strategy profile for a dynamic game with Nash equilibrium for every subgame.
+\end{minipage}
 
+\vspace{0.5\baselineskip}
 
-\vspace{2\baselineskip}
+{\tiny\color{Gray} Reference: https://cannabisdrinksexpo.com/en/blog/producer-profiles-70/consumer-education-is-key-says-matt-vincent-301.htm}
 
-{\bfseries Bayesian Nash Equilibrium} -- A strategy profile that maximizes the expected payoff for each player given their beliefs and given the strategies played by the other players.
+\end{minipage}
 
-%Every player's strategy maximizes their expected payoff given their beliefs about the state of nature.
+% pre-roll brands?
+
+% solid edible brands? Overlap with beverage brands?
+
+% What are the top brands in Washington State and 
+
 
 \end{frame}
 
 
 %------------------------------------------%
-% Congestion Model
+% Question of the Day
 %------------------------------------------%
-\section{Congestion Game}
-\begin{frame}{Congestion Model}
+\section{Question of the Day}
+\begin{frame}{Question of the Day}
 
-\footnotesize
+{\Large {\bfseries Brand Analysis}: Can we measure marketing performance for a cannabis brand?}\\[0.5\baselineskip]
 
-% TODO: Model product type production as a congestion game.
+Here is a list of potential metrics:
 
-\vspace{0.5\baselineskip}
-Given
+\vspace{0.25\baselineskip}
 
 \begin{itemize}
 
-\item Cannabis {\color{RedOrange}producers}, $i = 1,...,N$,
-\item Cannabis {\color{ForestGreen}products}, $m=1,...,M$,
-\item A time horizon, $t=1,...,T$.
+\item Market share
+
+\vspace{0.125\baselineskip}
+
+\item Market penetration rate
+
+\vspace{0.125\baselineskip}
+
+\item Purchase frequency / time between purchases
+
+\vspace{0.125\baselineskip}
+
+\item Repeat purchase rate
+
+\vspace{0.125\baselineskip}
+
+\item Items sold
+
+\vspace{0.125\baselineskip}
+
+\item Customer lifetime value
+
+\vspace{0.125\baselineskip}
+
+\item Average product price
 
 \end{itemize}
-
-\vspace{0.75\baselineskip}
-Under the following assumptions:
-
-\begin{itemize}
-
-\item Any {\color{RedOrange}producer} can produce any {\color{ForestGreen}product}.
-
-\item The {\itshape cost} to produce an item of any type is $c=0$.
-
-\item A {\color{RedOrange}producer} can change the type of {\color{ForestGreen}product} it produces at a set {\itshape interval}, $t_i$.\footnote{\tiny\itshape ``The Calvo Fairy is a mythical creature who arrives according to a Poisson process (i.e. inter-arrival times are exponentially-distributed).'' -Anonymous Economist}
-
-\end{itemize}
-
-\vspace{0.75\baselineskip}
-{\bfseries Strategy}: Every time, $t_i$, a {\color{RedOrange}producer} can choose it's {\color{ForestGreen}product} type:
-
-\vspace{0.25\baselineskip}
-\begin{enumerate}
-
-\item The {\color{RedOrange}producer} looks at the number of {\color{RedOrange}producers} of each type, $n_m$,
-
-\vspace{0.25\baselineskip}
-
-\item The {\color{RedOrange}producer} calculates the average profits for the {\color{RedOrange}producer} of each {\color{ForestGreen}product} type, $E[\pi]_m$, for $t_i$,
-
-\vspace{0.25\baselineskip}
-
-\item The {\color{RedOrange}producer} chooses the most profitable {\color{ForestGreen}product} to produce, $m*$, for $t_i$, taking into consideration that each other {\color{RedOrange}producer}, $j=1,...,J$, will produce the product that is most profitable for them at each $t_j$.
-
-%enter or exit each product market depending on their best strategy at each $t_j$.
-\end{enumerate}
-
-\end{frame}
-
 
 %\begin{itemize}
 %
@@ -483,35 +334,9 @@ Under the following assumptions:
 %
 %\item Using beverage product type for simplicity. The analysis can be readily applied to all product types.
 %
-%\end{itemize}
-
-
-%------------------------------------------%
-% Question and Hypothesis
-%------------------------------------------%
-\section{Question and Hypothesis}
-\begin{frame}{Question and Hypothesis}
-
-% Question of the day
-\begin{center}
-\begin{minipage}{.9\linewidth}
-\begin{Block}{Question of the day.}
-
-\vspace{.5\baselineskip}
-\begin{itemize}
-
-\item What is the {\bfseries Nash Equilibrium} of the congestion game?
-
-\end{itemize}
-
-\vspace{.5\baselineskip}
-
-\end{Block}
-\end{minipage}
-\end{center}
+%\end{itemize} 
 
 \end{frame}
-
 
 %------------------------------------------%
 % Takeaway
@@ -525,15 +350,36 @@ Under the following assumptions:
 % Thank you.
 \includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\[-0.5\baselineskip]
 
+We've gone over what it means to be a successful {\color{TealBlue} beverage} producer in Washington State and we've seen how data can contain insights for marketers.
+
 \begin{center}
 \begin{minipage}{.9\linewidth}
-\begin{Block}{Insight of the Day}
+\begin{Block}{Lessons of the Day}
 
 \vspace{0.5\baselineskip}
 
 \begin{itemize}
 
-\item It's all fun and {\bfseries games}, until someone makes a profit!
+\item Certain KPIs correlate with {\bfseries market share}:
+
+\vspace{0.25\baselineskip}
+\begin{itemize}
+
+\item Market penetration
+
+\vspace{0.25\baselineskip}
+
+\item Product proliferation
+
+\end{itemize}
+
+\vspace{0.25\baselineskip}
+
+\item Spread the word, {\bfseries build your brand}!
+
+\vspace{0.5\baselineskip}
+
+\item {\bfseries Shelf-space}. Get there while you {\itshape can}!
 
 \vspace{0.5\baselineskip}
 
@@ -555,7 +401,6 @@ What would you like to talk about next week?
 \vspace{0.5\baselineskip}
 
 \end{frame}
-
 
 %------------------------------------------%
 % Fin.

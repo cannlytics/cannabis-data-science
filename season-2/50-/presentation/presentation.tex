@@ -1,6 +1,6 @@
 %------------------------------------------%
 % Cannabis Data Science
-% Date: 2/2/2022
+% Date: 1/26/2022
 %------------------------------------------%
 \documentclass[xcolor={dvipsnames}]{beamer}
 \hypersetup{pdfpagemode = FullScreen}
@@ -19,10 +19,10 @@
 %------------------------------------------%
 % Title
 %------------------------------------------%
-\title[\textbf{Cananbis Data Science \#51}]{}
+\title[\textbf{Cananbis Data Science \#50}]{}
 \author{Cannabis Data Science}
-\institute[]{\Large Cananbis Data Science \#51}
-\date{February \nth{2}, 2022}
+\institute[]{\Large Cananbis Data Science \#50}
+\date{January \nth{25}, 2022}
 
 %------------------------------------------%
 % Packages
@@ -127,8 +127,7 @@
 
 \vspace{\baselineskip}
 
-What does the Washington State canopy look like? \newline
-How has it changed over time?
+Are there any cultivation patterns that can be discovered from augmenting and visualizing cultivation data?
 
 \vspace{\baselineskip}
 
@@ -139,64 +138,6 @@ How has it changed over time?
 \vfill
 
 \end{frame}
-
-
-%------------------------------------------%
-% Panel Data
-%------------------------------------------%
-\section{Panel Data}
-
-\begin{frame}{}
-
-{\large \textbf{Panel Data}}\vspace{1.5\baselineskip}\\
-
-\begin{itemize}
-
-\item A panel has the form
-\vspace{.5\baselineskip}
-
-\begin{figure}
-    \begin{subfigure}[t]{.5\textwidth}
-      \includegraphics[width=\textwidth]{images/panel.png}
-    \end{subfigure}
-\end{figure}
-
-where
-\vspace{.5\baselineskip}
-\begin{itemize}
-\item $i$ is the individual dimension and
-\item $t$ is the time dimension.
-\end{itemize}
-\vspace{1.5\baselineskip}
-
-\item We can look at plants ($x_{it}$) by licensee ($i$) over time ($t$).
-
-\end{itemize}
-
-
-
-
-
-%A general panel data regression model is written as
-%
-%\begin{figure}
-%    \begin{subfigure}[t]{.3\textwidth}
-%      \includegraphics[width=\textwidth]{images/regression.png}
-%    \end{subfigure}
-%\end{figure}
-%
-%where
-%
-%\begin{figure}
-%    \begin{subfigure}[t]{.25\textwidth}
-%      \includegraphics[width=\textwidth]{images/errors.png}
-%    \end{subfigure}
-%\end{figure}
-%
-%Estimation with a \textbf{fixed effects} or \textbf{random effects} model depends on assumptions about $\mu_i$, the individual-specific, time-invariant effects.
-
-\end{frame}
-
 
 %------------------------------------------%
 % Data science history.
@@ -228,41 +169,28 @@ where
 %\end{frame}
 
 %------------------------------------------%
-% Statistics of Big Data
-%------------------------------------------%
-%\section{Statistics of Big Data}
-%\begin{frame}{}
-%
-%{\large \textbf{Statistics of Big Data}\vspace{1.5\baselineskip}\\
-%\begin{itemize}
-%
-%% TODO: Talk about big data and statistics...
-%
-%\end{frame}
-
-%------------------------------------------%
 % Augmenting and visualizing data.
 % TODO: Add visualizations
 %------------------------------------------%
-%\section{Augmenting and Visualizing Data}
-%\begin{frame}{}
-%
-%{\large \textbf{Augmenting and visualizing cannabis data}}\vspace{1.5\baselineskip}\\
-%\begin{itemize}
-%
-%\item {\bfseries Box (and Swarm) Plots} - Useful for visualizing variability.
-%
-%\vspace{\baselineskip}
-%
-%\item {\bfseries Bubble Plots} - Useful for visualizing a third dimension in a 2D plot.
-%
-%\vspace{\baselineskip}
-%
-%\item {\bfseries Scatter Plots} - Useful for visualizing the space dimension of your data.
-%
-%\end{itemize}
-%
-%\end{frame}
+\section{Augmenting and Visualizing Data}
+\begin{frame}{}
+
+{\large \textbf{Augmenting and visualizing cannabis data}}\vspace{1.5\baselineskip}\\
+\begin{itemize}
+
+\item {\bfseries Box (and Swarm) Plots} - Useful for visualizing variability.
+
+\vspace{\baselineskip}
+
+\item {\bfseries Bubble Plots} - Useful for visualizing a third dimension in a 2D plot.
+
+\vspace{\baselineskip}
+
+\item {\bfseries Scatter Plots} - Useful for visualizing the space dimension of your data.
+
+\end{itemize}
+
+\end{frame}
 
 
 %It is imperative to have the right tools for the task at hand.
@@ -496,7 +424,7 @@ where
 %------------------------------------------%
 % Takeaway
 %------------------------------------------%
-\section{Takeaway}
+
 \begin{frame}{}
 
 \begin{center}
@@ -514,7 +442,11 @@ where
 
 \begin{itemize}
 
-\item Statistics on big data is hard, but the value from simple statistics can go a long way.
+\item It is imperative to have the right tools for the task at hand.
+
+\vspace{\baselineskip}
+
+\item A little data augmentation and visualization can go a long way.
 
 \vspace{\baselineskip}
 

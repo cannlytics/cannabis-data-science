@@ -1,0 +1,220 @@
+%------------------------------- PREAMBLE -------------------------------%
+\documentclass[11pt]{article}
+\usepackage{titlesec}
+\usepackage[top=.75in, bottom=.75in, left=0.75in, right=.75in]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+%\usepackage{caption}
+\usepackage[singlelinecheck=off]{caption}
+\usepackage{enumerate}
+\usepackage{hhline}
+\usepackage[justification=centering]{caption}
+\newcommand\T{\rule{0pt}{2.5ex}} %TOPSTRUT
+\newcommand\B{\rule[-1.75ex]{0pt}{0pt}} %BOTTOMSTRUT
+%For multiline tables
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+\newcommand\blfootnote[1]{\begingroup\renewcommand\thefootnote{}\footnote{#1}\addtocounter{footnote}{-1}\endgroup}
+\usepackage{pbox}
+%------------------------------ TITLE -----------------------------------%
+%\pagenumbering{gobble}
+\setlength{\parindent}{0pt}
+\begin{document}
+
+\noindent\Large {\bfseries\LARGE Notes on Partial Equilibrium Analysis}\\Cannabis Data Science\\ Author: Keegan Skeate\\Written: \medskip\today
+
+%\sloppy
+
+\vspace{\baselineskip}
+
+%------------------------------------------%
+% Part 1
+%------------------------------------------%
+{\bfseries Partial Equilibrium} -- In competitive analysis, if cannabis is a relatively small portion of a consumer's expenditure, then we can assume wealth effects will be small and analyze outcomes from dynamics in the cannabis market. We also assume that prices in other markets are fixed and substitutional effects in the cannabis industry will not change prices in other markets.
+
+\vspace{\baselineskip}
+First, we assume that each consumer $i=1,\dots,I$ has utility function
+
+$$
+u_i(m_i, x_i) = m_i + \phi_i(x_i)
+$$
+
+where
+
+\begin{align*}
+\phi_i(0) &= 0, \\
+\phi_i'(x_i) & > 0  \textit{``increasing,''} \\
+\phi_i''(x_i) & < 0 \textit{``at a decreasing rate,''}
+\end{align*}
+
+\vspace{\baselineskip}
+for all $ x_i \geq 0$, and $m_i$ is the total money expenditure on other goods. 
+
+\vspace{\baselineskip}
+Second, there are firms $j=1,\dots,J$, that produce cannabis, $l$ with cost function
+
+$$
+c_j(q_j),
+$$
+
+\vspace{\baselineskip}
+where $q_j \geq 0 $ are the units of cannabis, $l$, produced. We assume
+
+\begin{align*}
+c_j'(q_j) &> 0  \textit{``increasing,''} \\
+c_j''(q_j) &\geq 0  \textit{``at a constant or increasing rate,''} \\
+\end{align*}
+
+and input prices are taken as fixed.
+
+\newpage
+\noindent {\bfseries Competitive Equilibria} -- You can now find the competitive equilibria. Given the price, $p^*$, for cannabis, $l$, firm $j$'s equilibrium output level $q_j^*$ is found by
+
+$$
+\max_{q_j \geq 0} p^* q_j - c_j (q_j)
+$$
+
+where
+
+$$
+p^* = c_j'(q_j^*)
+$$
+
+if $q_j^* > 0$. The equilibrium consumption of consumer $i$ is
+
+$$
+(m_i^*, x_i^*)
+$$
+
+and is found from
+
+$$
+\max_{m_i \in \mathbb{R}, x_i \in \mathbb{R}} m_i + \phi_i(x_i) \hspace{4ex}\text{s.t.}\hspace{4ex} w_{mi} + \sum_{j=1}^{J} \theta_{ij}\left(p^*q_j^* - c_j(q_j^*)\right)
+$$
+
+where $w_{mi}$ is consumer $i$'s endowment given their expenditure on other goods and $\theta_{ij}$ is consumer $i$'s ownership share of firm $j$. Consumer $i$'s problem is then
+
+$$
+\max_{x_i \geq 0 } \phi_i(x_i) - p^*x_i + \left[ w_{mi} + \sum_{j=1}^{J} \theta_{ij}\left(p^*q_j^* - c_j(q_j^*)\right) \right]
+$$
+
+where $\phi_i'(x_i^*) \leq p^*$ for all $i=1,\dots,I$.
+
+\vspace{\baselineskip}
+Finally, all markets clear, that is the amount consumed equals the amount produced
+
+$$
+\sum_{i=1}^I x_i^* = \sum_{j=1}^J q_j^*.
+$$
+
+We can now find that
+
+\begin{itemize}
+
+\item Firm $j$'s marginal benefit from selling another unit of cannabis, $l$, at price $p^*$ equals its marginal cost $c_j'(q_j^*)$.
+
+\item Consumer $i$'s marginal benefit from consuming another unit of cannabis, $l$, $\phi_i'(x_i^*)$, equals their marginal cost, $p^*$.
+
+\end{itemize}
+
+\newpage
+{\bfseries Aggregate Supply and Aggregate Demand} -- The competitive equilibrium can be represented by the aggregate supply and aggregate demand curves, with the equilibrium price at their intersection.
+
+\vspace{\baselineskip}
+The aggregate demand function for cannabis is
+
+$$
+x(p) = \sum_i x_i(p).
+$$
+
+The aggregate supply function for cannabis is
+
+$$
+q(p) = \sum_j q_j(p).
+$$
+
+\vspace{\baselineskip}
+{\bfseries Comparative Statics} -- You can now analyze how underlying market conditions affect the equilibrium outcome of a competitive market. You can compare market outcomes across several similar markets that differ in a measurable way. For example, you can try to measure the effect on prices and aggregate supply from changes in various factors: population, rainfall, average electricity price, average temperature, median income, proportion of the economy that is agricultural, average number years of education, number of tourists, {\bfseries sales tax}. You can assume that consumer $i$'s preferences are affected by exogenous parameters $\alpha$
+
+$$
+\phi_i(x_i, \alpha)
+$$
+
+\vspace{\baselineskip}
+and each firm's technology may be affected by exogenous parameters $\beta$
+
+$$
+c_j(q_j, \beta).
+$$
+
+\vspace{\baselineskip}
+Finally, price paid depends on taxes and subsidies, where
+
+\begin{align*}
+\hat{p_i}(p, t) &\hspace{1ex}\text{is the price consumer's actually pay,}\\
+\hat{p_j}(p, t) &\hspace{1ex}\text{is the price producer's actually receive.}
+\end{align*}
+
+
+\newpage
+{\bfseries Example: Effects of Taxes} -- The equilibrium price with tax $t$ satisfies
+
+$$
+x(p^*(t) + t) = q(p^*(t)),
+$$
+
+where
+
+$$
+p'^{*}(t) = - \frac{x'(p^*(t) + t )}{x'(p^*(t) + t ) - q'(p^*(t))}.
+$$
+
+Therefore,
+
+$$
+-1 \leq p'^{*}(t) < 0
+$$
+
+for any $t$.
+
+\vspace{\baselineskip}
+The theoretical claims are
+
+\begin{itemize}
+
+\item The price received by producers, $p^*(t)$, decreases as taxes, $t$, increase.
+
+\item The price paid by consumers, $p^*(t) + t$, may or may not increase, but should not decrease as taxes, $t$, increase.
+
+\item The quantity produced and consumed, $q^*$, may or may not decrease, but should not increase as taxes, $t$, increase.
+
+\item If marginal costs, $q'(p^*(t))$, are high, then consumers bear the brunt of the tax.
+
+\item If there are no marginal costs, $q'(p^*(t)) = 0$, then firms bear the entire impact of the tax.
+
+\end{itemize}
+
+
+\vspace{\baselineskip}
+{\bfseries Exercise} -- Test the theoretical claims of the effect of a marginal increase in tax rates, $t$, on prices paid by consumers, $p^*(t) + t$, and received by retailers, $p^*(t)$, empirically by estimating if the average price of cannabis in different geographies are negatively correlated with the localities sales tax.
+
+
+% Optional: Add future work.
+
+% Optional : Add extension.
+
+\vspace{\baselineskip}
+\section*{References}
+
+Microeconomic Theory by Andreu Mas-Colell, Michael D. Whinston, and Jerry R. Green (1995).
+
+
+%------------------------------------------%
+% Fin
+%------------------------------------------%
+\end{document}

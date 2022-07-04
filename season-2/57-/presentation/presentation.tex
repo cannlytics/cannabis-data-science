@@ -1,6 +1,6 @@
 %------------------------------------------%
-% Cannabis Data Science #58
-% Date: 3/23/2022
+% Cannabis Data Science
+% Date: 3/16/2022
 %------------------------------------------%
 \documentclass[xcolor={dvipsnames}]{beamer}
 \hypersetup{pdfpagemode = FullScreen}
@@ -19,10 +19,10 @@
 %------------------------------------------%
 % Title
 %------------------------------------------%
-\title[\textbf{Cannabis Data Science \#58}]{}
+\title[\textbf{Cannabis Data Science \#57}]{}
 \author{Cannabis Data Science}
-\institute[]{\Large Cannabis Data Science \#58}
-\date{March \nth{23}, 2022}
+\institute[]{\Large Cannabis Data Science \#57}
+\date{March \nth{16}, 2022}
 
 %------------------------------------------%
 % Packages
@@ -58,7 +58,6 @@
 \usepackage{hhline} % for double bars.
 \usepackage[super]{nth} % For formatting 1st, 2nd, 3rd, etc.
 \usepackage{graphicx, caption, subcaption}
-\usepackage{setspace}
 
 %------------------------------------------%
 % Commands
@@ -122,219 +121,228 @@
 %------------------------------------------%
 % Data Science
 %------------------------------------------%
+\section{Data Science}
 
-\section{When did data science begin?}
-\begin{frame}{When did data science begin?\\}
+\begin{frame}{What Data Science Brings to the Table}
 
 \vspace*{0.125\baselineskip}
 
-% TODO: Write synopsis and add image.:
-\begin{minipage}{.4\textwidth}
 \begin{figure}
-\includegraphics[width=\textwidth]{images/john-graunt.png}
-\caption*{\scriptsize
-{\bfseries John Graunt} (1620 -- 1674)\\
-An early champion of statistics.
-}
+\includegraphics[height=1.5in]{images/winds-of-britain.png}
+\caption*{%
+  \tiny Daily wind patterns of Britain mapped by Francis Galton, {\itshape Meteorographica} (1863).
+ }
 \end{figure}
-\end{minipage}\hspace{0.05\textwidth}%
-\begin{minipage}{0.55\textwidth}
-\vspace{-2\baselineskip}
-Known for early work on:
-\vspace{0.5\baselineskip}
-\begin{itemize}
-    
-    \item Descriptive statistics;
 
-    \vspace{0.5\baselineskip}
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+{\footnotesize\itshape ``...by \underline{drawing diagrams}, and \underline{by countings}. This much suffices to give a correct idea of the {\bfseries distribution} of any given set of variables ; it is also sufficient to give a fair idea of the closeness of {\bfseries correlation}, or of kinship, between any two sets of variables.''}
+\end{minipage}
+\end{center}
+
+%\vspace*{0.05\baselineskip}
+
+\begin{flushright}
+\begin{minipage}{0.6\textwidth}
+{\footnotesize -- {\bfseries Francis Galton} in a letter to the editor of {\itshape The Times} on {\itshape Alcoholism and Offspring}.}
+\end{minipage}
+\end{flushright}
+
+%Measurements vary.
+
+\end{frame}
+
+
+%------------------------------------------%
+% Background
+%------------------------------------------%
+\section{Background}
+
+\begin{frame}{An Odd History of Data Exploration}
+
+\vspace*{0.5\baselineskip}
+
+Sir Francis Galton opened an anthropometric laboratory to
+
+\vspace*{0.25\baselineskip}
+
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+{\footnotesize\itshape ``show the public the \underline{simplicity} of the instruments and methods by which the chief physical characteristics of man may be \underline{measured} and \underline{recorded}.''}
+\end{minipage}
+\end{center}
+
+\vspace*{0.25\baselineskip}
+
+\begin{center}
+\begin{minipage}{0.45\textwidth}
+
+\begin{figure}
+\includegraphics[height=1.8in]{images/sir-francis-galton-1850s.jpg}
+\caption*{%
+  \tiny Sir Francis Galton (1822 – 1911) in the 1850s.\\
+ }
+\end{figure}
+
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.45\textwidth}
+
+
+\begin{figure}
+\includegraphics[height=1.8in]{images/anthro-lab-poster.jpg}
+\caption*{%
+  \tiny Flyer advertising the Anthropometric Laboratory.\\
+ }
+\end{figure}
+
+\end{minipage}
+\end{center}
+
+
+\end{frame}
+
+%------------------------------------------%
+% Francis Galton
+%------------------------------------------%
+
+\begin{frame}{Francis Galton's Fingerprint on Data Science}
+
+\begin{minipage}{0.45\textwidth}
+
+\begin{itemize}
+\item Penchant for \underline{counting} and \underline{measuring}.
+
+\vspace*{0.25\baselineskip}
+
+\item Founded the biometric approach to the study of heredity.
+
+\vspace*{0.25\baselineskip}
+
+\item Taught and founded {\itshape Biometrika} with Karl Pearson.
+
+\vspace*{0.25\baselineskip}
+
+\item Introduced the concepts:
+
+\begin{itemize}
+\item {\bfseries standard deviation};
+\item {\bfseries correlation};
+\item {\bfseries regressions}.
+\end{itemize}
   
-    \item Census methods that lead to modern demography;
-
-    \vspace{0.5\baselineskip}    
-    
-    \item Epidemiology.
-
 \end{itemize}
+
+
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.45\textwidth}
+
+\begin{figure}
+\includegraphics[height=1.5in]{images/distribution-of-successful-men.png}
+\caption*{%
+  \tiny Distribution of Successes and of Natural Ability Among the Kinsfolk of Fellows of the Royal Society (1904).\\
+ }
+\end{figure}
+
 \end{minipage}
-
-%https://en.wikipedia.org/wiki/John_Graunt
-
-%Table of Casualties in Natural and Political Observations Made Upon the Bills of Mortality (5th edition, published 1676)
 
 \end{frame}
 
+%------------------------------------------%
+% Francis Galton's work
+%------------------------------------------%
 
-\section{Where did these techniques come from?}
-\begin{frame}{Where did these techniques come from?}
+\begin{frame}{Francis Galton's Work}
 
-
-% TODO: Write synopsis and add image:
-\begin{minipage}{0.55\textwidth}
+\begin{figure}
+\includegraphics[height=2in]{images/rate-of-regression.png}
+\caption*{%
+  \tiny An application of regression and prediction by Francis Galton in {\itshape Anthropological Miscellanea} (1886).\\
+ }
+\end{figure}
 
 \begin{itemize}
 
-\item Fit {\bfseries negative binomial distributions} to the numbers of purchases of a brand of consumer goods.
+\item Created a dataset of 9,337 respondents, each measured in 17 categories.
 
-\vspace{0.5\baselineskip}
-
-\item Modeled repeated category and brand purchases within a wide variety of markets.
-% NBD-Dirichlet model of brand choice successfully modelled the
-
-\vspace{0.5\baselineskip}
-
-\item Studied the percentage of the relevant population that has purchased a given brand (or category) at least once in the time period under study.
+\item After applying the \underline{liner regression} to sweat peas, Francis Galton applied regressions to the human data.
 
 \end{itemize}
-
-\end{minipage}\hspace{0.05\textwidth}%
-\begin{minipage}{0.35\textwidth}
-\begin{figure}
-\includegraphics[width=\textwidth]{images/andrew-sc-ehrenberg.jpg}
-\caption*{
-{\bfseries\scriptsize Andrew S. C. Ehrenberg}\\ Statistician and marketing scientist.
-}
-\end{figure}
-\end{minipage}
 
 \end{frame}
 
 %------------------------------------------%
-% A Sprinkle of Economics
+% FIXME: Introduction
 %------------------------------------------%
-%\section{A Sprinkle of Economics}
-%\begin{frame}{A Sprinkle of Economics}
+%\section{Introduction}
 %
-%\vspace*{0.125\baselineskip}
+%\begin{frame}{}
 %
+%\begin{minipage}{0.7\textwidth}
+%
+%\vspace{-2\baselineskip}
+%
+%% Question of the day
+%\begin{center}
+%\begin{minipage}{.9\linewidth}
+%\begin{Block}{Question of the day}
+%
+%\vspace{.5\baselineskip}
 %\begin{itemize}
-%
-%\item Cournot
-%
-%\item Joseph Bertrand
-%
-%\item Pareto
-%
-%\item Irving Fisher
-%
+%\item What insights does our data hold that we may not know?
 %\end{itemize}
+%
+%\vspace{.5\baselineskip}
+%
+%\end{Block}
+%\end{minipage}
+%\end{center}
+%
+%\end{minipage}\hspace{0.05\textwidth}%
+%%\begin{minipage}{0.25\textwidth}
+%%
+%%\vspace{0.5\baselineskip}
+%%
+%%\end{minipage}
 %
 %\end{frame}
 
-
 %------------------------------------------%
-% Application to the Cannabis Industry
+% Exploratory Data Analysis
 %------------------------------------------%
-\section{Application to the Cannabis Industry}
-\begin{frame}{Application to the Cannabis Industry}
 
-\begin{minipage}{0.45\textwidth}
-\begin{center}
-\vspace{0.25\baselineskip}
-\begin{figure}
-\includegraphics[height=2.5in]{images/beverage-label.jpg}
-\vspace{-0.25\baselineskip}
-\caption*{
-\scriptsize Cannabis--infused beverage label\\[0.125\baselineskip]
-\tiny {\color{WildStrawberry} 10mg per serving} | {\color{WildStrawberry} 100mg THC per bottle}\\[0.5\baselineskip]
-\tiny\color{Gray}
-Author: kiliweb {\tiny https://world.openfoodfacts.org/editor/kiliweb}\\
-License: CC BY-SA 3.0 {\tiny https://creativecommons.org/licenses/by-sa/3.0}
-}
-\end{figure}
-\end{center}
-\end{minipage}\hspace{0.0\textwidth}%
-\begin{minipage}{0.55\textwidth}
+\begin{frame}{An aside on studying}
 
-\vspace{0.5\baselineskip}
+{\itshape Weekly Evening Meeting} By Francis Galton
 
-\begin{minipage}{0.75\textwidth}
+{\itshape On Men of Science, their Nature and their Nurture}
 
-{\footnotesize\itshape ``Oh Hi’s THC {\color{Mulberry} Pomegranate} Seltzer is our number one seller. When deciding on a new product to launch, we look at \underline{trending flavors}.''}
-
-\vspace{0.5\baselineskip}
-
-{\footnotesize\itshape ``negotiate pricing structures to sell the \underline{customer volume} helps greatly.''}
-
-\vspace{0.5\baselineskip}
-
-{\footnotesize\itshape ``\underline{Expansion can be complex} as it is a capital-intensive investment.''}
-
-\vspace{-0.5\baselineskip}
-\begin{flushright}
-{\footnotesize - Matt Vincent\\ {\tiny Co-Founder of OH-Hi Beverages}}
-\end{flushright}
-
-\end{minipage}
-
-\vspace{0.5\baselineskip}
-
-{\tiny\color{Gray} Reference: https://cannabisdrinksexpo.com/en/blog/producer-profiles-70/consumer-education-is-key-says-matt-vincent-301.htm}
-
-\end{minipage}
-
-% pre-roll brands?
-
-% solid edible brands? Overlap with beverage brands?
-
-% What are the top brands in Washington State and 
-
-
-\end{frame}
-
-
-%------------------------------------------%
-% Question of the Day
-%------------------------------------------%
-\section{Question of the Day}
-\begin{frame}{Question of the Day}
-
-{\Large {\bfseries Brand Analysis}: Can we measure marketing performance for a cannabis brand?}\\[0.5\baselineskip]
-
-Here is a list of potential metrics:
-
-\vspace{0.25\baselineskip}
+\vspace{0.75\baselineskip}
 
 \begin{itemize}
 
-\item Market share
+\item \underline{Not tied down} to old courses of classics and mathematics.
 
-\vspace{0.125\baselineskip}
+\vspace{.5\baselineskip}
 
-\item Market penetration rate
+\item Sufficient groundwork in many subjects to avoid error.
 
-\vspace{0.125\baselineskip}
+\vspace{.5\baselineskip}
 
-\item Purchase frequency / time between purchases
+\item Early introduced to \underline{many subjects} of interest.
 
-\vspace{0.125\baselineskip}
+\vspace{.5\baselineskip}
 
-\item Repeat purchase rate
+\item A well--balanced education, including {\bfseries chemistry}, {\bfseries botany}, {\bfseries logic}, and {\bfseries political economy}.
 
-\vspace{0.125\baselineskip}
+\vspace{.5\baselineskip}
 
-\item Items sold
+\item A variety of subjects, and \underline{attention to details}.
 
-\vspace{0.125\baselineskip}
+\vspace{.5\baselineskip}
 
-\item Customer lifetime value
-
-\vspace{0.125\baselineskip}
-
-\item Average product price
+\item Coming in contact with persons of every rank and sitting in the same form.
 
 \end{itemize}
-
-%\begin{itemize}
-%
-%\item It is easier to argue that there is natural variance in products such as flower, however, the ability for a beverage manufacturer to capture a large section of the market given a uniform product, typically a 100mg beverage, may depend largely on their marketing effectiveness.
-%
-%\item Do encumbants get market share?
-%
-%\item Run the gamut with beverage brand analysis.
-%
-%\item Using beverage product type for simplicity. The analysis can be readily applied to all product types.
-%
-%\end{itemize} 
 
 \end{frame}
 
@@ -348,9 +356,7 @@ Here is a list of potential metrics:
 \begin{minipage}{3.85in}
 
 % Thank you.
-\includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\[-0.5\baselineskip]
-
-We've gone over what it means to be a successful {\color{TealBlue} beverage} producer in Washington State and we've seen how data can contain insights for marketers.
+\includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\
 
 \begin{center}
 \begin{minipage}{.9\linewidth}
@@ -360,26 +366,11 @@ We've gone over what it means to be a successful {\color{TealBlue} beverage} pro
 
 \begin{itemize}
 
-\item Certain KPIs correlate with {\bfseries market share}:
-
-\vspace{0.25\baselineskip}
-\begin{itemize}
-
-\item Market penetration
-
-\vspace{0.25\baselineskip}
-
-\item Product proliferation
-
-\end{itemize}
-
-\vspace{0.25\baselineskip}
-
-\item Spread the word, {\bfseries build your brand}!
+\item Measurements vary.
 
 \vspace{0.5\baselineskip}
 
-\item {\bfseries Shelf-space}. Get there while you {\itshape can}!
+\item Exploring your data is an critical, yet often overlooked, step in gleaming insights.
 
 \vspace{0.5\baselineskip}
 
@@ -393,12 +384,6 @@ We've gone over what it means to be a successful {\color{TealBlue} beverage} pro
 
 \end{minipage}
 \end{center}
-
-\vspace{0.5\baselineskip}
-
-What would you like to talk about next week?
-
-\vspace{0.5\baselineskip}
 
 \end{frame}
 

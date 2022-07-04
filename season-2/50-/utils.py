@@ -55,29 +55,29 @@ def end_of_period_timeseries(data: DataFrame, period: Optional[str] = 'M') -> Da
     return data
 
 
-# def forecast_arima(
-#         model: Any,
-#         forecast_horizon: Any,
-#         exogenous: Optional[Any] = None,
-# ) -> Tuple[Any]:
-#     """Format an auto-ARIMA model forecast as a time series.
-#     Args:
-#         model (ARIMA): An pmdarima auto-ARIMA model.
-#         forecast_horizon (DatetimeIndex): A series of dates.
-#         exogenous (DataFrame): Am optional DataFrame of exogenous variables.
-#     Returns:
-#         forecast (Series): The forecast series with forecast horizon index.
-#         conf (Array): A 2xN array of lower and upper confidence bounds.
-#     """
-#     periods = len(forecast_horizon)
-#     forecast, conf = model.predict(
-#         n_periods=periods,
-#         return_conf_int=True,
-#         X=exogenous,
-#     )
-#     forecast = Series(forecast)
-#     forecast.index = forecast_horizon
-#     return forecast, conf
+def forecast_arima(
+        model: Any,
+        forecast_horizon: Any,
+        exogenous: Optional[Any] = None,
+) -> Tuple[Any]:
+    """Format an auto-ARIMA model forecast as a time series.
+    Args:
+        model (ARIMA): An pmdarima auto-ARIMA model.
+        forecast_horizon (DatetimeIndex): A series of dates.
+        exogenous (DataFrame): Am optional DataFrame of exogenous variables.
+    Returns:
+        forecast (Series): The forecast series with forecast horizon index.
+        conf (Array): A 2xN array of lower and upper confidence bounds.
+    """
+    periods = len(forecast_horizon)
+    forecast, conf = model.predict(
+        n_periods=periods,
+        return_conf_int=True,
+        X=exogenous,
+    )
+    forecast = Series(forecast)
+    forecast.index = forecast_horizon
+    return forecast, conf
 
 
 def format_billions(value: float, pos: Optional[int] = None) -> str: #pylint: disable=unused-argument
@@ -147,5 +147,5 @@ def sorted_nicely(unsorted_list: List[str]) -> List[str]:
     License: CC BY-SA 2.5 <https://creativecommons.org/licenses/by-sa/2.5/>
     """
     convert = lambda text: int(text) if text.isdigit() else text
-    alpha = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-    return sorted(unsorted_list, key=alpha)
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    return sorted(unsorted_list, key=alphanum_key)

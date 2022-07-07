@@ -1,5 +1,0 @@
-\babel@toc {english}{}
-\beamer@sectionintoc {1}{Research Question}{2}{0}{1}
-\beamer@sectionintoc {2}{Economics}{3}{0}{2}
-\beamer@sectionintoc {3}{Panel Data}{6}{0}{3}
-\beamer@sectionintoc {4}{Conclusion}{7}{0}{4}

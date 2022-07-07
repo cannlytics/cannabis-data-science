@@ -1,12 +1,21 @@
 basemap
+cannlytics
+census
 fred
 googlemaps
+nltk
+opencv-python
 pandas
-# pmdarima
+pdfplumber
+pmdarima
 polyline
 pymc3
 python-dateutil
 python-dotenv
+tabulate
+us
 seaborn
 spacy
+statadict
 statsmodels
+zipcodes

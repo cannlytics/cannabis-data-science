@@ -1,0 +1,701 @@
+%------------------------------------------%
+% Cannabis Data Science #72
+% Copyright (c) 2022 Cannlytics
+% Date: 6/29/2022
+%------------------------------------------%
+\documentclass[xcolor={dvipsnames}]{beamer}
+\hypersetup{pdfpagemode = FullScreen}
+\mode<presentation>{
+  \usetheme{Boadilla}
+  \usecolortheme{orchid}
+  \usefonttheme{default}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+}
+\setbeamersize{
+  text margin left = 0.5in,
+  text margin right = 0.5in
+}
+
+%------------------------------------------%
+% Title
+%------------------------------------------%
+\title[\textbf{Cannabis Data Science \#72}]{}
+\author{Cannlytics}
+\institute[]{\Large Cannabis Data Science \#72}
+\date{June \nth{29}, 2022}
+
+%------------------------------------------%
+% Packages
+%------------------------------------------%
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{tikz} % For styling.
+\usepackage{xparse}
+\usepackage{amsmath}
+\renewcommand*\footnoterule{} % No footnote line.
+\usepackage{mathtools} % Annotating equations.
+\usepackage{hhline} % Double bars.
+\usepackage[super]{nth} % 1st, 2nd, 3rd, etc.
+\usepackage{graphicx, caption, subcaption}
+\usepackage{setspace}
+\usepackage[charter]{mathdesign}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{arrows.meta}
+
+%------------------------------------------%
+% Theme
+%------------------------------------------%
+\definecolor{LG}{RGB}{218, 247, 166}
+\definecolor{DG}{RGB}{2, 48, 32}
+\setbeamercolor*{palette primary}{bg=LG, fg=DG}
+\setbeamercolor*{palette secondary}{bg=LG, fg=DG}
+\setbeamercolor*{palette tertiary}{bg=LG, fg=DG}
+
+%------------------------------------------%
+% Commands
+%------------------------------------------%
+
+% Top space.
+\newcommand\T{\rule{0pt}{2.5ex}}
+
+% Bottom space.
+\newcommand\B{\rule[-1.25ex]{0pt}{0pt}}
+
+% Blocks.
+\newenvironment<>{Block}[2][.9\textwidth]
+  {\setlength{\textwidth}{#1}
+  \begin{actionenv}#3
+    \def\insertblocktitle{#2}\par
+    \usebeamertemplate{block begin}}
+  {\par\usebeamertemplate{block end}
+  \end{actionenv}}
+
+% Balls.
+\defbeamertemplate{enumerate item}{largeball}
+{\begin{pgfpicture}{-1ex}{-0.65ex}{1.5ex}{1.5ex}
+\usebeamercolor[fg]{item projected}
+{\pgftransformscale{2.5}\pgftext{\Large\pgfuseshading{bigsphere}}}
+{\pgftransformshift{\pgfpoint{0pt}{0.5pt}}
+\pgftext{\usebeamerfont*{item projected}\small\insertenumlabel}}
+\end{pgfpicture}}
+
+% Fancy arrows.
+\NewDocumentCommand\UpArrow{O{2.0ex} O{black}}{%
+   \mathrel{\tikz[baseline] \draw [->, line width=0.5pt, #2] (0,0) -- ++(0,#1);}} % Fancy up-arrow.
+\NewDocumentCommand\DownArrow{O{2.0ex} O{black}}{%
+   \mathrel{\tikz[baseline] \draw [<-, line width=0.5pt, #2] (0,0) -- ++(0,#1);}} % Fancy down-arrow.
+
+% Equations with numbers on the left.
+\makeatletter
+\newcommand{\LeftEqNo}{\let\veqno\@@leqno}
+\makeatother
+
+% Print out title.
+\defbeamertemplate*{title page}{customized}[1][]
+{
+  \usebeamerfont{title}\inserttitle\par
+  \bigskip
+  \vspace{0.5\baselineskip}
+  \usebeamerfont{institute}\insertinstitute\par
+  \vspace{0.5\baselineskip}
+  {\small\usebeamerfont{date}\insertdate\par}
+  \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+}
+
+%------------------------------------------%
+%
+% Presentation
+%
+%------------------------------------------%
+\begin{document}
+
+% Title page.
+\begin{frame}{}
+
+% Background
+\tikz[remember picture, overlay]
+\node[opacity=1.0, inner sep=0pt] at (current page.center){
+  \includegraphics[height=\paperheight, width=\paperwidth]{images/presentation-cover.pdf}
+};
+
+% Title
+\vspace*{4\baselineskip}
+\includegraphics[scale=0.375]{images/logo.pdf}
+\vspace*{-2\baselineskip}
+\titlepage
+\end{frame}
+
+%------------------------------------------%
+% Introduction
+%------------------------------------------%
+
+\begin{frame}{}
+
+\begin{center}
+\includegraphics[width=1.5in]{images/fdacs.png}
+\end{center}
+
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+{\itshape ``The wildly famous West Coast cannabis brand {\bfseries\color{Green}Jungle Boys} quietly entered the Florida medical marijuana market about a month ago.''}
+\begin{flushright}
+{\small\tiny -- Hannah Gershowitz\\
+{\itshape Jungle Boys Outsells All Florida\\Dispensaries by a Long Shot on\\First Day of Business}\\
+Respect My Region\\
+June 23, 2022\\
+https://www.respectmyregion.com/jungle-boys-outsells-florida-dispensaries/
+}
+\end{flushright}
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{}
+
+{\small
+\begin{center}
+\begin{minipage}{0.9\textwidth}
+{\itshape ``You do not get discoveries in the sciences by taking \underline{huge amounts of data}, throwing them into a computer and doing \underline{statistical analysis} of them....''
+
+\vspace{1\baselineskip}
+
+``...that's not the way you understand things, you have to have \underline{\bfseries theoretical insights}.''}
+\begin{flushright}
+{\small -- Noam Chomsky}
+\end{flushright}
+\end{minipage}
+\end{center}
+}
+
+\end{frame}
+
+
+\begin{frame}{Hurdles in Programming and Statistics}
+
+Machine learning suffers from three big issues:
+
+{\small
+\vspace*{1\baselineskip}
+\begin{enumerate}
+
+\item {\bfseries Dependency}: Domain--dependent models and training data;
+
+\vspace*{1\baselineskip}
+
+\item {\bfseries Consistency}: Different training leading to different results;
+
+\vspace*{1\baselineskip}
+
+\item {\bfseries Transparency}: Black-box, uninterpretable algorithms that lack a reasoning process.
+
+\end{enumerate}
+}
+
+\end{frame}
+
+
+\begin{frame}{An Application of Machine Learning}
+
+\begin{center}
+\begin{minipage}{\linewidth}
+\begin{Block}{Insights of the Day}
+
+\vspace{0.5\baselineskip}
+
+\begin{itemize}
+
+\item The idea is to input reviews for cannabis products, grouped by user, strain, or brand, then get back measures for:
+
+\vspace{0.5\baselineskip}
+\begin{itemize}
+
+\item Polarity;
+\vspace{0.25\baselineskip}
+\item Intensity;
+\vspace{0.25\baselineskip}
+\item Emotion;
+\vspace{0.25\baselineskip}
+\item Aspects;
+\vspace{0.25\baselineskip}
+\item Personality;
+\vspace{0.25\baselineskip}
+\item Depression;
+\vspace{0.25\baselineskip}
+\item Engagement;
+\vspace{0.25\baselineskip}
+\item Well-being.
+
+\end{itemize}
+
+\vspace{0.75\baselineskip}
+
+\end{itemize}
+
+\end{Block}
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+
+%------------------------------------------%
+% Scientific Process
+%------------------------------------------%
+
+%\begin{frame}{Scientific Process}
+%
+%\begin{enumerate}
+%
+%\item {\bfseries Hypothesis}
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Literature Review
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Methodology
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Data
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Results
+%
+%\vspace{0.5\baselineskip}
+%
+%\item Conclusion
+%
+%\end{enumerate}
+%
+%\end{frame}
+
+
+%------------------------------------------%
+% Hypothesis
+%------------------------------------------%
+
+%\begin{frame}{1. Hypothesis}
+%
+%{\bfseries Hypothesis} - A cannabis consumer's \underline{personality} affects the \underline{chemotype} of cannabis that the consumer consumes on average.
+%
+%\end{frame}
+
+
+%------------------------------------------%
+% Literature / History
+%------------------------------------------%
+
+%\begin{frame}{2. Literature Review}
+%
+%{\bfseries Economics}
+%
+%\vspace{0.25\baselineskip}
+%\begin{itemize}
+%
+%\item {\bfseries Revealed Preferences} - A theory that preferences of consumers can be revealed by their purchasing habits.
+%
+%\end{itemize}
+%
+%% Time value of money. Is money power?
+%
+%% Talk about personality traits.
+%
+%\vspace{1\baselineskip}
+%{\bfseries Psychology}
+%
+%\vspace{0.25\baselineskip}
+%\begin{itemize}
+%
+%\item The Big 5 Personality Traits
+%
+%\vspace{0.25\baselineskip}
+%\begin{itemize}
+%
+%\item {\bfseries O}penness
+%
+%\vspace{0.25\baselineskip}
+%
+%\item {\bfseries C}onscientiousness
+%
+%\vspace{0.25\baselineskip}
+%
+%\item {\bfseries E}xtraversion
+%
+%\vspace{0.25\baselineskip}
+%
+%\item {\bfseries A}greeableness
+%
+%\vspace{0.25\baselineskip}
+%
+%\item {\bfseries N}euroticism
+%
+%\end{itemize}
+%
+%\end{itemize}
+%
+%\end{frame}
+
+
+%------------------------------------------%
+% Methodology
+%------------------------------------------%
+
+%\begin{frame}{3. Methodology - Ordinary Least Squares}
+%
+%Estimate the relationship between the Big 5 personality traits and the $\beta$-pinene to $D$-limonene ratio. Test
+%
+%$$
+%r_i = \beta_0 + \beta_o O_i + \beta_c C_i + \beta_e E_i + \beta_a A_i + \beta_n N_i,
+%$$
+% 
+%where
+%
+%\vspace{0.5\baselineskip}
+%{\small
+%\begin{itemize}
+%
+%\item $r_i$ is the average $\beta$-pinene to $D$-limonene for user $i$;
+%
+%\vspace{1\baselineskip}
+%
+%\item $O_i$, $C_i$, $E_i$, $A_i$, $N_i$ are the predicted personality traits for user $i$ on a scale of 0 to 1.
+%
+%\end{itemize}
+%}
+%
+%\end{frame}
+
+
+%------------------------------------------%
+% Data
+%------------------------------------------%
+
+%\begin{frame}{4. Data - Natural Language Processing to Predict Personality Traits}
+%
+%\vspace{0.5\baselineskip}
+%{\small {\bfseries Collected data} - Consumer purchases merged with lab results.}
+%
+%\vspace{1\baselineskip}
+%{
+%\small
+%{\bfseries Synthetic data} - Attempt to detect the Big 5 personality traits with natural language processing (NLP).
+%
+%\vspace{0.25\baselineskip}
+%{\small
+%\begin{itemize}
+%\item The idea is that the user reveals their personality with the language that they choose to use.
+%\vspace{0.25\baselineskip}
+%\item A scale of 0 to 1 will be used for each trait.
+%\end{itemize}
+%}
+%}
+%
+%{
+%\small
+%\vspace{0.5\baselineskip}
+%
+%The {\bfseries lexical hypothesis} asserts
+%
+%\vspace{0.25\baselineskip}
+%{\small
+%\begin{enumerate}
+%
+%\item Personality traits that are important to a group of people will eventually become a part of that group's language;
+%
+%%\vspace{0.25\baselineskip}
+%
+%\item Important personality traits are likely to be encoded into a single word.
+%
+%\end{enumerate}
+%}
+%}
+%
+%\end{frame}
+
+
+%------------------------------------------%
+% Results
+%------------------------------------------%
+
+%\begin{frame}{5. Results, conclusions, and future research}
+%
+%{\bfseries\large Advanced Cannabis Analytics}
+%
+%\vspace{0.25\baselineskip}
+%Thursday, June \nth{30}, 2022 \\
+%\vspace{0.25\baselineskip}
+%4:20pm EST | 1:20 PM PST
+%
+%\end{frame}
+
+
+%------------------------------------------%
+% DRAFT MATERIAL
+%------------------------------------------%
+%
+%\begin{frame}{The Wild Story of How We Got Here and How We Achieve the Dream}
+%
+%\begin{figure}
+%\includegraphics[width=\textwidth]{images/plant-hardiness-half-zones-usa.jpg}
+%\end{figure}
+%
+%\end{frame}
+
+
+% Neither alcohol nor tobacco is legally listed as a controlled substance.
+
+
+% MORE Act (CORE Act upon enactment?)
+
+%Marijuana Opportunity Reinvestment and Expungement Act or the MORE Act
+%
+%This bill decriminalizes marijuana.
+%
+%Specifically, it removes marijuana from the list of scheduled substances under the Controlled Substances Act and eliminates criminal penalties for an individual who manufactures, distributes, or possesses marijuana.
+%
+%The bill also makes other changes, including the following:
+%
+%replaces statutory references to marijuana and marihuana with cannabis,
+%requires the Bureau of Labor Statistics to regularly publish demographic data on cannabis business owners and employees,
+%establishes a trust fund to support various programs and services for individuals and businesses in communities impacted by the war on drugs,
+%imposes an excise tax on cannabis products produced in or imported into the United States and an occupational tax on cannabis production facilities and export warehouses,
+%makes Small Business Administration loans and services available to entities that are cannabis-related legitimate businesses or service providers,
+%prohibits the denial of federal public benefits to a person on the basis of certain cannabis-related conduct or convictions,
+%prohibits the denial of benefits and protections under immigration laws on the basis of a cannabis-related event (e.g., conduct or a conviction),
+%establishes a process to expunge convictions and conduct sentencing review hearings related to federal cannabis offenses,
+%directs the Government Accountability Office to study the societal impact of state legalization of recreational cannabis,
+%directs the National Highway Traffic Safety Administration to study methods for determining whether a driver is impaired by marijuana,
+%directs the National Institute for Occupational Safety and Health to study the impact of state legalization of recreational cannabis on the workplace, and
+%directs the Department of Education to study the impact of state legalization of recreational cannabis on schools and school-aged children.
+
+
+%https://www.congress.gov/bill/117th-congress/house-bill/3617
+
+%------------------------------------------%
+% Virginia Foxx
+%------------------------------------------%
+
+% Virginia Foxx
+%voted against the Marijuana Opportunity Reinvestment & Expungement Act (MORE)
+
+% $79,000 and $210,000 in Altria stock
+
+
+%------------------------------------------%
+% Dillon Gentry
+%------------------------------------------%
+
+
+%------------------------------------------%
+% Altria
+%------------------------------------------%
+
+% Owns stake in Cronos Group, which cultivates high THC cannabis in Canada.
+
+% TODO: DEBUNK!!!!!
+
+% "The overall cost of substance misuse in the United States, which the National Institute on Drug Abuse estimates at $600 billion annually."
+% Addressing Youth and Cannabis
+%p.24 
+
+% Uncited claim by the National Institute of Drug Abuse.
+
+% How the societal cost of drugs was calculated?
+
+% A 1982 survey of 3,700 households found that the average income of households with at least 1 person who admitted to having ever used marijuana daily (20 days or more in a 30-day period) was 28 percent lower than the average reported income of otherwise similar households.
+
+% Unsubstantiated claim: 
+
+% p.8 Addressing Youth and Cannabis
+
+%https://www.cpear.org/wp-content/uploads/2022/03/CPEAR_Cannabis-Youth-Prevention_Policypaper_.pdf
+
+
+
+% "Ensuring youth prevention must be part of cannabis policy reform."
+% Cannabis and Youth Use
+%https://www.cpear.org/wp-content/uploads/2021/09/Youth-One-Pager-4.pdf
+
+% The patented spliff
+% http://www.pat2pdf.org/pat2pdf/foo.pl?number=11017689
+
+%------------------------------------------%
+% Letters from Associations
+%------------------------------------------%
+
+%American Trade Association for Cannabis and Hemp
+%
+%- "Must include a health warning."
+%- "...dosage with recommended consumption
+%instructions."
+%- "...do not make any health claims."
+%- "Leading nationwide data collection and public health surveillance."
+%- "Edibles prohibited that are shaped like a human, animal, or fruit...
+%- "Cannot be on a stick."
+%- "Must never be combined or intended to be combined with alcohol or tobacco."
+%- "...an excise tax with a rate of 10\% in the first year, growing to 25\% in the fifth year..."
+%- "... because of the relative lack of data..."
+%Comments on the Cannabis Administration and Opportunity Act
+%Coalition for Cannabis Policy, Education, and Regulation
+%https://mjbizdaily.com/wp-content/uploads/2021/09/CPEAR-CAOA-Comments.pdf
+
+
+%------------------------------------------%
+% Our Plan
+%------------------------------------------%
+
+%This is what we're going to do:
+%
+%1. Systematically arm ourselves with statistics.
+%2. Systematically address all uncited, unsubstantiated claims about cannabis.
+%3. Draft our thoughts in our own bills.
+%4. Run, vote, and talk to {\bfseries our} representatives.
+%5. Speak to everyone about statistics we have discovered and push back against uncited, unsubstantiated claims by returning to step 1.
+
+
+%------------------------------------------%
+% Our Stance
+%------------------------------------------%
+
+%1.  Unalienable Right: "the pursuit of Happiness."
+%
+%2. Any cannabis prohibition is despotic.
+
+
+%------------------------------------------%
+% Seque to conclusion
+%------------------------------------------%
+
+%"Tell them about the dream, Martin!"
+%-  Mahalia Jackson
+% Washington, D.C.'s, Lincoln Memorial Aug. 28, 1963
+
+
+%------------------------------------------%
+% Plant patents
+%------------------------------------------%
+
+%plant patents have a 20 year term
+
+% asexually reproducible (i.e., not through seed propagation)
+
+% Plant Variety Protection Act of 1970
+% https://en.wikipedia.org/wiki/Plant_Variety_Protection_Act_of_1970
+
+% General Information About 35 U.S.C. 161 Plant Patents
+%https://www.uspto.gov/patents/basics/types-patent-applications/general-information-about-35-usc-161
+
+% Yitzhak Cohen
+%https://en.wikipedia.org/wiki/Yitzhak_Cohen
+
+% {\itshape ``As the federal agency that grants patents and registers trademarks, we hold a treasure trove of data. Now we're giving it to you - faster and easier than before.''} -USPTO
+% https://www.uspto.gov/learning-and-resources/open-data-and-mobility
+
+
+% Easy public access to patent data is a relatively new phenomena.
+% https://www.ipwatchdog.com/2016/06/20/will-happen-uspto-releases-apis/id=70209/
+
+
+%------------------------------------------%
+% Cannabis Cultivar Patents
+%------------------------------------------%
+
+% High THCV / THC chemotype cultivars
+%
+%
+
+% Dominant CBG chemotype cultivars
+% PG 1 19 0125 0002
+
+% Pest-resistant cultivars:
+% HAPPY PINEAPPLE
+
+% High CBC yielding cultivars
+% C2B
+
+% Resistance to microbial growth
+% MR2018002
+
+
+%------------------------------------------%
+% Takeaway
+%------------------------------------------%
+\section{Takeaway}
+
+\begin{frame}{}
+
+\begin{center}
+\includegraphics[width=3in]{images/extended-nfpa-hazard-diamond.png}\\
+\begin{flushleft}
+{\tiny Author: xkcd\\
+License: CC BY-NC 2.5\\[-0.75\baselineskip]
+URL: https://xkcd.com/2638/}
+\end{flushleft}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{}
+
+\vspace{0.5\baselineskip}
+
+\begin{center}
+\begin{minipage}{3.85in}
+
+% Thank you.
+\includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\[-0.75\baselineskip]
+
+\begin{center}
+\begin{minipage}{\linewidth}
+\begin{Block}{Insights of the Day}
+
+\vspace{0.5\baselineskip}
+
+\begin{itemize}
+
+\item Sentiment around your brand can be measured.
+%\vspace{0.5\baselineskip}
+%
+%\item Getting to the table is {\bfseries easy}, simply:
+%
+%\vspace{0.75\baselineskip}
+%\begin{enumerate}
+%
+%\item \underline{Read and follow the rules};
+%
+%\vspace{1\baselineskip}
+%
+%\item \underline{Don't be shy to ask, especially for help}.
+%
+%\end{enumerate}
+
+\vspace{0.75\baselineskip}
+
+\end{itemize}
+
+\end{Block}
+\end{minipage}
+\end{center}
+
+\vfill
+
+\end{minipage}
+\end{center}
+
+\vspace{0.5\baselineskip}
+
+{\large What is on your mind for next week?}\\
+
+\end{frame}
+
+
+%------------------------------------------%
+% Fin.
+%------------------------------------------%
+\end{document}

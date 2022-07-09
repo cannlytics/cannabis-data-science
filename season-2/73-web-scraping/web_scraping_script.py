@@ -34,15 +34,11 @@ Setup:
 from datetime import datetime
 from hashlib import sha256
 import hmac
-import os
 from time import sleep
 
 # External imports.
 from cannlytics.utils.utils import snake_case
-import matplotlib.pyplot as plt
 import pandas as pd
-import statsmodels.api as sm
-from statsmodels.graphics.regressionplots import abline_plot
 
 # Selenium imports.
 from selenium import webdriver
@@ -61,7 +57,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 # Define pages to collect.
 BASE = 'https://results.psilabs.org/test-results/?page={}'
 TOTAL_PAGES = 4921
-PAGES = range(600, 1000) # Collect N pages.
+PAGES = range(1000, 1225) # Collect N pages. (Get pg 4921!)
 
 # Specify your chromedriver. You can:
 # 1. Put your chromedriver in `C:\Python39\Scripts` or equivalent.
@@ -75,11 +71,12 @@ service = Service()
 # Getting ALL the data.
 #-----------------------------------------------------------------------
 
-def get_psi_labs_test_results(driver, max_delay=3) -> list:
+def get_psi_labs_test_results(driver, max_delay=5, reverse=True) -> list:
     """Get all test results for PSI labs.
     Args:
         driver (WebDriver): A Selenium Chrome WebDiver.
-        max_delay (float): The maximum number of seconds to wait for rendering.
+        max_delay (float): The maximum number of seconds to wait for rendering (optional).
+        reverse (bool): Whether to collect in reverse order, True by default (optional).
     Returns:
         (list): A list of dictionaries of sample data.
     """
@@ -93,6 +90,8 @@ def get_psi_labs_test_results(driver, max_delay=3) -> list:
         print('Failed to load page within %i seconds.' % max_delay)
         return samples
     cards = driver.find_elements(by=By.TAG_NAME, value='sample-card')
+    if reverse:
+        cards.reverse()
     for card in cards:
 
         # Begin getting sample details from the card.
@@ -154,7 +153,7 @@ def get_psi_labs_test_results(driver, max_delay=3) -> list:
     return samples
 
 
-def get_psi_labs_test_result_details(driver, max_delay=3) -> dict:
+def get_psi_labs_test_result_details(driver, max_delay=5) -> dict:
     """Get the test result details for a specific PSI lab result.
     Args:
         driver (WebDriver): A Selenium Chrome WebDiver.
@@ -286,12 +285,47 @@ pause = 0
 runtime = round((len(PAGES) * 3 + (10 * len(PAGES) * 3)) / 60, 2)
 print('Collecting results. Max runtime >', runtime, 'minutes.')
 start = datetime.now()
-all_test_results = get_all_psi_labs_test_results(PAGES, pause=pause)
-data = pd.DataFrame(all_test_results)
-end = datetime.now()
-print('Runtime took:', end - start)
+
+# Create a headless Chrome browser.
+options = Options()
+options.headless = True
+options.add_argument('--window-size=1920,1200')
+driver = webdriver.Chrome(options=options, service=service)
+
+# Iterate over all of the pages to get all of the samples.
+errors = []
+test_results = []
+pages = list(PAGES)
+pages.reverse()
+for page in pages:
+    print('Getting samples on page:', page)
+    driver.get(BASE.format(str(page)))
+    results = get_psi_labs_test_results(driver)
+    if results:
+        test_results += results
+    else:
+        print('Failed to find samples on page:', page)
+        errors.append(page)
 
 # Save the results.
+data = pd.DataFrame(test_results)
 timestamp = datetime.now().isoformat()[:19].replace(':', '-')
 datafile = f'../../.datasets/michigan/psi-lab-results-{timestamp}.xlsx'
 data.to_excel(datafile, index=False)
+end = datetime.now()
+print('Runtime took:', end - start)
+
+
+# FIXME:
+# all_test_results = get_all_psi_labs_test_results(PAGES, pause=pause)
+
+# TODO: Get the details for each sample.
+# total = len(test_results)
+# for i, test_result in enumerate(test_results):
+#     print('Collecting (%i/%i):' % (i + 1, total), test_result['product_name'])
+#     driver.get(test_result['lab_results_url'])
+#     details = get_psi_labs_test_result_details(driver)
+#     test_results[i] = {**test_result, **details}
+
+# Close the browser.
+driver.quit()

@@ -468,6 +468,7 @@ ANALYTES = {
 DECODINGS = {
     '<LOQ': 0,
     '<LOD': 0,
+    'ND': 0,
 }
 
 # Read in the saved results.

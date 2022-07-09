@@ -120,6 +120,9 @@ for index, row in data.iterrows():
 # TODO: Find the first occurrences of famous strains.
 
 
+# TODO: Create strain fingerprints: histograms of dominant terpenes.
+
+
 #-----------------------------------------------------------------------
 # Modeling the data.
 #-----------------------------------------------------------------------

@@ -87,11 +87,7 @@ if __name__ == '__main__':
     # # Future work: Automate the update of `videos.json`.
     # print(json.dumps(videos.to_dict(orient='records'), indent=2))
     
-    # Future work: Automate the update of `readme.md`.
-
-    # Create the table of episodes, to manually update `readme.md`.
-
-    # Update the index table in the `readme.md`.
+    # Create the table of episodes and update the `readme.md`.
     filename = '../../readme.md'
     table = create_readme_index('../../assets/videos.json')
     with open(filename, 'r') as f:

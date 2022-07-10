@@ -4,7 +4,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: July 4th, 2022
-Updated: 7/5/2022
+Updated: 7/9/2022
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Description:
@@ -34,6 +34,7 @@ Setup:
 from datetime import datetime
 from hashlib import sha256
 import hmac
+import os
 from time import sleep
 
 # External imports.
@@ -50,6 +51,45 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
+# Desired order for output columns.
+COLUMNS = [
+    'sample_id',
+    'date_tested',
+    'analyses',
+    'producer',
+    'product_name',
+    'product_type',
+    'results',
+    'coa_urls',
+    'images',
+    'lab_results_url',
+    'date_received',
+    'method',
+    'qr_code',
+    'sample_weight',
+]
+
+
+
+def create_sample_id(private_key, public_key, salt='') -> str:
+    """Create a hash to be used as a sample ID.
+    The standard is to use:
+        1. `private_key = producer`
+        2. `public_key = product_name`
+        3. `salt = date_tested`
+    Args:
+        private_key (str): A string to be used as the private key.
+        public_key (str): A string to be used as the public key.
+        salt (str): A string to be used as the salt, '' by default (optional).
+    Returns:
+        (str): A sample ID hash.
+    """
+    secret = bytes(private_key, 'UTF-8')
+    message = snake_case(public_key) + snake_case(salt)
+    sample_id = hmac.new(secret, message.encode(), sha256).hexdigest()
+    return sample_id
+
+
 #------------------------------------------------------------------------------
 # Setup.
 #------------------------------------------------------------------------------
@@ -57,7 +97,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 # Define pages to collect.
 BASE = 'https://results.psilabs.org/test-results/?page={}'
 TOTAL_PAGES = 4921
-PAGES = range(1000, 1225) # Collect N pages. (Get pg 4921!)
+PAGES = range(1, 1025) # Collect N pages. (Get pg 4921!)
 
 # Specify your chromedriver. You can:
 # 1. Put your chromedriver in `C:\Python39\Scripts` or equivalent.
@@ -293,39 +333,70 @@ options.add_argument('--window-size=1920,1200')
 driver = webdriver.Chrome(options=options, service=service)
 
 # Iterate over all of the pages to get all of the samples.
-errors = []
-test_results = []
-pages = list(PAGES)
-pages.reverse()
-for page in pages:
-    print('Getting samples on page:', page)
-    driver.get(BASE.format(str(page)))
-    results = get_psi_labs_test_results(driver)
-    if results:
-        test_results += results
-    else:
-        print('Failed to find samples on page:', page)
-        errors.append(page)
+# errors = []
+# test_results = []
+# pages = list(PAGES)
+# pages.reverse()
+# for page in pages:
+#     print('Getting samples on page:', page)
+#     driver.get(BASE.format(str(page)))
+#     results = get_psi_labs_test_results(driver)
+#     if results:
+#         test_results += results
+#     else:
+#         print('Failed to find samples on page:', page)
+#         errors.append(page)
 
-# Save the results.
-data = pd.DataFrame(test_results)
-timestamp = datetime.now().isoformat()[:19].replace(':', '-')
-datafile = f'../../.datasets/michigan/psi-lab-results-{timestamp}.xlsx'
-data.to_excel(datafile, index=False)
-end = datetime.now()
-print('Runtime took:', end - start)
 
+# Read in and aggregate all of the test results.
+
+# # Aggregate lab results.
+# all_data = pd.DataFrame()
+# directory = '../../../.datasets/lab_results/raw_data/psi_labs'
+# datasets = [f for f in os.listdir(directory)]
+# for dataset in datasets:
+#     file_data = pd.read_excel('/'.join([directory, dataset]))
+#     all_data = pd.concat([all_data, file_data])
+
+# # Remove duplicates.
+# all_data.drop_duplicates(subset='sample_id', inplace=True)
+
+# # Re-do the sample IDs.
+# all_data['sample_id'] = all_data.apply(
+#     lambda x: create_sample_id(
+#         x['producer'],
+#         x['product_name'],
+#         x['date_tested'],
+#     )
+# )
 
 # FIXME:
 # all_test_results = get_all_psi_labs_test_results(PAGES, pause=pause)
 
-# TODO: Get the details for each sample.
-# total = len(test_results)
-# for i, test_result in enumerate(test_results):
-#     print('Collecting (%i/%i):' % (i + 1, total), test_result['product_name'])
-#     driver.get(test_result['lab_results_url'])
-#     details = get_psi_labs_test_result_details(driver)
-#     test_results[i] = {**test_result, **details}
+# Read in the test results.
+filename = 'psi-labs-test-results-2022-07-09T20-03-39.xlsx'
+datafile = f'../../.datasets/lab_results/raw_data/{filename}'
+all_data = pd.read_excel(datafile)
+
+# Get the details for each sample.
+total = len(all_data)
+rows = []
+subset = all_data.loc[all_data['results'].isnull()][:10_000]
+for index, values in subset.iterrows():
+    print('Collecting (%s/%i):' % (index, total), values['product_name'])
+    driver.get(values['lab_results_url'])
+    details = get_psi_labs_test_result_details(driver)
+    rows.append({**values.to_dict(), **details})
+
+# Save the results.
+data = pd.DataFrame(rows)
+data = pd.concat([all_data, data])
+data.drop_duplicates(subset='sample_id', keep='last', inplace=True)
+# timestamp = datetime.now().isoformat()[:19].replace(':', '-')
+# datafile = f'../../.datasets/michigan/psi-lab-results-{timestamp}.xlsx'
+data.to_excel(datafile, index=False)
+end = datetime.now()
+print('Runtime took:', end - start)
 
 # Close the browser.
 driver.quit()

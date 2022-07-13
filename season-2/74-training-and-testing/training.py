@@ -5,7 +5,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 7/7/2022
-Updated: 7/7/2022
+Updated: 7/12/2022
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Description:
@@ -28,35 +28,13 @@ Resources:
 
 """
 # Standard imports.
-from datetime import datetime
-from hashlib import sha256
-import hmac
-import os
-from time import sleep
+import ast
 
 # External imports.
 from cannlytics.utils.utils import snake_case
 import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm
-from statsmodels.graphics.regressionplots import abline_plot
-
-
-ANALYSES = {
-    'cannabinoids': ['potency', 'POT'],
-    'terpenes': ['terpene', 'TERP'],
-    'residual_solvents': ['solvent', 'RST'],
-    'pesticides': ['pesticide', 'PEST'],
-    'microbes': ['microbial', 'MICRO'],
-    'heavy_metals': ['metal', 'MET'],
-}
-ANALYTES = {
-    # TODO: Define all of the known analytes from the Cannlytics library.
-}
-DECODINGS = {
-    '<LOQ': 0,
-    '<LOD': 0,
-}
 
 
 #-----------------------------------------------------------------------
@@ -64,38 +42,89 @@ DECODINGS = {
 #-----------------------------------------------------------------------
 
 # Read in the saved results.
-datafile = f'../../.datasets/michigan/psi-lab-results-sample-2022-07-06.xlsx'
-data = pd.read_excel(datafile)
+datafile = f'../../.datasets/lab_results/aggregated-cannabis-test-results.xlsx'
+data = pd.read_excel(datafile, sheet_name='psi_labs_raw_data')
 
 # Optional: Drop rows with no analyses at this point.
+unneeded_columns = ['coa_urls', 'date_received', 'method', 'qr_code',
+                    'sample_weight']
+data.drop(unneeded_columns, axis=1, inplace=True)
+
+# Isolate a training sample.
+sample = data.sample(1_000, random_state=420)
 
 # Create both wide and long data for ease of use.
 # See: https://rstudio-education.github.io/tidyverse-cookbook/tidy.html
-# TODO: Normalize and clean the data. In particular, flatten:
+# Normalize and clean the data. In particular, flatten:
 # - `analyses`
 # - `results`
 # - `images`
 # - `coa_urls`
 wide_data = pd.DataFrame()
 long_data = pd.DataFrame()
-for index, row in data.iterrows():
+for index, row in sample.iterrows():
     series = row.copy()
-    analyses = series['analyses']
-    images = series['images']
-    results = series['results']
+    analyses = ast.literal_eval(series['analyses'])
+    images = ast.literal_eval(series['images'])
+    results = ast.literal_eval(series['results'])
     series.drop(['analyses', 'images', 'results'], inplace=True)
+    
+    # Code analyses.
     if not analyses:
         continue
+    for analysis in analyses:
+        series[analysis] = 1
+    
+    # Add to wide data.
+    wide_data = pd.concat([wide_data, pd.DataFrame([series])])
 
-    # TODO: Iterate over results, cleaning results and adding columns.
+    # Iterate over results, cleaning results and adding columns.
     # Future work: Augment results with key, limit, and CAS.
+    for result in results:
+
+        # Clean the values.
+        analyte_name = result['name']
+        measurements = result['value'].split(' ')
+        try:
+            measurement = float(measurements[0])
+        except:
+            measurement = None
+        try:
+            units = measurements[1]
+        except:
+            units = None
+        key = snake_case(analyte_name)
+        try:
+            margin_of_error = float(result['margin_of_error'].split(' ')[-1])
+        except:
+            margin_of_error = None
+
+        # Format long data.
+        entry = series.copy()
+        entry['analyte'] = key
+        entry['analyte_name'] = analyte_name
+        entry['result'] = measurement
+        entry['units'] = units
+        entry['margin_of_error'] = margin_of_error
+
+        # Add to long data.
+        long_data = pd.concat([long_data, pd.DataFrame([entry])])
 
 
-# Optional: Create data / CoA NFTs for the lab results!!!
+# Fill null observations.
+wide_data = wide_data.fillna(0)
 
-
-# TODO: Save the curated data, both wide and long data.
-
+# Rename columns
+analyses = {
+    'POT': 'cannabinoids',
+    'RST': 'residual_solvents',
+    'TERP': 'terpenes',
+    'PEST': 'pesticides',
+    'MICRO': 'micro',
+    'MET': 'heavy_metals',
+}
+wide_data.rename(columns=analyses, inplace=True)
+long_data.rename(columns=analyses, inplace=True)
 
 
 #------------------------------------------------------------------------------
@@ -107,17 +136,44 @@ for index, row in data.iterrows():
 
 # TODO: Count the number of unique data points scraped!
 
+# Count the number of various tests.
+terpenes = wide_data.loc[wide_data['terpenes'] == 1]
+
+# Find all of the analytes.
+analytes = list(long_data.analyte.unique())
+
+# Find all of the product types.
+product_types = list(long_data.product_type.unique())
+
 
 # TODO: Look at cannabinoid concentrations over time.
 
 
-# TODO: Look at cannabinoid distributions by type.
+# Look at cannabinoid distributions by type.
+flower = long_data.loc[long_data['product_type'] == 'Flower']
+flower.loc[flower['analyte'] == '9_thc']['result'].hist(bins=100)
+
+concentrates = long_data.loc[long_data['product_type'] == 'Concentrate']
+concentrates.loc[concentrates['analyte'] == '9_thc']['result'].hist(bins=100)
 
 
-# TODO: Look at terpene distributions by type!
+# Look at terpene distributions by type!
+terpene = flower.loc[flower['analyte'] == 'dlimonene']
+terpene['result'].hist(bins=100)
+
+terpene = concentrates.loc[concentrates['analyte'] == 'dlimonene']
+terpene['result'].hist(bins=100)
 
 
-# TODO: Find the first occurrences of famous strains.
+# Find the first occurrences of famous strains.
+gorilla_glue = flower.loc[
+    (flower['product_name'].str.contains('gorilla', case=False)) |
+    (flower['product_name'].str.contains('glu', case=False))    
+]
+
+# Create strain fingerprints: histograms of dominant terpenes.
+compound = gorilla_glue.loc[gorilla_glue['analyte'] == '9_thc']
+compound['result'].hist(bins=100)
 
 
 #-----------------------------------------------------------------------
@@ -175,3 +231,6 @@ for index, row in data.iterrows():
 # TODO: Forecast: If the trend continues, what would cannabis look like
 # in 10 years? What average cannabinoid and terpene concentration can
 # we expect to see in Michigan in 2025 and 2030?
+
+
+# Optional: Create data / CoA NFTs for the lab results!!!

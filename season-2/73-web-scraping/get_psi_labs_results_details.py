@@ -1,10 +1,10 @@
 """
-Web Scraping of PSI Labs Test Results
+Get PSI Labs Test Results
 Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: July 4th, 2022
-Updated: 7/9/2022
+Updated: 7/10/2022
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Description:
@@ -23,7 +23,7 @@ Resources:
 
 Setup:
 
-    1. Create a folder `../../.datasets/michigan` to store your data.
+    1. Create a folder `../../.datasets/lab_results/raw_data` to store your data.
 
     2. Download ChromeDriver and put it in your `C:\Python39\Scripts` folder
     or pass the `executable_path` to the `Service`.
@@ -276,15 +276,10 @@ def get_psi_labs_test_result_details(driver, max_delay=5) -> dict:
     return details
 
 
-def get_all_psi_labs_test_results(pages, pause=0.125, verbose=True):
-    """Get ALL of PSI Labs test results.
-    Args:
-        pages (iterable): A range of pages to get lab results from.
-        pause (float): A pause between requests to respect PSI Labs' server.
-        verbose (bool): Whether or not to print out progress, True by default (optional).
-    Returns:
-        (list): A list of collected lab results.
-    """
+if __name__ == '__main__':
+
+    # Get all of the results.
+    start = datetime.now()
 
     # Create a headless Chrome browser.
     options = Options()
@@ -292,122 +287,33 @@ def get_all_psi_labs_test_results(pages, pause=0.125, verbose=True):
     options.add_argument('--window-size=1920,1200')
     driver = webdriver.Chrome(options=options, service=service)
 
-    # Iterate over all of the pages to get all of the samples.
-    test_results = []
-    for page in pages:
-        if verbose:
-            print('Getting samples on page:', page)
-        driver.get(BASE.format(str(page)))
-        results = get_psi_labs_test_results(driver)
-        if results:
-            test_results += results
-        else:
-            print('Failed to find samples on page:', page)
-        sleep(pause)
+    # Read in the test results.
+    filename = 'aggregated-cannabis-test-results.xlsx'
+    data_dir = '../../.datasets/lab_results/raw_data'
+    sheet_name = 'psi_labs_raw_data'
+    datafile = f'{data_dir}/{filename}'
+    all_data = pd.read_excel(datafile, sheet_name=sheet_name)
 
     # Get the details for each sample.
-    total = len(test_results)
-    for i, test_result in enumerate(test_results):
-        if verbose:
-            print('Collecting (%i/%i):' % (i + 1, total), test_result['product_name'])
-        driver.get(test_result['lab_results_url'])
+    # NOTE: Restricting subset here: Change to control pages collected.
+    subset = all_data.loc[all_data['results'].isnull()][15_000:]
+    rows = []
+    total = len(subset)
+    for index, values in subset.iterrows():
+        percent = round(index / total, 4)
+        message = 'Collecting (%.4f%%) (%i/%i):' % (percent, index + 1, total)
+        print(message, values['product_name'])
+        driver.get(values['lab_results_url'])
         details = get_psi_labs_test_result_details(driver)
-        test_results[i] = {**test_result, **details}
-        sleep(pause)
+        rows.append({**values.to_dict(), **details})
 
-    # Close the browser and return the results.
+    # Save the results.
+    data = pd.DataFrame(rows)
+    data = pd.concat([all_data, data])
+    data.drop_duplicates(subset='sample_id', keep='last', inplace=True)
+    data.to_excel(datafile, index=False, sheet_name=sheet_name)
+    end = datetime.now()
+    print('Runtime took:', end - start)
+
+    # Close the browser.
     driver.quit()
-    return test_results
-
-
-# Get all of the results.
-# pause = 0
-# runtime = round((len(PAGES) * 3 + (10 * len(PAGES) * 3)) / 60, 2)
-# print('Collecting results. Max runtime >', runtime, 'minutes.')
-start = datetime.now()
-
-# Create a headless Chrome browser.
-options = Options()
-options.headless = True
-options.add_argument('--window-size=1920,1200')
-driver = webdriver.Chrome(options=options, service=service)
-
-# Iterate over all of the pages to get all of the samples.
-# errors = []
-# test_results = []
-# pages = list(PAGES)
-# pages.reverse()
-# for page in pages:
-#     print('Getting samples on page:', page)
-#     driver.get(BASE.format(str(page)))
-#     results = get_psi_labs_test_results(driver)
-#     if results:
-#         test_results += results
-#     else:
-#         print('Failed to find samples on page:', page)
-#         errors.append(page)
-
-
-# Read in and aggregate all of the test results.
-
-# # Aggregate lab results.
-# all_data = pd.DataFrame()
-# directory = '../../../.datasets/lab_results/raw_data/psi_labs'
-# datasets = [f for f in os.listdir(directory)]
-# for dataset in datasets:
-#     file_data = pd.read_excel('/'.join([directory, dataset]))
-#     all_data = pd.concat([all_data, file_data])
-
-# # Remove duplicates.
-# all_data.drop_duplicates(subset='sample_id', inplace=True)
-
-# # Re-do the sample IDs.
-# all_data['sample_id'] = all_data.apply(
-#     lambda x: create_sample_id(
-#         x['producer'],
-#         x['product_name'],
-#         x['date_tested'],
-#     )
-# )
-
-# FIXME:
-# all_test_results = get_all_psi_labs_test_results(PAGES, pause=pause)
-
-# Read in the test results.
-filename = 'psi-labs-test-results-2022-07-09T20-03-39.xlsx'
-datafile = f'../../.datasets/lab_results/raw_data/{filename}'
-all_data = pd.read_excel(datafile)
-
-# Get the details for each sample.
-start_index = 6_000
-rows = []
-subset = all_data.loc[all_data['results'].isnull()][start_index:]
-total = len(subset)
-for index, values in subset.iterrows():
-    percent = round((index - start_index  + 1)/ total * 100, 2)
-    print('Collecting (%.2f%%) (%i/%i):' % (percent, index - start_index + 1, total), values['product_name'])
-    driver.get(values['lab_results_url'])
-    details = get_psi_labs_test_result_details(driver)
-    rows.append({**values.to_dict(), **details})
-    
-    # Save every 500 observations.
-    if index % 500 == 0:
-        data = pd.DataFrame(rows)
-        data = pd.concat([all_data, data])
-        data.drop_duplicates(subset='sample_id', keep='last', inplace=True)
-        timestamp = datetime.now().isoformat()[:19].replace(':', '-')
-        datafile = f'../../.datasets/lab_results/raw_data/concurrent-{timestamp}-{filename}'
-        data.to_excel(datafile, index=False)
-        
-# Save the results.
-data = pd.DataFrame(rows)
-data = pd.concat([all_data, data])
-data.drop_duplicates(subset='sample_id', keep='last', inplace=True)
-timestamp = datetime.now().isoformat()[:19].replace(':', '-')
-datafile = f'../../.datasets/lab_results/raw_data/concurrent-{timestamp}-{filename}'
-data.to_excel(datafile, index=False)
-end = datetime.now()
-print('Runtime took:', end - start)
-
-# Close the browser.
-driver.quit()

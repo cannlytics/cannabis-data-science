@@ -522,7 +522,7 @@ SOFTWARE.
 
 Please cite the following if you use the code examples in your research:
 
-```
+```bibtex
 @misc{cannlytics2022,
   title={Cannabis Data Science},
   author={Skeate, Keegan and Rice, Charles and O'Sullivan-Sutherland, Candace},

@@ -334,7 +334,7 @@ parser = CoADoc()
 sample = {'analyses': [], 'results': []}
 
 # Test Confident Cannabis CoAs.
-cc_coa_pdf = f'../../.datasets/coas/Classic Jack.pdf'
+cc_coa_pdf = f'../../.datasets/coas/Sunbeam.pdf'
 cc_coa_url = 'https://share.confidentcannabis.com/samples/public/share/4ee67b54-be74-44e4-bb94-4f44d8294062'
 
 
@@ -343,21 +343,21 @@ cc_coa_url = 'https://share.confidentcannabis.com/samples/public/share/4ee67b54-
 #-----------------------------------------------------------------------
 
 # # Get the PDF.
-# pdf_file = pdfplumber.open(cc_coa_pdf)
-# page = pdf_file.pages[0]
-# for img in page.images:
-#     try:
-#         # Decode a QR code.
-#         y = page.height
-#         bbox = (img['x0'], y - img['y1'], img['x1'], y - img['y0'])
-#         crop = page.crop(bbox)
-#         obj = crop.to_image(resolution=300)
-#         image_data = decode(obj.original)
-#         url = image_data[0].data.decode('utf-8')
-#         if url:
-#             break
-#     except:
-#         continue
+pdf_file = pdfplumber.open(cc_coa_pdf)
+page = pdf_file.pages[0]
+for img in page.images:
+    try:
+        # Decode a QR code.
+        y = page.height
+        bbox = (img['x0'], y - img['y1'], img['x1'], y - img['y0'])
+        crop = page.crop(bbox)
+        obj = crop.to_image(resolution=300)
+        image_data = decode(obj.original)
+        url = image_data[0].data.decode('utf-8')
+        if url:
+            break
+    except:
+        continue
 
 # # Get the `lab_results_url` from the QR code on the first page.
 # lab_results_url = parser.find_pdf_qr_code_url(cc_coa_pdf)

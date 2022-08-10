@@ -336,9 +336,9 @@ sample_details_area = literal_eval(coa_parameters['coa_sample_details_area'])
 # Look at front page areas.
 img = front_page.to_image(resolution=150)
 img.draw_rects([
-    distributor_area,
+    # distributor_area,
     # producer_area,
-    # sample_details_area,
+    sample_details_area,
 ])
 
 # Look at result page areas.
@@ -388,7 +388,7 @@ obs['producer_license_number'] = details[-1]
 
 # Optional: Get the image data.
 # image_index = coa_parameters['coa_image_index']
-# obs['image_data'] = self.get_pdf_image_data(report.pages[0], image_index)
+# obs['image_data'] = parser.get_pdf_image_data(report.pages[0], image_index)
 obs['images'] = []
 
 # Get the sample details.

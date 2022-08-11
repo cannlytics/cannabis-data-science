@@ -16,7 +16,7 @@ We would love to see you at an upcoming meetup! Please bring any research that y
 
 | Event | Day | Time |
 |-------|-----|------|
-| [**Cannabis Data Science**](https://www.meetup.com/cannabis-data-science) | Wednesdays | 8:30am PST / 9:30am MT / 10:30am CDT / 11:30am EST / [your time](http://www.timebie.com/std/pst.php?q=8.5) |
+| [**Cannabis Data Science**](https://www.meetup.com/cannabis-data-science) | Wednesdays | 1:20pm PST / 2:20pm MT / 3:20pm CDT / 4:20pm EST |
 
 Please peruse the Cannabis Data Science archive and see if you can find anything of value!
 

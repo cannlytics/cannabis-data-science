@@ -24,11 +24,13 @@ References:
 """
 # Standard imports.
 from ast import literal_eval
+from datetime import datetime
 import os
 import shutil
 
 # External imports.
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import requests
 
@@ -76,9 +78,9 @@ plt.show()
 # Get a random image for the strain.
 strain_name = 'Death Star'
 criterion = (flower['product_name'] == strain_name)
-sample = flower.loc[criterion].sample(1, random_state=420).iloc[0]
+sample = flower.loc[criterion].sample(1, random_state=200).iloc[0]
 images = literal_eval(sample['images'])
-image_url = images[0]['url']
+image_url = images[-1]['url']
 
 # Download the model image.
 image_file = f'{IMAGE_DIR}/model.jpg'
@@ -103,7 +105,7 @@ art = FlowerArt(
 # Create an NFT image for the strain.
 key = kebab_case(strain_name)
 nft_file = f'{IMAGE_DIR}/nft-{key}.jpg'
-nft_image_data = art.cartoonize_image(image_file, nft_file)
+nft_image_data = art.cartoonize_image(image_file, nft_file, convert_colors=True)
 
 
 #-----------------------------------------------------------------------
@@ -167,53 +169,64 @@ art = FlowerArt(
     line_size = 7,
     blur_value = 7,
     number_of_filters = 10, # 5 (fast) to 10 (slow) filters recommended.
-    total_colors = 9,
+    total_colors = 50,
     sigmaColor = 50,
     sigmaSpace = 50,
 )
 
-# Mint images for the top products.
+# Mint images for the top product.
 nfts = []
-for strain_name in top_products[:5]:
+# samples =  flower.loc[flower['product_name'] == 'Gorilla Glue'].sample(420)
+samples = flower['product_name'].value_counts()[21:420]
+for strain_name in samples.index:
 
     print('Minting:', strain_name)
+    try:
 
-    # Download a random sample's image.
-    image_file = f'{IMAGE_DIR}/model.jpg'
+        # Download a random sample's image.
+        image_file = f'{IMAGE_DIR}/model.jpg'
 
-    # Get a random image for the strain.
-    criterion = (flower['product_name'] == strain_name)
-    sample = flower.loc[criterion].sample(1, random_state=420).iloc[0]
-    images = literal_eval(sample['images'])
-    image_url = images[-1]['url']
-    print('Sample:', sample['sample_id'])
-    print('Sample URL:', sample['lab_results_url'])
-    print('Sample Image URL:', image_url)
+        # Get a random image for the strain.
+        criterion = (flower['product_name'] == strain_name)
+        sample = flower.loc[criterion].sample(1, random_state=420).iloc[0]
+        images = literal_eval(sample['images'])
+        image_url = images[-1]['url']
+        print('Sample:', sample['sample_id'])
+        print('Sample URL:', sample['lab_results_url'])
+        print('Sample Image URL:', image_url)
 
-    # Download the model image.
-    response = requests.get(image_url)
-    open(image_file, 'wb').write(response.content)
+        # Download the model image.
+        response = requests.get(image_url)
+        open(image_file, 'wb').write(response.content)
 
-    # Create a cartoon modelled after the image.
-    key = kebab_case(strain_name)
-    nft_file = f'{IMAGE_DIR}/nft-{key}.jpg'
-    nft_image_data = art.cartoonize_image(image_file, nft_file)
+        # Create a cartoon modelled after the image.
+        key = kebab_case(strain_name)
+        nft_file = f'{IMAGE_DIR}/nft-{key}.jpg'
+        nft_image_data = art.cartoonize_image(image_file, nft_file)
 
-    # Future work: Mint an NFT for the image!
-    nfts.append({
-        'file_name': nft_file,
-        'id': create_sample_id('cannlytics.eth', nft_image_data),
-        'image_url': image_url,
-        'lab_results_url': sample['lab_results_url'],
-        'name': strain_name,
-        'sample_id': sample['sample_id'],
-    })
+        # Future work: Mint an NFT for the image!
+        nfts.append({
+            'file_name': nft_file,
+            'id': create_sample_id('cannlytics.eth', np.array2string(nft_image_data)),
+            'image_url': image_url,
+            'lab_results_url': sample['lab_results_url'],
+            'name': strain_name,
+            'sample_id': sample['sample_id'],
+        })
+
+    except:
+        print('Failed mint:', strain_name)
+
+# Save the NFT data.
+timestamp = datetime.now().isoformat().replace(':', '-')[:19]
+nft_data = pd.DataFrame(nfts)
+nft_datafile = f'{IMAGE_DIR}/nfts-{timestamp}.xlsx'
+nft_data.to_excel(nft_datafile)
 
 
 #-----------------------------------------------------------------------
 # Future work: Create 420 Strain NFTs for the top 420 strains.
 #-----------------------------------------------------------------------
-
 
 # 1. Stack all SC Labs, MCR Labs, and PSI Labs lab results.
 lab_results = pd.DataFrame()
@@ -276,11 +289,67 @@ for i, product in enumerate(top_products.index.tolist()):
 # Visualize the top products
 top_products.sort_values()[-15:].plot(kind="barh")
 plt.show()
+
+
 for index, value in top_products.iteritems():
     print(index, value)
 
 # 3. Mint 420 NFT images!
+art = FlowerArt(
+    line_size = 7,
+    blur_value = 7,
+    number_of_filters = 10, # 5 (fast) to 10 (slow) filters recommended.
+    total_colors = 9,
+    sigmaColor = 50,
+    sigmaSpace = 50,
+)
+nfts = []
+for strain_name in top_products.index[57:]:
 
+    print('Minting:', strain_name)
+    try:
+
+        # Download a random sample's image.
+        image_file = f'{IMAGE_DIR}/model.jpg'
+
+        # Get a random image for the strain.
+        seed = 420
+        criterion = (flower['product_name'] == strain_name)
+        sample = flower.loc[criterion].sample(1, random_state=seed).iloc[0]
+        images = literal_eval(sample['images'])
+        image_url = images[0]['url']
+        print('Sample:', sample['sample_id'])
+        print('Sample URL:', sample['lab_results_url'])
+        print('Sample Image URL:', image_url)
+
+        # Download the model image.
+        response = requests.get(image_url)
+        open(image_file, 'wb').write(response.content)
+
+        # Create a cartoon modelled after the image.
+        key = kebab_case(strain_name)
+        nft_file = f'{IMAGE_DIR}/nft-{key}.jpg'
+        nft_image_data = art.cartoonize_image(image_file, nft_file, show=False)
+
+        # Future work: Mint an NFT for the image!
+        nfts.append({
+            'file_name': nft_file,
+            'id': create_sample_id('cannlytics.eth', np.array2string(nft_image_data)),
+            'image_url': image_url,
+            'lab_results_url': sample['lab_results_url'],
+            'name': strain_name,
+            'sample_id': sample['sample_id'],
+            'random_seed': seed,
+        })
+
+    except:
+        print('Failed:', strain_name)
+
+# Save the NFT data.
+timestamp = datetime.now().isoformat().replace(':', '-')[:19]
+nft_data = pd.DataFrame(nfts)
+nft_datafile = f'{IMAGE_DIR}/nfts-{timestamp}.xlsx'
+nft_data.to_excel(nft_datafile)
 
 #-----------------------------------------------------------------------
 # Future work: Use NLP to identify the top strains.
@@ -297,6 +366,8 @@ from string import punctuation
 
 # Create a NLP client.
 nlp = spacy.load('en_core_web_lg')
+
+# TODO: Enhance with our knowledge base.
 
 # Find the similarity between words.
 nlp('Gorilla Glue #4').similarity(nlp('Gorilla Glue'))

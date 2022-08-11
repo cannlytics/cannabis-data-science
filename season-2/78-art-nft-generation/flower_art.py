@@ -67,6 +67,7 @@ class FlowerArt():
             outfile: str,
             grayscale: Optional[bool] = False,
             convert_colors: Optional[bool] = False,
+            show: Optional[bool] = False,
         ) -> Any:
         """Create a NFT for a given strain given a representative image.
         Combine edge mask with the colored image.
@@ -94,8 +95,9 @@ class FlowerArt():
         )
         cartoon = cv2.bitwise_and(blurred, blurred, mask=edges)
         cv2.imwrite(outfile, cartoon)
-        cv2.imshow('image', cartoon)
-        cv2.waitKey()
+        if show:
+            cv2.imshow('image', cartoon)
+            cv2.waitKey()
         return img
     
     def color_quantization(self, img, k: int):

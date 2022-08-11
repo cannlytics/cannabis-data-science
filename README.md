@@ -2,7 +2,7 @@
   <img style="width:100%" alt="" src="https://firebasestorage.googleapis.com/v0/b/cannlytics.appspot.com/o/public%2Fimages%2Flogos%2Fcannabis-data-science-logo-wide.png?alt=media&token=880500fd-4a48-42e8-b8a9-3aa36605e299">
 </div>
 
-Welcome to the [Cannabis Data Science Meetup Group](https://www.meetup.com/cannabis-data-science), a team of data scientists from around the world who are advancing cannabis science, one 🧬 molecule at a time! Here you can find many useful notes, notebooks, and video tutorials to help you get, wrangle, and analyze cannabis data with the best of them. Come join the fun every Wednesday at 8:30am PST / 9:30am MT / 10:30am CDT / 11:30am EST / [your time](http://www.timebie.com/std/pst.php?q=8.5). You are always welcome to use the code, watch the [videos](https://cannlytics.com/videos), and make contributions of your own! Please dive in: 
+Welcome to the [Cannabis Data Science Meetup Group](https://www.meetup.com/cannabis-data-science), a team of data scientists from around the world who are advancing cannabis science, one 🧬 molecule at a time! Here you can find many useful notes, notebooks, and video tutorials to help you get, wrangle, and analyze cannabis data with the best of them. Come join the fun every Wednesday at 1:20pm PST / 2:20pm MT / 3:20pm CT / 4:20pm EST. You are always welcome to use the code, watch the [videos](https://cannlytics.com/videos), and make contributions of your own! Please dive in: 
 
 - [🧑‍🚀 Meetups](#meetups)
 - [🚀 Getting Started](#getting-started)

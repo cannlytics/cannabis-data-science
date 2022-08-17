@@ -39,7 +39,7 @@ class FlowerArt():
     def __init__(self,
         line_size = 7,
         blur_value = 7,
-        number_of_filters = 10, # 
+        number_of_filters = 10,
         total_colors = 9,
         sigmaColor = 200,
         sigmaSpace = 200,
@@ -78,6 +78,7 @@ class FlowerArt():
             outfile (str): The image file to create.
             grayscale (bool): Whether to convert to grayscale, False by default.
             convert_colors (bool): Whether to convert the colors, False by default.
+            show (bool): Whether or not to show the image, False by default.
         Returns:
             (Mat): The image matrix data.
         """
@@ -121,6 +122,7 @@ class FlowerArt():
     def edge_mask(self, img, line_size, blur_value):
         """Create an edge mask, emphasizing the thickness of the edges
         to give a cartoon-style to the image.
+        Args:
             img (Mat): The image matrix data.
             line_size (int): The width for the image lines.
             blur_value (int): The degree to which to blur the image.

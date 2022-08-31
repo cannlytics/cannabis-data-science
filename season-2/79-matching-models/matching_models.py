@@ -17,17 +17,6 @@ Data Source:
     - Aggregated Cannabis Laboratory Test Results
     URL: <https://huggingface.co/datasets/cannlytics/aggregated-cannabis-test-results>
 
-References:
-
-    - 
-    URL: <>
-
-    - 
-    URL: <>
-
-    - 
-    URL: <>
-
 Setup:
 
     1. Clone the `dev` branch of Cannlytics.
@@ -44,10 +33,6 @@ Setup:
         ```
 
 """
-#------------------------------------------------------------------------------
-# Setup
-#------------------------------------------------------------------------------
-
 # Standard imports.
 from ast import literal_eval
 
@@ -79,10 +64,10 @@ plt.rcParams.update({
 })
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Get the data!
 # URL: <https://huggingface.co/datasets/cannlytics/aggregated-cannabis-test-results>
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # Read in lab result data.
 datafile = '../../.datasets/lab_results/aggregated-cannabis-test-results-2022-08-09.xlsx'
@@ -116,19 +101,17 @@ sample = lab_results.loc[
 sample = sample.sample(100, random_state=420)
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Clean the data.
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # Clean numeric columns.
-sample['total_terpenes'] = pd.to_numeric(sample['total_terpenes'].apply(
-    convert_to_numeric,
-    strip=True,
-))
-sample['total_cannabinoids'] = pd.to_numeric(sample['total_cannabinoids'].apply(str).apply(
-    convert_to_numeric,
-    strip=True,
-))
+sample['total_terpenes'] = pd.to_numeric(
+    sample['total_terpenes'].apply(str).apply(convert_to_numeric, strip=True)
+)
+sample['total_cannabinoids'] = pd.to_numeric(
+    sample['total_cannabinoids'].apply(str).apply(convert_to_numeric, strip=True)
+)
 
 # Look at the data!
 sample['total_terpenes'].hist(bins=20)
@@ -145,7 +128,9 @@ for index, row in sample.iterrows():
     clean_results = results.copy()
 
     # Separate `lod` and `loq`.
-    lod_loq_values = [x['lodloq'].split(' / ') if x.get('lodloq') else None for x in results]
+    lod_loq_values = [
+        x['lodloq'].split(' / ') if x.get('lodloq') else None for x in results
+    ]
     for i, values in enumerate(lod_loq_values):
         if values is not None:
             result = clean_results[i]
@@ -199,9 +184,9 @@ data = pd.read_excel(outfile, sheet_name='Values')
 # data = parser.standardize(data)
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Look at the data
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # Keep track of features.
 features = pd.DataFrame()
@@ -270,9 +255,9 @@ plt.show()
 # Future work: Find the columns where most columns have a value.
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Analyze the data: Given a product, find the most similar product.
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 from sklearn.neighbors import NearestNeighbors
 
@@ -283,12 +268,69 @@ X = features.dropna(how='all')
 model = NearestNeighbors(n_neighbors=4, algorithm='ball_tree')
 model.fit(X)
 
+# User input:
+strain = 'Pipe Dream' # vs. Trill vs. Mandarin Skunk
+
 # Predict the nearest neighbor of a given strain.
-strain = 'Mandarin Skunk' # Trill vs. Mandarin Skunk
 x_hat = pd.DataFrame([X.loc[strain]])
 distance, prediction = model.kneighbors(x_hat)
 nearest_strains = X.iloc[prediction[0]]
-print(list(nearest_strains.index))
+top_strains = list(nearest_strains.index)
+print(top_strains)
+
+# Look at known terpene ratio.
+x, y = 'limonene', 'beta_pinene'
+ratio = data.eval(f'{y} / {x}').rename('ratio')
+features['ratio_2'] = ratio
+ax = sns.scatterplot(
+    data=data,
+    x=x,
+    y=y,
+    hue=ratio,
+    s=400,
+    palette='viridis',
+)
+for line in range(0, data.shape[0]):
+    product_name = data.index[line]
+    if product_name not in top_strains:
+        continue
+    ax.text(
+        data[x][line],
+        data[y][line],
+        data.index[line],
+        horizontalalignment='center',
+        size='small',
+        color='black',
+    )
+plt.title('beta-Pinene to d-Limonene Ratio')
+plt.show()
+
+# Look at known terpene ratio.
+x, y = 'beta_caryophyllene', 'alpha_humulene'
+ratio = data.eval(f'{y} / {x}').rename('ratio')
+features['ratio_2'] = ratio
+ax = sns.scatterplot(
+    data=data,
+    x=x,
+    y=y,
+    hue=ratio,
+    s=400,
+    palette='viridis',
+)
+for line in range(0, data.shape[0]):
+    product_name = data.index[line]
+    if product_name not in top_strains:
+        continue
+    ax.text(
+        data[x][line],
+        data[y][line],
+        data.index[line],
+        horizontalalignment='center',
+        size='small',
+        color='black',
+    )
+plt.title('beta-Pinene to d-Limonene Ratio')
+plt.show()
 
 
 # Future work: Add more features to use in the nearest neighbor model.
@@ -309,4 +351,4 @@ print(list(nearest_strains.index))
 # Future work:
 #------------------------------------------------------------------------------
 
-# TODO: Create name, value pairs for NLP.
+# Future work: Create name, value pairs for NLP.

@@ -24,6 +24,7 @@ Data Source:
 """
 # Standard imports.
 from datetime import datetime
+import math
 import os
 from time import sleep
 
@@ -145,7 +146,7 @@ outfile = f'{COA_DATA_DIR}/rawgarden-coa-data-{timestamp}.xlsx'
 coa_data = parser.save(all_data, outfile)
 
 # DEV:
-outfile = f'{COA_DATA_DIR}/rawgarden-coa-data-2022-08-31T13-48-39.xlsx'
+outfile = f'{COA_DATA_DIR}/rawgarden-coa-data-2022-08-31T14-05-09.xlsx'
 
 # Read the CoA data back in.
 coa_values = pd.read_excel(outfile, sheet_name='Values')
@@ -232,6 +233,8 @@ sample['pine_lime_ratio'].apply(np.log).hist(bins=50)
 plt.title('Distribution of Log of Average beta-Pinene to d-Limonene by User')
 plt.show()
 
+sample['log_pine_lime_ratio'] = sample['pine_lime_ratio'].apply(np.log)
+
 
 #-----------------------------------------------------------------------
 # Analyze the data.
@@ -251,16 +254,16 @@ model.fit(X)
 x_hat = sample.sample(1, random_state=420)
 
 # Predict the k-nearest neighbors given a user's chemotype profile.
-distance, prediction = model.kneighbors(x_hat)
+distance, prediction = model.kneighbors(x_hat[['log_pine_lime_ratio']])
 y_hat = X.iloc[prediction[0]]
 
 # TODO: Map prediction to products.
-recommendations = coa_values[y_hat]
+recommendations = coa_values.loc[y_hat.index]
 # recommendations = list(coa_values.index)
-print('Recommendations:', recommendations)
+print('Recommendations:', recommendations['product_name'])
 
 # Concat historic user average with recommendations.
-observations = x_hat.concat(recommendations)
+observations = pd.concat([x_hat, recommendations])
 
 # Look terpene ratio of recommended products in
 # comparison of the user's historic ratio.
@@ -269,20 +272,26 @@ ax = sns.scatterplot(
     data=observations,
     x=x,
     y=y,
-    hue=ratio,
     s=400,
     palette='viridis_r',
 )
-for index, row in sample.iterrows():
+for index, row in observations.iterrows():
+    name = row['user']
+    try:
+        if math.isnan(name): name = row['product_name']
+    except TypeError:
+        continue
     ax.text(
         row[x],
         row[y],
-        row['user'],
+        name,
         horizontalalignment='center',
         verticalalignment='bottom',
         size='medium',
         color='#2A8936',
     )
+plt.xlim(0)
+plt.ylim(0)
 plt.title('beta-Pinene / d-Limonene Ratio of Recommendations to Historic Average')
 plt.show()
 

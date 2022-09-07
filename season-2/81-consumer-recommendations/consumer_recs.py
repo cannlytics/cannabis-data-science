@@ -4,7 +4,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 8/23/2022
-Updated: 8/31/2022
+Updated: 9/7/2022
 License: <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Description:
@@ -17,6 +17,7 @@ Data Source:
 
     - Raw Garden Lab Results
     URL: <https://rawgarden.farm/lab-results/>
+    Collection: See `parse_rawgarden_coas.py`
 
     - Strain Reviews
     https://cannlytics.page.link/reported-effects
@@ -50,7 +51,7 @@ plt.rcParams.update({
 })
 
 # Specify where your data lives.
-DATA_DIR = '.datasets'
+DATA_DIR = '../../.datasets'
 COA_DATA_DIR = f'{DATA_DIR}/lab_results/raw_garden'
 COA_PDF_DIR = f'{COA_DATA_DIR}/pdfs'
 REVIEW_DATA_DIR = f'{DATA_DIR}/effects'
@@ -63,102 +64,43 @@ if not os.path.exists(REVIEW_DATA_DIR): os.makedirs(REVIEW_DATA_DIR)
 
 
 #-----------------------------------------------------------------------
-# Get the data!
-# URL: <https://rawgarden.farm/lab-results/>
+# Look at the data.
 #-----------------------------------------------------------------------
-
-# Get Raw Garden's lab results page.
-base = 'https://rawgarden.farm/lab-results/'
-response = requests.get(base, headers=DEFAULT_HEADERS)
-soup = BeautifulSoup(response.content, 'html.parser')
-
-# Get all of the PDF URLs.
-urls = []
-for i, link in enumerate(soup.findAll('a')):
-    try:
-        href = link.get('href')
-        if href.endswith('.pdf'):
-            urls.append(href)
-    except AttributeError:
-        continue
-
-# Download all of the PDFs.
-pause = 0.24 # Pause to respect the server serving the PDFs.
-total = len(urls)
-print('Downloading PDFs, ETA > %.2fs' % (total * pause))
-start = datetime.now()
-for i, url in enumerate(urls):
-    name = url.split('/')[-1]
-    outfile = os.path.join(COA_PDF_DIR, name)
-    response = requests.get(url, headers=DEFAULT_HEADERS)
-    with open(outfile, 'wb') as pdf:
-        pdf.write(response.content)
-    print('Downloaded %i / %i' % (i +  1, total))
-    sleep(pause)
-end = datetime.now()
-
-# Count the number of PDFs downloaded.
-files = [x for x in os.listdir(COA_PDF_DIR)]
-print('Downloaded %i PDFs.' % len(files), 'Time:', end - start)
-
-# TODO: Organize the PDFs into folder by type.
-
-
-#-----------------------------------------------------------------------
-# Parse and standardize the data with CoADoc
-#-----------------------------------------------------------------------
-
-# Parse lab results with CoADoc.
-parser = CoADoc()
-
-# Future work: Parse all CoAs in 1-shot.
-# data = parser.parse(COA_PDF_DIR)
-
-# Iterate over PDF directory.
-all_data, recorded, unidentified = [], [], []
-for path, subdirs, files in os.walk(COA_PDF_DIR):
-    for name in files:
-        if not name.endswith('.pdf'):
-            continue
-        if name in unidentified:
-            continue
-
-        # Parse CoA PDFs one by one.
-        file_name = os.path.join(path, name)
-        try:
-            coa_data = parser.parse(file_name, max_delay=3)
-            all_data.extend(coa_data)
-            print('Parsed:', name)
-            recorded.append(name)
-        except:
-            print('Error:', name)
-            pass
-
-        # Save the CoA data every 100 CoAs, just in case!
-        if len(all_data) % 100 == 0:
-            timestamp = datetime.now().isoformat()[:19].replace(':', '-')
-            outfile = f'{COA_DATA_DIR}/rawgarden-coa-data-{timestamp}.xlsx'
-            coa_data = parser.save(all_data, outfile)
-
-# Save all of the CoA data.
-timestamp = datetime.now().isoformat()[:19].replace(':', '-')
-outfile = f'{COA_DATA_DIR}/rawgarden-coa-data-{timestamp}.xlsx'
-coa_data = parser.save(all_data, outfile)
 
 # DEV:
 outfile = f'{COA_DATA_DIR}/rawgarden-coa-data-2022-08-31T14-05-09.xlsx'
+# outfile = f'{COA_DATA_DIR}/rawgarden-coa-data-2022-09-07T13-39-09.xlsx'
 
 # Read the CoA data back in.
 coa_values = pd.read_excel(outfile, sheet_name='Values')
 
-# Visualize the beta-pinene / d-limonene ratio of the CoA data.
+# Visualize beta-pinene to d-limonene.
+sns.scatterplot(
+    data=coa_values.loc[
+        (coa_values['beta_pinene'] > 0.001) &
+        (coa_values['d_limonene'] > 0.001)
+    ],
+    x='d_limonene',
+    y='beta_pinene',
+)
+plt.title('beta-Pinene to d-Limonene')
+plt.show()
+
+# Visualize the beta-pinene / d-limonene ratio.
 coa_values['pine_lime_ratio'] = coa_values.eval('beta_pinene / d_limonene')
 coa_values['pine_lime_ratio'].hist(bins=100)
+plt.ylabel('Count')
+plt.xlabel('Ratio')
+plt.title('beta-Pinene to d-Limonene Ratio')
 plt.show()
 
 # Visualize the log of the beta-pinene / d-limonene ratio.
 coa_values['log_pine_lime_ratio'] = coa_values['pine_lime_ratio'].apply(np.log)
 coa_values['log_pine_lime_ratio'].hist(bins=100)
+plt.xlim(-3, 3)
+plt.xlabel('Log Ratio')
+plt.ylabel('Count')
+plt.title('Log beta-Pinene to d-Limonene Ratio')
 plt.show()
 
 
@@ -173,23 +115,100 @@ reviews = pd.read_excel(datafile, index_col=0)
 # Remove duplicates.
 reviews.drop_duplicates(subset='review', inplace=True)
 
-# TODO: Standardize review columns?
 
-# Determine the unique number of users.
-users = reviews.groupby('user', as_index=False)
-user_averages = users.mean()
-user_averages['n_reviews'] = users['review'].nunique()['review']
+#-----------------------------------------------------------------------
+# Perform sentiment analysis on the reviews.
+#-----------------------------------------------------------------------
+
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
+import statistics
+
+# Create natural language processing (NLP) client.
+sia = SIA()
+
+def avg_positivity(text: str) -> bool:
+    """Average of all sentence compound scores."""
+    scores = [
+        sia.polarity_scores(sentence)['compound']
+        for sentence in nltk.sent_tokenize(text)
+    ]
+    try:
+        return statistics.mean(scores)
+    except:
+        return 0
+
+# Rank reviews -1 to 1.
+reviews['sentiment_score'] = reviews['review'].apply(lambda x: avg_positivity(x))
+
+# Scale sentiment score from 0 to 1.
+reviews['sentiment_score'] = reviews['sentiment_score'].apply(lambda x: (x + 1) / 2)
+
+# Visualize the sentiment score.
+reviews['sentiment_score'].hist(bins=100)
+plt.title('Distribution of Sentiment Scores')
+plt.xlabel('Sentiment Score')
+plt.ylabel('Count')
+plt.show()
+
+# Exclude neutral reviews.
+reviews['sentiment_score'].loc[
+    reviews['sentiment_score'] != 0.5
+].hist(bins=100)
+plt.xlabel('Sentiment Score')
+plt.ylabel('Count')
+plt.title('Distribution of Sentiment Scores, Excluding Outliers')
+plt.show()
+
+
+#-----------------------------------------------------------------------
+# Calculate each user's weighted average chemical profile by sentiment.
+#-----------------------------------------------------------------------
 
 # Isolate a training sample.
-sample = user_averages.loc[
-    (user_averages['user'] != 'Anonymous') &
-    (user_averages['beta_pinene'] > 0) &
-    (user_averages['d_limonene'] > 0) &
-    (user_averages['n_reviews'] > 10)
+sample = reviews.loc[
+    (reviews['beta_pinene'] > 0) &
+    (reviews['d_limonene'] > 0) &
+    (reviews['sentiment_score'] != 0.5)
+    # (train['beta_caryophyllene'] > 0) &
+    # (train['humulene'] > 0) &
     # (train['total_thc'] > 0) &
     # (train['total_cbd'] > 0) &
-    # (train['beta_caryophyllene'] > 0) &
-    # (train['humulene'] > 0)
+]
+
+def weighted_avg(df, values, weights, by):
+    """Calculate a weighted average.
+    Args:
+
+    Returns:
+
+    Author: kadee <https://stackoverflow.com/a/33054358/5021266>
+    License: CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/>
+    """
+    v, w = df[values], df[weights]
+    return (v * w).groupby(by).sum() / w.groupby(by).sum()
+
+
+sample['log_pine_lime_ratio'] = sample['beta_pinene'].apply(sample['d_limonene'])
+
+# FIXME:
+# Calculate a weighted average using `sentiment_score`.
+user_data = weighted_avg(
+    sample,
+    values='log_pine_lime_ratio',
+    weights='sentiment_score',
+    by='user'
+)
+
+# Simple average:
+# user_data = users.mean()
+
+# Determine the unique number of users.
+users = sample.groupby('user', as_index=False)
+user_data['n_reviews'] = sample.groupby('user')['review'].nunique()
+user_data = user_data.loc[
+    (user_data.index != 'Anonymous') &
+    (user_data['n_reviews'] > 10)
 ]
 
 # Plot beta-pinene to d-limonene by user.
@@ -237,10 +256,8 @@ sample['log_pine_lime_ratio'] = sample['pine_lime_ratio'].apply(np.log)
 
 
 #-----------------------------------------------------------------------
-# Analyze the data.
+# Estimate a product recommendation model.
 #-----------------------------------------------------------------------
-
-# TODO: Recommend the nearest product in similarity of terpene ratios.
 
 # Define the features to use.
 features = ['log_pine_lime_ratio']
@@ -250,6 +267,11 @@ X = coa_values[features].dropna(how='all')
 model = NearestNeighbors(n_neighbors=4, algorithm='ball_tree')
 model.fit(X)
 
+
+#-----------------------------------------------------------------------
+# Use the model for prediction.
+#-----------------------------------------------------------------------
+
 # Specify the user.
 x_hat = sample.sample(1, random_state=420)
 
@@ -257,16 +279,15 @@ x_hat = sample.sample(1, random_state=420)
 distance, prediction = model.kneighbors(x_hat[['log_pine_lime_ratio']])
 y_hat = X.iloc[prediction[0]]
 
-# TODO: Map prediction to products.
+# Map prediction to products.
 recommendations = coa_values.loc[y_hat.index]
-# recommendations = list(coa_values.index)
 print('Recommendations:', recommendations['product_name'])
 
 # Concat historic user average with recommendations.
 observations = pd.concat([x_hat, recommendations])
 
-# Look terpene ratio of recommended products in
-# comparison of the user's historic ratio.
+# Look at the terpene ratio of recommended products in comparison to
+# the user's historically consumed ratio, weighted by sentiment.
 x, y = 'd_limonene', 'beta_pinene'
 ax = sns.scatterplot(
     data=observations,
@@ -300,7 +321,6 @@ plt.show()
 # Bonus: k-nearest neighbors Search with user-specified strain.
 #-----------------------------------------------------------------------
 
-
 # E.g. My favorite strain is Jack Herer, the average Jack Herer has
 # chemical profile Xj. Therefore, the most similar raw Garden product
 # based on factors B, is Yj.
@@ -311,9 +331,11 @@ plt.show()
 # based on factors B, is Yn.
 
 
-# Super bonus: If it were possible to mix products, then what mix
+#-----------------------------------------------------------------------
+# Super Bonus: If it were possible to mix products, then what mix
 # of products would match, or be the closest match, to a consumer's
 # historic or desired chemical profile.
+#-----------------------------------------------------------------------
 
 # def f(alpha, x, target):
 #     matrix = x[0] * alpha + x[1] * (1- alpha) - target

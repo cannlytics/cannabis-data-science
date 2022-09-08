@@ -2,9 +2,11 @@
 Use OCR to Recognize PDF Text
 Copyright (c) 2022 Cannlytics
 
-Authors: Keegan Skeate <https://github.com/keeganskeate>
+Authors:
+    Keegan Skeate <https://github.com/keeganskeate>
+    Candace O'Sullivan-Sutherland <https://github.com/candy-o>
 Created: 8/30/2022
-Updated: 9/7/2022
+Updated: 9/8/2022
 License: <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Description:
@@ -38,7 +40,6 @@ from wand.color import Color
 
 # Internal imports.
 from cannlytics.data.coas import CoADoc
-from cannlytics.data.coas.cannalysis import parse_cannalysis_coa
 
 # Specify where your data lives.
 DATA_DIR = '.'
@@ -105,10 +106,6 @@ parser = CoADoc()
 lab = parser.identify_lims(outfile)
 assert lab == 'Cannalysis'
 
-# FIXME: This algorithm is throwing an error.
-# data = parse_cannalysis_coa(parser, outfile)
-# assert data is not None
-
 
 #-----------------------------------------------------------------------
 # Use CoADoc's built-in OCR.
@@ -119,9 +116,9 @@ import pdfplumber
 
 # Pass a PDF through OCR.
 parser = CoADoc()
-doc = '../../.datasets/tests/210000043-Kush-Clouds-0.5g.pdf'
-temp_path = '../../.datasets/tests/tmp'
-temp_file = '../../.datasets/tests/tmp/ocr_coa.pdf'
+doc = f'{DATA_DIR}/mist.pdf'
+temp_path = f'{DATA_DIR}/imgs'
+temp_file = f'{DATA_DIR}/ocr-coa.pdf'
 parser.pdf_ocr(doc, temp_file, temp_path, resolution=180)
 
 # Test that the PDF needs OCR.

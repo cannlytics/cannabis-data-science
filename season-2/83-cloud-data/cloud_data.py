@@ -9,8 +9,7 @@ Created: 9/13/2022
 Updated: 9/14/2022
 License: <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
-Description:
-
+Description: Get cannabis lab test data curated by Cannlytics from Hugging Face.
 """
 from cannlytics.data.coas import CoADoc
 from datasets import load_dataset # pip install datasets

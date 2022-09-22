@@ -494,7 +494,7 @@ The Cannabis Data Science meetup group and the accompanying source code is made 
 | 💸 PayPal Donation | <https://cannlytics.page.link/donate> |
 | 💵 Venmo Donation | <https://www.venmo.com/u/cannlytics> |
 | 🪙 Bitcoin donation address| 34CoUcAFprRnLnDTHt6FKMjZyvKvQHb6c6 |
-| ⚡ Ethereum donation address | 0xa466d0893e3d4f584c5a7aec1104b9f1d541cf1c |
+| ⚡ Ethereum donation address | `cannlytics.eth` |
 
 ## 🏛️ License <a name="license"></a>
 

@@ -125,57 +125,185 @@
 \titlepage
 \end{frame}
 
+%------------------------------------------%
+% Introduction
+%------------------------------------------%
 
-\begin{frame}{The Emergence of Cannabis Chemovars}
-%
-%Can we model strain emergence similar to a virus. For example, do certain strain names go viral or spread around the country?
+\begin{frame}{Cannabis Commerce}
 
-%\begin{center}
-\begin{minipage}{\textwidth}
-\begin{Block}{Hypotheses}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/ca-cannabis-fire-map.png}
+\end{center}
 
-\vspace{0.75\baselineskip}
+{\tiny\setstretch{0} Dillis, Christopher, Butsic, Van, Moanga, Diana, Parker-Shames, Phoebe, Wartenberg, Ariani, and Grantham, Theodore E.. 2022. ``The Threat of Wildfire is Unique to Cannabis among Agricultural Sectors in California.'' Ecosphere 13( 9): e4205. https://doi.org/10.1002/ecs2.4205}
 
+\end{frame}
+
+%------------------------------------------%
+% Literature Review
+%------------------------------------------%
+
+% Page 
+\begin{frame}{Literature Review}
+
+\vspace{0.5\baselineskip}
+Topics:
+
+\vspace{0.5\baselineskip}
 \begin{itemize}
 
-\item Can we find the data / producer / state of the \nth{1} ocurrance of a particular strain?
-
-\vspace{0.75\baselineskip}
-
-\item Can we find the date a particular strain spread to another state?
-
-\vspace{0.75\baselineskip}
-
-\item Do chemical profiles vary by region?
-
-\vspace{0.75\baselineskip}
-
-\item Does California cannabis show more chemical variation than in Michigan or Massachusetts?
-
-\begin{itemize}
-
-\footnotesize
+\item California prepares for interstate cannabis commerce.
 
 \vspace{0.5\baselineskip}
 
-\item Do new strains arise more often in CA than in MA because a larger proportion of plants are grown from seed versus clone?
+\item Kentucky congress members push for FDA CBD oversight.
 
 \vspace{0.5\baselineskip}
 
-\item Are concentrates more variable in CA than in MI or MA because of source flower?
+\item $\Delta$--8 THC, novel cannabinoids, concentrates, additives.
 
 \end{itemize}
 
+% Picture of COAs.
+\vspace{1\baselineskip}
+\begin{minipage}{0.45\textwidth}
+
+\includegraphics[width=\textwidth]{images/bubba-kush-coa.pdf}
+
+\end{minipage}\hspace{0.045\textwidth}%
+\begin{minipage}{0.45\textwidth}
+
+\includegraphics[width=\textwidth]{images/tangie-coa.pdf}
+
+\end{minipage}
+
+\end{frame}
+
+% Page 
+\begin{frame}{Literature Review}
+
+\begin{center}
+\includegraphics[width=\textwidth]{images/qgdpstate0622.png}
+\end{center}
+
+\end{frame}
+
+%------------------------------------------%
+% Research Question
+%------------------------------------------%
+
+\begin{frame}{Research Question}
+
+\begin{center}
+\begin{minipage}{0.9\linewidth}
+\begin{Block}{Hypotheses}
+
+\vspace{0.5\baselineskip}
+
+\begin{itemize}
+\item Is there a relationship between a state permitting adult-use cannabis and its GDP?
+
 \vspace{0.75\baselineskip}
 
-\item 
+\item If a state permits adult-use, does the number of retailers per capita affect its GDP?
 
 \vspace{0.75\baselineskip}
+
 
 \end{itemize}
 
 \end{Block}
 \end{minipage}
+\end{center}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/qgdpstate0622.png}
+\end{center}
+
+\end{frame}
+
+%------------------------------------------%
+% Methodology
+%------------------------------------------%
+
+\begin{frame}{Methodology}
+
+Assuming the following model,
+
+\vspace{-0.25\baselineskip}
+$$
+\text{GDP}_s = \beta_0 + \beta_1D_s + \beta_2X_s + \mu_s,
+$$
+
+\vspace{0.25\baselineskip}
+where
+%\vspace{-0.25\baselineskip}
+\begin{align*}
+D_s &=
+\begin{cases}
+0 \text{ if adult-use is not permitted},\\
+1 \text{ if adult-use is permitted},
+\end{cases} \\
+X_s & \text{ is number of retailers per capita in state } s,
+\end{align*}
+
+we can interpret:
+
+\vspace{0.5\baselineskip}
+\begin{itemize}
+
+\item $\beta_1$ as the expected change in GDP from a state permitting adult-use cannabis,
+
+\vspace{0.75\baselineskip}
+
+\item $\beta_2$ as the expected change in GDP from an increase in 1 retailer per capita (100,000 people).
+
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------%
+% Data
+%------------------------------------------%
+
+\begin{frame}{Data}
+
+States where adult-use is permitted:
+\vspace{0.75\baselineskip}
+\begin{itemize}
+\begin{minipage}{0.4\linewidth}
+\small
+    \item Alaska
+    \item Arizona
+    \item Colorado
+    \item Connecticut
+    \item Illinois
+    \item Maine
+    \item Massachusetts
+    \item Michigan
+\end{minipage}
+\begin{minipage}{0.4\linewidth}
+\small
+    \item Montana
+    \item New Mexico
+    \item Nevada
+    \item New Jersey
+    \item Oregon
+    \item Rhode Island
+    \item Vermont
+    \item Washington
+\end{minipage}
+\end{itemize}
+
+\vspace{0.75\baselineskip}
+States where adult-use will soon be permitted:
+\vspace{0.25\baselineskip}
+\begin{itemize}
+\small
+\item New York
+\item Virginia
+\item D.C.?
+\end{itemize}
 
 \end{frame}
 
@@ -196,14 +324,12 @@
 
 \begin{center}
 \begin{minipage}{0.75\linewidth}
-\begin{Block}{Insights of the Day}
+\begin{Block}{Insight of the Day}
 
 \vspace{0.5\baselineskip}
 
 \begin{itemize}
-
-\vspace{0.75\baselineskip}
-\item ?
+\item The squeaky wheel gets the oil!
 \vspace{0.75\baselineskip}
 
 \end{itemize}

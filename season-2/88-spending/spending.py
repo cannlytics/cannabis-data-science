@@ -7,6 +7,13 @@ Authors:
 Created: 11/2/2022
 Updated: 11/2/2022
 License: <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
+
+Setup:
+
+    1. Install all Python dependencies:
+
+    pip install cannlytics pdfplumber pytesseract spacy transformers
+
 """
 # Standard imports.
 import os
@@ -87,6 +94,10 @@ for filename in receipt_filenames:
     image_text = image_to_text(filename)
     receipt_texts.append(image_text)
 
+# Save the receipt text.
+with open('receipt_texts.txt', 'w+') as f:
+    for s in receipt_texts:
+        f.write(str(s) + '\n')
 
 #------------------------------------------------------------------------------
 # Extract the key data from the text with NLP.
@@ -119,7 +130,18 @@ for i in doc.ents:
 
 #------------------------------------------------------------------------------
 
+import pandas as pd
+
 # TODO: Identify times.
+time_entities = []
+for i in doc.ents:
+    entry = str(i.lemma_).lower()
+    if i.label_ in ['CARDINAL']:
+        try:
+            date_time = pd.to_datetime(entry)
+            time_entities.append(date_time)
+        except:
+            pass
 
 
 #------------------------------------------------------------------------------

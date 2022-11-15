@@ -18,7 +18,9 @@ Data Sources:
 
 Setup:
 
-    1. Install all Python dependencies with `pip install spacy`.
+    1. Install all Python dependencies with:
+    
+        pip install spacy textacy
 
     2. Download the datasets to your `DATA_DIR`.
 

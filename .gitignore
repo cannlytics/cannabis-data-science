@@ -8,10 +8,12 @@
 *.datasets
 
 # Ignore PyCache.
+__pycache__/
 *.pyc
 
 # Ignore extraneous LaTeX files.
 *.aux
+*.bcf
 *.bbl
 *.blg
 *.log
@@ -20,3 +22,4 @@
 *.snm
 *.gz
 *.toc
+*.run.xml

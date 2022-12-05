@@ -175,11 +175,11 @@ if __name__ == '__main__':
     # Get a transcript of the audio file.
     text = audio_to_text(audio_file)
 
-    # TODO: Summarize (perhaps with BERT) to get a title and description.
+    # TODO: Summarize (with BERT) to get a title and description.
     short_title = ''
     description = ''
 
-    # TODO: Create background art (perhaps with Stable Diffusion) with the title.
+    # TODO: Create background art (with Stable Diffusion) with the title.
     # Save the background as needed to Firebase Storage.
     cover_image_url = ''
 

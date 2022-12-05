@@ -7,6 +7,10 @@ Created: March 2017
 Updated: 10/27/2021
 License: MIT License <https://opensource.org/licenses/MIT>
 """
+# Standard imports:
+from typing import Any, Optional
+
+# External imports:
 import numpy as np
 import pandas as pd
 from statsmodels.tsa.arima_model import ARIMA
@@ -21,7 +25,7 @@ def arima_min_rmse_forecast(
         time_series,
         lag_order=6,
         hold_out_period=6,
-        forecast_steps=12,
+        horizon=12,
         verbose=False,
     ):
     """Forecast a series with an ARIMA model selected by minimum RMSE
@@ -31,7 +35,7 @@ def arima_min_rmse_forecast(
         time_series (Series):
         lag_order (int): The maximum lag order for the ARIMA model.
         hold_out_period (int): The number of periods to hold out for training.
-        forecast_period (int): The number of periods to forecast.
+        horizon (int): The number of periods to forecast.
         verbose (bool): Wether or not to print out details.
     """
 
@@ -53,7 +57,7 @@ def arima_min_rmse_forecast(
             if verbose:
                 print('Fitting ARIMA', order)
 
-            # Rolling forecast
+            # Rolling forecast.
             history = [x for x in train]
             predictions = list()
             for t in range(len(test)):
@@ -67,8 +71,8 @@ def arima_min_rmse_forecast(
                     history.append(actual)
                 except:
                     pass
-                #print('predicted=%f, actual=%f' % (yhat, actual))
-                #print('Psuedo Out-of-Sample RMSE: %.3f' % rmse)
+                if verbose:
+                    print('y_hat: %f | y: %f | RMSE: %f' % (yhat, actual, rmse))
             if len(predictions)==0:
                 forecasts.append(np.array([np.inf, np.inf, np.inf]))
                 rmse_of_forecast.append(np.inf)
@@ -91,47 +95,57 @@ def arima_min_rmse_forecast(
     order = (best_lag_order[0], 0, best_lag_order[1])
     model = ARIMA(X, order =order )
     regression = model.fit(disp=0)
-    forecast = regression.forecast(forecast_steps)
+    forecast = regression.forecast(horizon)
     return forecast[0]
 
+
 def arima_min_bic_forecast(
-        time_series,
-        lag_order,
-        forecast_steps
-):
-    
-      # Initialization
+        time_series: Any,
+        lag_order: int,
+        horizon: int,
+        verbose: Optional[bool] = False,
+    ):
+    """Forecast a series with an ARIMA model selected by minimum BIC.
+
+    Args:
+        time_series (Series):
+        lag_order (int): The maximum lag order for the ARIMA model.
+        hold_out_period (int): The number of periods to hold out for training.
+        horizon (int): The number of periods to forecast.
+        verbose (bool): Wether or not to print out details.
+    """
     X = time_series
-    # Lag Orders
     p, q = np.arange(lag_order+1) , np.arange(lag_order+1)
-    # Forecasts
     lag_order_of_model = list()
     bic_of_model = list()
-    # Scan ARMA(p, q) models
-    for p in range(lag_order+1):
-        for q in range(lag_order+1):
-            order = np.array([p,q])
-            lag_order_of_model.append(order)
 
+    # Scan ARMA(p, q) models.
+    for p in range(lag_order + 1):
+        for q in range(lag_order + 1):
+            order = np.array([p, q])
+            lag_order_of_model.append(order)
             try:
                 model = ARIMA(X, order=(p, 0, q))
                 model_fit = model.fit(disp=0)
                 bic = model_fit.bic
             except:
                 bic = np.inf
-                print ('Not Stationary')
+                if verbose:
+                    print ('Not Stationary')
                 pass
-
             bic_of_model.append(bic)
-            print ('Model: (%i, %i)' % (p, q), 'BIC: %.4f' % bic)
+            if verbose:
+                print ('Model: (%i, %i)' % (p, q), 'BIC: %.4f' % bic)
 
-    # Identify best model
+    # Identify the best model.
     min_bic_model = bic_of_model.index(min(bic_of_model))
     best_lag_order = lag_order_of_model[min_bic_model]
-    print('Best model:', best_lag_order)
-    # Estimate Best Model and Forecast
-    best_model = ARIMA(X, order = (best_lag_order[0],0,best_lag_order[1]) )
+    if verbose:
+        print('Best model:', best_lag_order)
+
+    # Forecast with the best model.
+    best_model = ARIMA(X, order = (best_lag_order[0], 0, best_lag_order[1]) )
     best_model_fit = best_model.fit(disp=0)
-    best_output = best_model_fit.forecast(forecast_steps)
+    best_output = best_model_fit.forecast(horizon)
     best_forecast = best_output[0]
     return pd.Series(best_forecast)

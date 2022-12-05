@@ -23,3 +23,6 @@ __pycache__/
 *.gz
 *.toc
 *.run.xml
+
+# Ignore VS Code settings.
+*.vscode

@@ -1,9 +1,10 @@
 """
 Utility Functions | Cannabis Data Science
+Copyright (c) 2022 Cannlytics
 
-Author: Keegan Skeate <keegan@cannlytics.com>
+Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 10/27/2021
-Updated: 12/3/2022
+Updated: 12/11/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 """
 import numpy as np
@@ -37,25 +38,22 @@ def reverse_dataframe(df):
     return df[::-1].reset_index(drop=True)
 
 
-def draw_brace(ax, xspan, yy, text):
+def draw_brace(ax, x_span, yy, text):
     """Draws an annotated brace on the axes."""
-    xmin, xmax = xspan
-    xspan = xmax - xmin
+    xmin, xmax = x_span
+    x_span = xmax - xmin
     ax_xmin, ax_xmax = ax.get_xlim()
+    ax_ymin, ax_ymax = ax.get_ylim()
     xax_span = ax_xmax - ax_xmin
-
-    ymin, ymax = ax.get_ylim()
-    yspan = ymax - ymin
-    resolution = int(xspan / xax_span * 100) * 2 + 1 # guaranteed uneven
-    beta = 300./xax_span # the higher this is, the smaller the radius
-
+    y_span = ax_ymax - ax_ymin
+    resolution = int(x_span / xax_span * 100) * 2 + 1 # guaranteed uneven
+    beta = 300.0 / xax_span # the higher this is, the smaller the radius
     x = np.linspace(xmin, xmax, resolution)
-    x_half = x[:int(resolution/2)+1]
-    y_half_brace = (1 / (1. + np.exp(-beta * (x_half - x_half[0])))
-                    + 1 /( 1. + np.exp(-beta * (x_half - x_half[-1]))))
+    x_half = x[:int(resolution/2) + 1]
+    y_half_brace = (1 / (1.0 + np.exp(-beta * (x_half - x_half[0])))
+                    + 1 /(1.0 + np.exp(-beta * (x_half - x_half[-1]))))
     y = np.concatenate((y_half_brace, y_half_brace[-2::-1]))
-    y = yy + (.05* y - .01) * yspan # adjust vertical position
-
+    y = yy + (0.05 * y - 0.01) * y_span # adjust vertical position
     ax.autoscale(False)
     ax.plot(x, y, color='black', lw=1)
-    ax.text((xmax + xmin) / 2., yy + .07 * yspan, text, ha='center', va='bottom')
+    ax.text((xmax + xmin) / 2., yy + .07 * y_span, text, ha='center', va='bottom')

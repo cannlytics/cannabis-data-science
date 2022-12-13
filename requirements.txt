@@ -3,6 +3,7 @@ cannlytics
 census
 fred
 googlemaps
+moviepy
 nltk
 opencv-python
 pandas

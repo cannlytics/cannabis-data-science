@@ -1,10 +1,10 @@
 """
-ARIMA Forecasting with Massachusetts Cannabis Data
-Cannabis Data Science
+ARIMA Forecasting with Massachusetts Cannabis Data | Cannabis Data Science
+Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <keegan@cannlytics.com>
 Created: 10/27/2021
-Updated: 12/3/2022
+Updated: 12/11/2022
 License: MIT License <https://opensource.org/licenses/MIT>
 
 Objective:
@@ -20,12 +20,12 @@ Objective:
 Data Sources:
 
     MA Cannabis Control Commission
-    - Average Monthly Price per Ounce for Adult-Use Cannabis: https://dev.socrata.com/foundry/opendata.mass-cannabis-control.com/rqtv-uenj
-    - Plant Activity and Volume: https://dev.socrata.com/foundry/opendata.mass-cannabis-control.com/j3q7-3usu
 
-    Fed Fred
-    - Federal funds interest rate: https://fred.stlouisfed.org/series/FEDFUNDS
-    - Interest rates: https://www.federalreserve.gov/releases/h15/
+    - Average Monthly Price per Ounce for Adult-Use Cannabis
+    URL: <https://dev.socrata.com/foundry/opendata.mass-cannabis-control.com/rqtv-uenj>
+
+    - Plant Activity and Volume
+    URL: <https://dev.socrata.com/foundry/opendata.mass-cannabis-control.com/j3q7-3usu>
 
 """
 # External imports:

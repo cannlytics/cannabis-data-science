@@ -4,7 +4,7 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 4/4/2022
-Updated: 11/30/2022
+Updated: 12/4/2022
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Command-line example:
@@ -18,6 +18,7 @@ Setup:
     ```
     pip install moviepy
     pip install git+https://github.com/openai/whisper.git
+    pip install --upgrade git+https://github.com/huggingface/diffusers.git
     ```
 
 """
@@ -27,19 +28,22 @@ import sys
 from typing import Optional
 
 # External imports:
+from cannlytics.utils import snake_case
+from datasets import load_dataset
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
 from dotenv import dotenv_values
-import moviepy.editor as mp # 
+import moviepy.editor as mp
+import pandas as pd
+import requests
+import torch
 import whisper
-
-
-model = whisper.load_model("small")
 
 
 def video_to_audio(
         video_file: str,
         audio_file: str,
         volume: Optional[float] = 1,
-):
+    ) -> None:
     """Save the audio from a video as an audio file, incrementing the version
     as needed.
     Args:
@@ -53,7 +57,10 @@ def video_to_audio(
     clip.audio.write_audiofile(audio_file)
 
         
-def audio_to_text(audio):
+def audio_to_text(
+        audio: str,
+        model_name: Optional[str] = 'small',
+    ) -> str:
     """Create text transcript from audio file.
     Args:
         An audio file.
@@ -62,10 +69,78 @@ def audio_to_text(audio):
     """
     audio = whisper.load_audio(audio)
     audio = whisper.pad_or_trim(audio)
+    model = whisper.load_model(model_name)
     mel = whisper.log_mel_spectrogram(audio).to(model.device)
     options = whisper.DecodingOptions(fp16 = False)
     result = whisper.decode(model, mel, options)
     return result.text
+
+
+def text_to_image(
+        prompt: str,
+        filename: Optional[str] = None,
+        height: Optional[int] = 768,
+        width: Optional[int] = 768,
+    ) -> str:
+    """Create an image given a text prompt."""
+    model_id = 'stabilityai/stable-diffusion-2'
+    scheduler = EulerDiscreteScheduler.from_pretrained(
+        model_id,
+        subfolder='scheduler',
+    )
+    pipe = StableDiffusionPipeline.from_pretrained(
+        model_id,
+        scheduler=scheduler,
+        revision="fp16",
+        torch_dtype=torch.float16,
+    )
+    pipe = pipe.to('cuda')
+    image = pipe(prompt, height=height, width=width).images[0]
+    if filename is None:
+        filename = snake_case(prompt[:32] + '.png')
+    image.save(filename)
+    return filename
+
+
+def create_hyperlink(href, text):
+    """Format a hyperlink as a link with given text."""
+    return f'<a href="{href}">{text}</a>'
+
+
+def create_readme_index(datafile):
+    """Create a markdown table from given JSON."""
+    columns = {
+        'short_title': 'Topic',
+        'description': 'Description',
+        'video_url': 'Video',
+        'source_code_url': 'Code',
+    }
+    videos = pd.read_json(datafile)
+    videos = videos.loc[videos['video_url'] != '']
+    videos['description'] = videos['description'].apply(lambda x: x.split('\n')[0])
+    videos['video_url'] = videos['video_url'].apply(create_hyperlink, text='Video')
+    videos['source_code_url'] = videos['source_code_url'].apply(create_hyperlink, text='Code')
+    videos['short_title'] = videos.apply(
+        lambda x: create_hyperlink(x['source_code_url'], x['short_title']),
+        axis=1,
+    )
+    videos = videos[list(columns.keys())]
+    videos.rename(columns=columns, inplace=True)
+    html = videos.to_html(index=False, render_links=True, escape=False)
+    return html
+
+
+def update_readme_index(videos_file, readme_file):
+    """Create the table of episodes and update the `readme.md`."""
+    table = create_readme_index(videos_file)
+    with open(readme_file, 'r') as f:
+        text = f.readlines()
+        readme = ''.join([line for line in text])
+        intro = readme.split('<table')[0]
+        outro = readme.split('</table>')[-1]
+        updated_readme = ''.join([intro, table, outro])
+    with open(readme_file, 'w') as f:
+        f.write(updated_readme)
 
 
 # === Test ===
@@ -100,9 +175,13 @@ if __name__ == '__main__':
     # Get a transcript of the audio file.
     text = audio_to_text(audio_file)
 
-    # TODO: Summarize (perhaps with BERT) to get a title and description.
-    short_title, description = '', ''
+    # TODO: Summarize (with BERT) to get a title and description.
+    short_title = ''
+    description = ''
 
-    # TODO: Create background art (perhaps with Stable Diffusion) with the title.
+    # TODO: Create background art (with Stable Diffusion) with the title.
     # Save the background as needed to Firebase Storage.
     cover_image_url = ''
+
+    # Update the `readme.md`.
+    # update_readme_index('../assets/videos-stats.json', '../readme.md')

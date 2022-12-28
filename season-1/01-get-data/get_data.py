@@ -1,5 +1,5 @@
 """
-Get Data | Cannabis Data Science #1 | 2021-02-10
+Get Data | Cannabis Data Science #1 (2021-02-10)
 Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>

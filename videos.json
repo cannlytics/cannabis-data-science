@@ -1366,5 +1366,41 @@
     "video_url": "",
     "youtube_id": "",
     "keywords": []
+  },
+  {
+    "cover_image_url": "",
+    "description": "We tackle the sticky issue of lab shopping for cannabis quality control tests: the phenomena of cannabis cultivators patronizing labs that flout quality control testing regulations.\n\nFind the data and source code: https://github.com/cannlytics/cannabis-data-science\n\nJoin us at the next meetup: https://meetup.com/cannabis-data-science",
+    "id": "cannabis-data-science-episode-91",
+    "length": "",
+    "number": 91,
+    "recorded_at": "2022-12-14T00:00:00+00:00",
+    "published_at": "2022-12-16",
+    "short_title": "Solutions for Cannabis QC Testing Lab Shopping",
+    "size": " GB",
+    "source_code_url": "https://github.com/cannlytics/cannabis-data-science/tree/main/season-3/91-lab-shopping",
+    "thumbnail": "",
+    "title": "Solutions for Cannabis QC Testing Lab Shopping | Cannabis Data Science #91",
+    "video_id": "cannabis-data-science-episode-91",
+    "video_url": "",
+    "youtube_id": "",
+    "keywords": []
+  },
+  {
+    "cover_image_url": "",
+    "description": "Molds and diseases and pests, oh my! We confront some of the many cannabis contaminants and discuss how they affect producers and consumers alike. We also discuss the laboratories screening for contaminants and how any anomalies could be detected with an application of Benford's Law.\n\nFind the data and source code: https://github.com/cannlytics/cannabis-data-science\n\nJoin us at the next meetup: https://meetup.com/cannabis-data-science",
+    "id": "cannabis-data-science-episode-91",
+    "length": "",
+    "number": 92,
+    "recorded_at": "2022-12-14T00:00:00+00:00",
+    "published_at": "2022-12-16",
+    "short_title": "Contamination and Anomaly Detection with Benford's Law",
+    "size": " GB",
+    "source_code_url": "https://github.com/cannlytics/cannabis-data-science/tree/main/season-3/91-lab-shopping",
+    "thumbnail": "",
+    "title": "Contamination and Anomaly Detection with Benford's Law | Cannabis Data Science #92",
+    "video_id": "cannabis-data-science-episode-92",
+    "video_url": "",
+    "youtube_id": "",
+    "keywords": []
   }
 ]

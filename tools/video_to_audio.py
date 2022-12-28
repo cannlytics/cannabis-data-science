@@ -4,17 +4,16 @@ Copyright (c) 2022 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 4/4/2022
-Updated: 12/13/2022
+Updated: 12/20/2022
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Command-line example:
 
     ```
-    python tools/video_to_audio.py cannabis-statistics/cannabis-statistics-01
+    python tools/video_to_audio.py season-3/cannabis-data-science-92
     ```
 """
 # Standard imports:
-import os
 import sys
 from typing import Optional
 

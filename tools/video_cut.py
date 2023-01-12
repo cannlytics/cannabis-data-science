@@ -18,7 +18,6 @@ Command-line Usage:
 """
 # Standard imports:
 import math
-import sys
 from typing import Optional
 
 # External imports:
@@ -29,7 +28,7 @@ def find_speaking(
         audio_clip,
         window_size: Optional[float] = 0.1,
         volume_threshold: Optional[float] = 0.01,
-        ease_in: Optional[float] = 0.25
+        ease_in: Optional[float] = 0.25,
     ) -> list:
     """
     Iterate over a video's audio to find the non-silent parts. Outputs a
@@ -74,7 +73,11 @@ def find_speaking(
     return speaking_intervals
 
 
-def video_cut(video_file, edited_file):
+def video_cut(
+        video_file: str,
+        edited_file: str,
+        temp_audiofile: Optional[str] = 'temp-audio.m4a',
+    ) -> None:
     """Edit silence out of a video."""
 
     # Find intervals to keep.
@@ -90,11 +93,11 @@ def video_cut(video_file, edited_file):
         edited_file,
         fps=60,
         preset='ultrafast',
-        codec='libx264',
-        temp_audiofile='temp-audio.m4a',
+        codec='mpeg4',
+        temp_audiofile=temp_audiofile,
         remove_temp=True,
-        audio_codec="aac",
-        threads=6
+        audio_codec='aac',
+        threads=6,
     )
     vid.close()
 
@@ -102,23 +105,28 @@ def video_cut(video_file, edited_file):
 if __name__ == '__main__':
 
     # Command-line usage:
+    # import sys
     # video_cut(sys.argv[1], sys.argv[2])
 
     # Example:
-    import os
-    data_dir = 'D:\\cannabis-data-science\\videos'
-    video_file = 'Cannabis Data Science (2022-12-28 13_22 GMT-8).mp4'
-    edited_file = 'cannabis-data-science-2022-12-28-cut.mp4'
-    video_cut(os.path.join(data_dir, video_file), os.path.join(data_dir, edited_file))
+    # import os
+    # data_dir = 'D:\\cannabis-data-science\\videos'
+    # video_file = 'Cannabis Data Science (2022-12-28 13_22 GMT-8).mp4'
+    # edited_file = 'cannabis-data-science-2022-12-28-cut.mp4'
+    # video_cut(os.path.join(data_dir, video_file), os.path.join(data_dir, edited_file))
 
     # Example:
+    import os
     from cannlytics.utils import kebab_case
     data_dir = 'D:\\cannabis-data-science\\videos'
     output_dir = os.path.join(data_dir, 'cut')
-    video_files = os.listdir(os.path.join(data_dir, 'unedited'))
+    video_files = os.listdir(os.path.join(data_dir, 'pending'))
+    video_files.reverse()
     for video_file in video_files:
         edited_file = kebab_case(video_file).replace('-mp-4', '.mp4')
+        audio_file = edited_file.replace('mp4', 'm4a')
         video_cut(
-            os.path.join(data_dir, 'unedited', video_file),
-            os.path.join(data_dir, 'cut', edited_file)
+            os.path.join(data_dir, 'pending', video_file),
+            os.path.join(data_dir, 'cut', edited_file),
+            os.path.join(data_dir, 'audio', audio_file),
         )

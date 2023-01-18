@@ -4,14 +4,17 @@ Copyright (c) 2023 Cannlytics
 
 Authors:
     Keegan Skeate <https://github.com/keeganskeate>
-Created: 1/11/2023
-Updated: 1/11/2023
+Created: 1/18/2023
+Updated: 1/18/2023
 License: <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
-Data Source:
+Data Sources:
 
     - Washington State Liquor and Cannabis Board (WSLCB)
     URL: <https://lcb.box.com/s/xseghpsq2t4i1musxj6mgd7b8rhxe7bm>
+
+    - Curated CCRS Inventory Lab Results
+    URL: <https://cannlytics.page.link/ccrs-inventory-lab-results-2022-12-07>
 
 """
 # Standard imports:

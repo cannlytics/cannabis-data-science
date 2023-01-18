@@ -49,6 +49,8 @@ for datafile in inventory_files:
     ]
     acdc = pd.concat([acdc, match])
     print('Found', len(acdc), 'ACDC inventory items.')
+    if len(acdc):
+        break
 
 
 # Find all Cannatonic inventory items.

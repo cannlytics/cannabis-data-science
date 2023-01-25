@@ -74,11 +74,13 @@ daily_lab_tests = lab_results.groupby('created_date')['inventory_id'].count()
 daily_lab_tests.plot()
 
 # Restrict to lab results created in 2022.
+plt.figure(figsize=(8, 6))
 daily_lab_tests = lab_results.loc[
     (lab_results['created_date'] >= pd.to_datetime('2022-01-01')) &
     (lab_results['created_date'] <= pd.to_datetime('2022-12-31'))
 ].groupby('created_date')['inventory_id'].count()
 daily_lab_tests.plot()
+plt.show()
 
 
 #------------------------------------------------------------------------------
@@ -198,7 +200,7 @@ min_date = pd.to_datetime('2022-01-01')
 max_date = pd.to_datetime('2022-12-31')
 
 # Find when each variety first appeared.
-variety = 'runtz'
+variety = 'haze'
 strain_tests = lab_results.loc[
     lab_results['strain_name'].str.contains(variety, case=False)
 ]
@@ -211,7 +213,7 @@ title = f'Timeline of "{variety}" tests in WA in 2022'
 timeline(sample, sample.index, title, min_date, max_date)
 
 # Identify the creator of a particular strain.
-strain = 'Greasy Runtz'
+strain = 'Greasy Runtz #2'
 inventor = lab_results.loc[lab_results['strain_name'] == strain]
 inventor = inventor.loc[inventor['created_date'] == inventor['created_date'].min()]
 inventor_name = inventor.iloc[0]["retailer_dba"]

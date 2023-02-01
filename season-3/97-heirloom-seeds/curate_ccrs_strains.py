@@ -171,7 +171,7 @@ plt.show()
 
 # Visualize the top selling 20 strains.
 top_sellers = strain_stats['total_sold'].sort_values(ascending=False)[:20]
-top_sellers.div(1000).sort_values(ascending=True).plot.barh(figsize=(8, 12))
+top_sellers.div(1000).sort_values(ascending=True)[:-2].plot.barh(figsize=(8, 12))
 plt.ylabel('')
 plt.xlabel('Thousands of Pounds')
 plt.title('Cannabis Pounds Sold in WA in 2022 by Strain')

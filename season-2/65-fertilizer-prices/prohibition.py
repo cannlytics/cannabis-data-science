@@ -43,7 +43,7 @@ primary_colors = sns.color_palette('husl', n_colors=10)
 #------------------------------------------------------------------------------
 
 # Read NASS API key.
-config = dotenv_values('../.env')
+config = dotenv_values('../../.env')
 api_key = config['NASS_API_KEY']
 base = 'http://quickstats.nass.usda.gov/api/'
 

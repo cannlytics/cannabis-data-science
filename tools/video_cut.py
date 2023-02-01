@@ -4,13 +4,13 @@ Copyright (c) 2023 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 1/7/2022
-Updated: 1/7/2022
+Updated: 1/28/2023
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Authors:
     Keegan Skeate <https://github.com/keeganskeate>
-    Vivek Haldar <https://github.com/vivekhaldar>
-    Donald Feury  <https://gitlab.com/dak425/scripts/-/blob/master/trim_silenceV2>
+    Vivek Haldar (original) <https://github.com/vivekhaldar>
+    Donald Feury (original)  <https://gitlab.com/dak425/scripts/-/blob/master/trim_silenceV2>
 
 Command-line Usage:
 
@@ -77,18 +77,27 @@ def video_cut(
         video_file: str,
         edited_file: str,
         temp_audiofile: Optional[str] = 'temp-audio.m4a',
+        verbose: Optional[bool] = True,
     ) -> None:
     """Edit silence out of a video."""
 
     # Find intervals to keep.
+    if verbose:
+        print('Finding silence in:', video_file)
     vid = VideoFileClip(video_file)
     intervals = find_speaking(vid.audio)
     keep_clips = [
         vid.subclip(max(start, 0), end) for [start, end] in intervals
     ]
 
-    # Edit the video.
+    # Create new video.
+    if verbose:
+        print('Creating new video...')
     edited_video = concatenate_videoclips(keep_clips)
+
+    # Save edited video.
+    if verbose:
+        print('Saving new video:', edited_file)
     edited_video.write_videofile(
         edited_file,
         fps=60,
@@ -100,22 +109,27 @@ def video_cut(
         threads=6,
     )
     vid.close()
+    print('Created new video:', edited_file)
 
 # === Usage ===
 if __name__ == '__main__':
 
     # Command-line usage:
     # import sys
-    # video_cut(sys.argv[1], sys.argv[2])
+    # try:
+    #     video_cut(sys.argv[1], sys.argv[2])
+    # except:
+    #     print('Arguments not specified. Try:')
+    #     print('python video_cut D:\\videos\\video.mp4 D:\\videos\\edited-video.mp4')
 
-    # Example:
+    # Example: Cut a specific video.
     # import os
     # data_dir = 'D:\\cannabis-data-science\\videos'
     # video_file = 'Cannabis Data Science (2022-12-28 13_22 GMT-8).mp4'
     # edited_file = 'cannabis-data-science-2022-12-28-cut.mp4'
     # video_cut(os.path.join(data_dir, video_file), os.path.join(data_dir, edited_file))
 
-    # Example:
+    # Example: Cut all videos in a given directory.
     import os
     from cannlytics.utils import kebab_case
     data_dir = 'D:\\cannabis-data-science\\videos'

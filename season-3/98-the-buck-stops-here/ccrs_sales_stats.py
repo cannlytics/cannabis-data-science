@@ -1,88 +1,76 @@
 """
-Strain Analysis
-Copyright (c) 2022 Cannlytics
+Curate CCRS Sales
+Copyright (c) 2022-2023 Cannabis Data
 
 Authors:
     Keegan Skeate <https://github.com/keeganskeate>
-Created: 1/4/2023
-Updated: 1/4/2023
+Created: 1/1/2023
+Updated: 2/1/2023
 License: <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Data Source:
 
-    - Heritability in Cannabis by Chief Seven Turtles
-    Sinsemilla Tips Domestic Marijuana Journal
-    Compiled by Tom Alexander
+    - Washington State Liquor and Cannabis Board (WSLCB)
+    URL: <https://lcb.box.com/s/xseghpsq2t4i1musxj6mgd7b8rhxe7bm>
 
 """
 # Standard imports:
 import os
 
 # External imports:
+from cannlytics.data import create_hash
+from cannlytics.data.ccrs import anonymize
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 
-# Setup plotting style.
-plt.style.use('fivethirtyeight')
-plt.rcParams.update({
-    'font.family': 'Times New Roman',
-    'font.size': 21,
-})
+#------------------------------------------------------------------------------
+# Setup
+#------------------------------------------------------------------------------
 
-# Read in the data.
-data = pd.read_excel('heritability.xlsx')
+# Specify where your data lives.
+base = 'D:\\data\\washington\\'
+data_dir = f'{base}\\CCRS PRR (12-7-22)\\CCRS PRR (12-7-22)\\'
+stats_dir = f'{base}\\ccrs-stats\\'
 
-# Separate the two methods.
-seeds = data.loc[data['method'] == 'seed']
-clones = data.loc[data['method'] == 'clone']
+# Get the licensees.
+licensee_stats_dir = os.path.join(stats_dir, 'licensee_stats')
+licensees = os.listdir(licensee_stats_dir)
 
-# Visualize seed plot differences.
-sns.displot(
-    data=seeds,
-    x='thc',
-    hue='plot',
-    kind='kde',
-    fill=True,
-    palette=sns.color_palette('bright')[2:4],
-    height=6,
-    aspect=1.5
-)
-plt.title('Variance in THC in Cannabis Propagated by Seed (1988)')
-plt.show()
 
-# Visualize clone plot differences.
-sns.displot(
-    data=clones,
-    x='thc',
-    hue='plot',
-    kind='kde',
-    fill=True,
-    palette=sns.color_palette('bright')[2:4],
-    height=6,
-    aspect=1.5
-)
-plt.title('Variance in THC in Cannabis Propagated by Clone (1988)')
-plt.show()
+#------------------------------------------------------------------------------
+# Data curation
+#------------------------------------------------------------------------------
 
-# Visualize seed vs. clone variance.
-sns.displot(
-    data=data,
-    x='thc',
-    hue='method',
-    kind='kde',
-    fill=True,
-    palette=sns.color_palette('bright')[:2],
-    height=6,
-    aspect=1.5
-)
-plt.title('Variance in THC in Cannabis by Propagation Method (1988)')
-plt.show()
+# Iterate over the licensees sales.
+solid_edibles = pd.DataFrame()
+liquid_edibles = pd.DataFrame()
+for licensee_id in licensees:
 
-# Calculate heritability.
-environmental_variation = clones.groupby('plot')['thc'].var().mean()
-phenotypic_variation = seeds.groupby('plot')['thc'].var().mean()
-genetic_variation = phenotypic_variation - environmental_variation
-heritability = genetic_variation / phenotypic_variation
-print('Heritability:', round(heritability, 2))
+    # Read the data.
+    month = '2022-11'
+    filename = f'{licensee_id}/sales-{licensee_id}-{month}.xlsx'
+    datafile = os.path.join(licensee_stats_dir, filename)
+    try:
+        data = pd.read_excel(datafile)
+        assert 'InventoryType' in data.columns
+    except:
+        continue
+
+    # Anonymize the data.
+    data = anonymize(data)
+
+    # Create a hash of the data.
+    # create_hash(data.to_json())
+
+    # Keep track of data by sample type.
+    solid_edibles_data = data.loc[data['InventoryType'] == 'Solid Edible']
+    liquid_edibles_data = data.loc[data['InventoryType'] == 'Liquid Edible']
+    solid_edibles = pd.concat([solid_edibles, solid_edibles_data])
+    liquid_edibles = pd.concat([liquid_edibles, liquid_edibles_data])
+
+
+#------------------------------------------------------------------------------
+# Analysis
+#------------------------------------------------------------------------------
+
+# What is the most popular edible?

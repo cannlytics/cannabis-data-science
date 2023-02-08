@@ -157,7 +157,8 @@ inventory_files = sorted_nicely(os.listdir(inventory_dir))
 lab_results_dir = os.path.join(stats_dir, 'lab_results')
 results_file = os.path.join(lab_results_dir, 'lab_results_0.xlsx')
 sales_items_files = get_datafiles(data_dir, 'SalesDetail_')
-for i, datafile in enumerate(sales_items_files):
+sales_items_files.reverse()
+for i, datafile in enumerate(sales_items_files[6:]):
     print('Augmenting:', datafile)
     midpoint_start = datetime.now()
 
@@ -200,7 +201,10 @@ for i, datafile in enumerate(sales_items_files):
     # Augment with curated inventory.
     print('Merging inventory data...')
     for datafile in inventory_files:
-        data = pd.read_excel(os.path.join(inventory_dir, datafile))
+        try:
+            data = pd.read_excel(os.path.join(inventory_dir, datafile))
+        except:
+            continue
         data['InventoryId'] = data['InventoryId'].astype(str)
         # FIXME: Why are there duplicates?
         data.drop_duplicates(subset='InventoryId', keep='first', inplace=True)
@@ -224,6 +228,13 @@ for i, datafile in enumerate(sales_items_files):
     # Augment with curated lab results.
     print('Merging lab result data...')
     data = pd.read_excel(results_file)
+    data.rename(columns={
+        'inventory_id': 'InventoryId',
+        'created_by': 'results_created_by',
+        'created_date': 'results_created_date',
+        'updated_by': 'results_updated_by',
+        'updated_date': 'results_updated_date',
+    }, inplace=True)
     data['InventoryId'] = data['InventoryId'].astype(str)
     items = rmerge(
         items,

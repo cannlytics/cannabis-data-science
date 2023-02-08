@@ -158,7 +158,7 @@ lab_results_dir = os.path.join(stats_dir, 'lab_results')
 results_file = os.path.join(lab_results_dir, 'lab_results_0.xlsx')
 sales_items_files = get_datafiles(data_dir, 'SalesDetail_')
 sales_items_files.reverse()
-for i, datafile in enumerate(sales_items_files[1:]):
+for i, datafile in enumerate(sales_items_files[6:]):
     print('Augmenting:', datafile)
     midpoint_start = datetime.now()
 

@@ -5,7 +5,7 @@ Copyright (c) 2023 Cannlytics
 Authors:
     Keegan Skeate <https://github.com/keeganskeate>
 Created: 2/2/2023
-Updated: 2/2/2023
+Updated: 2/8/2023
 License: <https://github.com/cannlytics/cannlytics/blob/main/LICENSE>
 
 References:
@@ -17,21 +17,14 @@ References:
     URL: <https://platform.openai.com/docs/models/gpt-3>
 
 """
-
-# Standard imports:
-import os
-
 # External imports:
 from dotenv import dotenv_values
 import openai
 
 # Get your OpenAI API key.
 # URL: <https://platform.openai.com/account/api-keys>
-config = dotenv_values('.env')
+config = dotenv_values('../../.env')
 openai.api_key = config['OPENAI_API_KEY']
-user = config.get('OPENAI_USER')
-# openai.organization = 'org-xyz'
-
 
 # Create a completion prompt.
 #
@@ -48,81 +41,144 @@ user = config.get('OPENAI_USER')
 #   - `temperature`: Use higher values (0 to 1) for more creativity.
 #   - `top_p`: Use lower values (0 to 1) for more creativity.
 #              It's suggested to alter either `top_p` or `temperature`, not both.
-openai.Completion.create(
+response = openai.Completion.create(
   model='text-davinci-003',
-  prompt='Write a summary of terpinolene',
-  max_tokens=600,
-  temperature=0.9,
+  prompt='Summary of Super Silver Haze',
+  max_tokens=300,
+  temperature=0.42,
   n=1,
-  best_of=3,
-  finish_reason='stop',
+#   best_of=3,
+#   finish_reason='stop',
 #   frequency_penalty=0.0,
 #   presence_penalty=1
 #   top_p=0.1,
 )
+print(response['choices'][0]['text'])
 
 # Edit text.
-openai.Edit.create(
-  model="text-davinci-edit-001",
-  input="What day of the wek is it?",
-  instruction="Fix the spelling mistakes",
-  temperature=0.9,
+response = openai.Edit.create(
+  model='text-davinci-edit-001',
+  input='Pesticide - Piperonyl Butoxide (ug/g)',
+  instruction='analysis, compound, and units in JSON',
   n=1,
+  temperature=0,
 )
+print(response['choices'][0]['text'])
 
-# TODO: Summarize text.
-body_of_text = ''
+# Find data in text.
+prompt = 'analysis, compound, and units in JSON given:'
+prompt += 'Pesticide - Piperonyl Butoxide (ug/g)'
+print(prompt)
+response = openai.Completion.create(
+  model='text-davinci-003',
+  prompt=prompt,
+  max_tokens=100,
+  n=1,
+  temperature=0,
+)
+print(response['choices'][0]['text'])
+
+# Summarize text.
+body_of_text = response['choices'][0]['text']
 prompt = body_of_text + '\n\ntl;dr'
+print(prompt)
+response = openai.Completion.create(
+  model='text-davinci-003',
+  prompt=prompt,
+  max_tokens=100,
+  n=1,
+  temperature=0,
+)
+print(response['choices'][0]['text'])
 
-# TODO: Create a table from text.
-# A two-column spreadsheet
-# of top science fiction movies and the year 
-# Title |  Year of release
+# Create a table from text.
+prompt = 'A two-column table of 5 '
+prompt += 'terpenes found in cannabis and their boiling point'
+prompt += '\nTerpene | Boiling point'
+print(prompt)
+response = openai.Completion.create(
+  model='text-davinci-003',
+  prompt=prompt,
+  max_tokens=300,
+  n=1,
+  temperature=0,
+)
+print(response['choices'][0]['text'])
 
-# TODO: Text to color.
-prompt = """The CSS code for a color like a blue sky at dusk:
+# Text to color.
+prompt = 'Best color hex for: '
+prompt += 'Super Silver Haze'
+print(prompt)
+response = openai.Completion.create(
+  model='text-davinci-003',
+  prompt=prompt,
+  max_tokens=100,
+  n=1,
+  temperature=0,
+)
+print(response['choices'][0]['text'])
 
-background-color: #"""
+# Text to emoji.
+prompt = 'Best emoji HTML hex for: '
+prompt += 'Grape Ape'
+print(prompt)
+response = openai.Completion.create(
+  model='text-davinci-003',
+  prompt=prompt,
+  max_tokens=100,
+  n=1,
+  temperature=0,
+)
+print(response['choices'][0]['text'])
 
-# TODO: Create a recipe for cannabis edibles given ingredients, a product,
+# Create a recipe for cannabis edibles given ingredients, a product,
 # and the desired dose per serving. Get the serving size and number of servings
 # per dish.
 prompt = """Write a recipe based on these ingredients and instructions:
 
-Frito Pie
-
-Ingredients:
-Fritos
-Chili
-Shredded cheddar cheese
-Sweet white or red onions, diced small
-Sour cream
+cannabis oil
+avocado
+toast
 
 Instructions:"""
+print(prompt)
+response = openai.Completion.create(
+  model='text-davinci-003',
+  prompt=prompt,
+  max_tokens=100,
+  n=1,
+  temperature=0,
+)
+print(response['choices'][0]['text'])
 
 # Create an image.
-openai.Image.create(
-  prompt='A cute baby sea otter',
+response = openai.Image.create(
+  prompt='A small garden of homegrown cannabis',
   n=1,
-  size='1024x1024'
+  size='1024x1024',
 )
-
+image_url = response['data'][0]['url']
+print(image_url)
 
 # Edit an existing image.
-image_file = 'flower.png'
-mask_file = 'jar.png'
-openai.Image.create_edit(
+image_file = 'imgs/bud.png'
+mask_file = 'imgs/homebaking-mask.png'
+response = openai.Image.create_edit(
   image=open(image_file, 'rb'),
   mask=open(mask_file, 'rb'),
-  prompt='A cannabis bud in a jar in space',
+  prompt='A journal for taking notes on cannabis',
   n=1,
   size='1024x1024'
 )
+image_url = response['data'][0]['url']
+print(image_url)
 
 # Create a variation of an existing image.
-image_file = 'flower.png'
-openai.Image.create_variation(
+image_file = 'imgs/bud.png'
+response = openai.Image.create_variation(
   image=open(image_file, 'rb'),
   n=1,
   size='1024x1024'
 )
+image_url = response['data'][0]['url']
+print(image_url)

@@ -1,11 +1,11 @@
 """
-Open Cannabis Data
+Open Cannabis AI
 Copyright (c) 2023 Cannlytics
 
 Authors:
     Keegan Skeate <https://github.com/keeganskeate>
 Created: 2/2/2023
-Updated: 2/8/2023
+Updated: 2/12/2023
 License: <https://github.com/cannlytics/cannlytics/blob/main/LICENSE>
 
 References:
@@ -93,7 +93,7 @@ print(response['choices'][0]['text'])
 
 # Create a table from text.
 prompt = 'A two-column table of 5 '
-prompt += 'terpenes found in cannabis and their boiling point'
+prompt += 'terpenes found in cannabis and their boiling points'
 prompt += '\nTerpene | Boiling point'
 print(prompt)
 response = openai.Completion.create(
@@ -161,7 +161,7 @@ image_url = response['data'][0]['url']
 print(image_url)
 
 # Edit an existing image.
-image_file = 'imgs/bud.png'
+image_file = 'imgs/plants.png'
 mask_file = 'imgs/homebaking-mask.png'
 response = openai.Image.create_edit(
   image=open(image_file, 'rb'),
@@ -174,7 +174,7 @@ image_url = response['data'][0]['url']
 print(image_url)
 
 # Create a variation of an existing image.
-image_file = 'imgs/bud.png'
+image_file = 'imgs/plants.png'
 response = openai.Image.create_variation(
   image=open(image_file, 'rb'),
   n=1,

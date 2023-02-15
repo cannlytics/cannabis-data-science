@@ -1,0 +1,350 @@
+%------------------------------------------%
+% Cannabis Data Science #100
+% Copyright (c) 2023 Cannlytics
+% Date: 2/15/2023
+%------------------------------------------%
+\documentclass[xcolor={dvipsnames}]{beamer}
+\hypersetup{pdfpagemode = FullScreen}
+\mode<presentation>{
+  \usetheme{Boadilla}
+  \usecolortheme{orchid}
+  \usefonttheme{default}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+}
+\setbeamersize{
+  text margin left = 0.5in,
+  text margin right = 0.5in
+}
+
+%------------------------------------------%
+% Title
+%------------------------------------------%
+\title[\textbf{Cannabis Data Science \#100}]{}
+\author{Cannlytics}
+\institute[]{\Large Cannabis Data Science \#100}
+\date{February \nth{15}, 2023}
+
+%------------------------------------------%
+% Packages
+%------------------------------------------%
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{tikz} % For styling.
+\usepackage{xparse}
+\usepackage{amsmath}
+\renewcommand*\footnoterule{} % No footnote line.
+\usepackage{mathtools} % Annotating equations.
+\usepackage{hhline} % Double bars.
+\usepackage[super]{nth} % 1st, 2nd, 3rd, etc.
+\usepackage{graphicx, caption, subcaption}
+\usepackage{setspace}
+\usepackage[charter]{mathdesign}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{arrows.meta}
+
+%------------------------------------------%
+% Theme
+%------------------------------------------%
+\definecolor{LG}{RGB}{218, 247, 166}
+\definecolor{DG}{RGB}{2, 48, 32}
+\setbeamercolor*{palette primary}{bg=LG, fg=DG}
+\setbeamercolor*{palette secondary}{bg=LG, fg=DG}
+\setbeamercolor*{palette tertiary}{bg=LG, fg=DG}
+
+%------------------------------------------%
+% Commands
+%------------------------------------------%
+
+% Top space.
+\newcommand\T{\rule{0pt}{2.5ex}}
+
+% Bottom space.
+\newcommand\B{\rule[-1.25ex]{0pt}{0pt}}
+
+% Blocks.
+\newenvironment<>{Block}[2][.9\textwidth]
+  {\setlength{\textwidth}{#1}
+  \begin{actionenv}#3
+    \def\insertblocktitle{#2}\par
+    \usebeamertemplate{block begin}}
+  {\par\usebeamertemplate{block end}
+  \end{actionenv}}
+
+% Balls.
+\defbeamertemplate{enumerate item}{largeball}
+{\begin{pgfpicture}{-1ex}{-0.65ex}{1.5ex}{1.5ex}
+\usebeamercolor[fg]{item projected}
+{\pgftransformscale{2.5}\pgftext{\Large\pgfuseshading{bigsphere}}}
+{\pgftransformshift{\pgfpoint{0pt}{0.5pt}}
+\pgftext{\usebeamerfont*{item projected}\small\insertenumlabel}}
+\end{pgfpicture}}
+
+% Fancy arrows.
+\NewDocumentCommand\UpArrow{O{2.0ex} O{black}}{%
+   \mathrel{\tikz[baseline] \draw [->, line width=0.5pt, #2] (0,0) -- ++(0,#1);}} % Fancy up-arrow.
+\NewDocumentCommand\DownArrow{O{2.0ex} O{black}}{%
+   \mathrel{\tikz[baseline] \draw [<-, line width=0.5pt, #2] (0,0) -- ++(0,#1);}} % Fancy down-arrow.
+
+% Equations with numbers on the left.
+\makeatletter
+\newcommand{\LeftEqNo}{\let\veqno\@@leqno}
+\makeatother
+
+% Print out title.
+\defbeamertemplate*{title page}{customized}[1][]
+{
+  \usebeamerfont{title}\inserttitle\par
+  \bigskip
+  \vspace{0.5\baselineskip}
+  \usebeamerfont{institute}\insertinstitute\par
+  \vspace{0.5\baselineskip}
+  {\small\usebeamerfont{date}\insertdate\par}
+  \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+}
+
+%------------------------------------------%
+% Presentation
+%------------------------------------------%
+\begin{document}
+
+% Title page.
+\begin{frame}{}
+
+% Background
+\tikz[remember picture, overlay]
+\node[opacity=1.0, inner sep=0pt] at (current page.center){
+  \includegraphics[height=\paperheight, width=\paperwidth]{images/presentation-cover.pdf}
+};
+
+% Title
+\vspace*{4\baselineskip}
+\includegraphics[scale=0.375]{images/logo.pdf}
+\vspace*{-2\baselineskip}
+\titlepage
+\end{frame}
+
+%------------------------------------------%
+% Introduction
+%------------------------------------------%
+
+\begin{frame}{The State of the Industry is not Good}
+
+% Column 
+\begin{minipage}{0.65\textwidth}
+\includegraphics[width=\textwidth]{images/cra-violation.png}
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.3\textwidth}
+\includegraphics[width=\textwidth]{images/shady-oil-2.jpeg}
+\end{minipage}
+
+\vspace{0.5\baselineskip}
+
+% Column 
+\begin{minipage}{0.65\textwidth}
+\includegraphics[width=\textwidth]{images/cra-notice.png}
+\includegraphics[width=\textwidth]{images/cra-notice-2.png}
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.3\textwidth}
+\includegraphics[width=\textwidth]{images/shady-oil.jpeg}
+\end{minipage}
+
+\end{frame}
+
+
+% 1850 Parmenter Rd Corunna, MI
+% 4779 E RAMON RD Palm Springs, CA 92264
+% 713 Grove St, Fayetteville, NC 28301
+
+%https://www.michigan.gov/lara/news-releases/2023/02/03/cannabis-regulatory-agency-summarily-suspends-licenses-of-corunna-processor
+
+%------------------------------------------%
+% Current Systems
+%------------------------------------------%
+
+\begin{frame}{Current Cannabis Traceability Systems}
+
+\begin{minipage}{0.35\textwidth}
+
+{\small Metrc, Biotrack, etc. rely on {\bfseries trust}.}
+
+\end{minipage}\hspace{0.075\textwidth}%
+\begin{minipage}{0.55\textwidth}
+
+\vspace{0.5\baselineskip}
+
+\includegraphics[width=\textwidth]{images/metrc-map.png}
+
+{\tiny Source: metrc.com/partners}
+
+\end{minipage}
+
+{\small As a result:}
+
+\vspace{1\baselineskip}
+\begin{itemize}
+
+\small
+
+\item Merchants must be {\bfseries wary} of their customers and seek information, often through costly means.
+
+\vspace{1\baselineskip}
+
+\item A certain amount of {\bfseries fraud} is accepted as unavoidable.
+
+\vspace{1\baselineskip}
+
+\item There can be a {\bfseries high cost} of mediating disputes.
+
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------%
+% Consequences of the current system
+%------------------------------------------%
+
+\begin{frame}{Consequences of the current system}
+
+\begin{minipage}{0.475\textwidth}
+
+\includegraphics[width=\textwidth]{images/candy-shop-search.png}
+
+\vspace{3\baselineskip}
+
+{\tiny Source: https://www.wdam.com/2023/01/26/
+hattiesburg-candy-shop-locations-searched-by-fbi-dea/}
+
+\end{minipage}\hspace{0.025\textwidth}%
+\begin{minipage}{0.475\textwidth}
+
+\includegraphics[width=\textwidth]{images/robert-deming.png}
+
+\vspace{3\baselineskip}
+
+{\tiny Source: https://www.wxxv25.com/dea-searches-biloxi-councilman-robert-demings-home-businesses/}
+
+\end{minipage}
+
+\end{frame}
+
+%------------------------------------------%
+% Introduction
+%------------------------------------------%
+
+
+\begin{frame}{A Peer--to--peer Cannabis Traceability System}
+
+\begin{center}
+\includegraphics[width=0.65\textwidth]{images/bitcoin-privacy.png}
+\end{center}
+
+\begin{minipage}{0.5\textwidth}
+
+\begin{itemize}
+
+\small
+
+\item Rely on {\bfseries cryptographic proof} instead of trust.
+
+\vspace{1\baselineskip}
+
+\item Buyers and sellers would be {\bfseries protected from fraud}.
+
+\vspace{1\baselineskip}
+
+\item {\bfseries Direct transactions} without having to trust a 3rd party or a state.
+
+\end{itemize}
+
+\end{minipage}\hspace{0.05\textwidth}%
+\begin{minipage}{0.45\textwidth}
+
+\includegraphics[width=\textwidth]{images/bitcoin-signing.png}
+
+\vspace{1\baselineskip}
+
+\includegraphics[width=\textwidth]{images/bitcoin-blockchain.png}
+
+\vspace{1\baselineskip}
+
+\end{minipage}
+
+\vfill
+
+{\tiny Source: Satoshi Nakamoto. (2008). Bitcoin: A Peer-to-Peer Electronic Cash System. Retrieved from https://bitcoin.org/bitcoin.pdf}
+
+\end{frame}
+
+%
+%a hash of a block of items to be timestamped 
+%
+%wide publishing of the hash
+%
+%The timestamp proves that the data must have existed at the time
+%
+%additional timestamp reinforcing the ones before it
+%
+%Confirmations are nothing but just the number of blocks added after the block the transaction was added in
+
+
+% https://wiki-or.metrc.com/
+% https://www.michigan.gov/lara/news-releases/2023/02/03/cannabis-regulatory-agency-summarily-suspends-licenses-of-corunna-processor
+% https://www.wdam.com/2023/01/26/hattiesburg-candy-shop-locations-searched-by-fbi-dea/
+% https://www.wxxv25.com/dea-searches-biloxi-councilman-robert-demings-home-businesses/
+
+% https://goodlabcolorado.com/2017/07/10/marijuana-math-calculating-milligrams-per-milliliter-in-liquids/
+% https://www.quora.com/How-many-mls-of-cannabis-oil-equal-1-gram
+% https://www.bccannabiswholesale.com/blogs/news/converting-potency-from-mg-g-to#:~:text=Oils%20will%20change%20from%20mg,is%200.93%20g%2Fml).
+
+
+%------------------------------------------%
+% Takeaway
+%------------------------------------------%
+\section{Takeaway}
+
+\begin{frame}{}
+
+\vspace{0.5\baselineskip}
+
+\begin{center}
+\begin{minipage}{3.85in}
+
+% Thank you.
+\includegraphics[width=.25in]{images/prayer.png} {\Large \textbf{Thank you for coming.}}\\[-0.75\baselineskip]
+
+\end{minipage}
+\end{center}
+
+{\large Insight:}\\
+
+\begin{itemize}
+
+\vspace{0.5\baselineskip}
+\item Code is read far more than it is written.
+
+
+%\item Eating out vs. cooking at home may be a good comparison for retail to homebaking.
+%
+%
+%\item Abundance.
+
+\end{itemize}
+
+
+
+%\vspace{0.5\baselineskip}
+
+%{\large What is on your mind for next week?}\\
+
+% TODO: Insight
+
+
+\end{frame}
+
+
+%------------------------------------------%
+% Fin.
+%------------------------------------------%
+\end{document}

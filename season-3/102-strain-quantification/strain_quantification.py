@@ -1,5 +1,5 @@
 """
-Strain Quantification
+Strain Quantification | What makes a cheese a cheese?
 Copyright (c) 2023 Cannlytics
 
 Authors:
@@ -92,10 +92,10 @@ sns.displot(
     kind='kde',
     fill=False,
     palette=sns.color_palette('bright', n_colors=len(terpene_data['key'].unique())),
-    height=8,
-    aspect=1.8,
+    height=7,
+    aspect=1.5,
 )
-plt.xlim(0)
+plt.xlim(0, 0.075)
 
 
 #------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ list(wa_cheese['strain_name'].unique())
 # Get WA cheese results.
 cannabinoid = 'thca'
 wa_cheese = wa_cheese.loc[
-    (wa_cheese[cannabinoid] > 10) &
+    (wa_cheese[cannabinoid] > 0) &
     (wa_cheese[cannabinoid] < 100)
 ]
 wa_cheese[cannabinoid].hist(bins=50)
@@ -218,10 +218,12 @@ print('Average THCA in MA cheese:', f'{ma_average}%')
 
 # Compile all MA and WA data into a panel dataset.
 ma_sample = pd.DataFrame({
+    'product_name': ma_cheese['product_name'],
     'value': ma_cheese['value'],
     'state': 'MA',
 })
 wa_sample = pd.DataFrame({
+    'product_name': wa_cheese['strain_name'],
     'value': wa_cheese['thca'],
     'state': 'WA',
 })
@@ -236,3 +238,4 @@ model = sm.OLS(Y, X).fit()
 print(model.summary())
 
 # TODO: Compare THC to CBD ratio.
+

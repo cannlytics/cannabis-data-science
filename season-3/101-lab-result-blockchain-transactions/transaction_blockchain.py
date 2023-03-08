@@ -100,7 +100,7 @@ if __name__ == '__main__':
     # Read lab results data.
     import pandas as pd
     data = pd.read_excel('mcr-lab-results-2023-02-06T14-35-24.xlsx')
-    
+
     # Sort by date.
     data.sort_values('date_tested', inplace=True)
 
@@ -109,7 +109,7 @@ if __name__ == '__main__':
         producer = row['producer']
         lab = row['lab']
         observation = row.to_json()
-        transaction = blockchain.new_transaction(producer, lab, observation)
+        transaction = blockchain.new_transaction(lab, producer, observation)
 
     # Create a new block.
     blockchain.new_block(12345)
@@ -119,7 +119,7 @@ if __name__ == '__main__':
         producer = row['producer']
         lab = row['lab']
         observation = row.to_json()
-        transaction = blockchain.new_transaction(producer, lab, observation)
+        transaction = blockchain.new_transaction(lab, producer, observation)
 
     # Create a new block.
     blockchain.new_block(6789)

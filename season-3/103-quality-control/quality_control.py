@@ -138,7 +138,7 @@ licensee_mean_failure_rate = licensee_failure_data['failure_rate'].mean()
 print(f'Mean licensee failure rate: {round(licensee_mean_failure_rate * 100, 2)}%')
 
 # Calculate standard deviation of licensee averages.
-licensee_failure_rate_std = failure_data['failure_rate'].std()
+licensee_failure_rate_std = licensee_failure_data['failure_rate'].std()
 print(f'Licensee failure rate std. deviation: {round(licensee_failure_rate_std * 100, 2)}%')
 
 # Rank each licensee against the standard.
@@ -149,7 +149,7 @@ ranking = licensee_failure_data.sort_values(by='failure_rate', ascending=True)
 
 # Insight: Identify licensees with lowest failure rates.
 print('Lowest Failure Rates:')
-print(ranking.head(20))
+print(ranking.head(10))
 
 # Insight: Identify licensees with highest failure rates.
 print('Highest Failure Rates:')
@@ -158,7 +158,7 @@ print(ranking.tail(20))
 # Plot failure rate of licensees who are failing.
 licensee_failure_data['failure_rate'].loc[
     (licensee_failure_data['failure_rate'] > 0) &
-    (licensee_failure_data['failure_rate'] < 0.275)
+    (licensee_failure_data['failure_rate'] < 1)
 ].mul(100).hist(bins=100, figsize=(12, 8))
 plt.xlabel('Failure Rate (%)')
 plt.ylabel('Density')

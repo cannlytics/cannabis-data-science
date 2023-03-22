@@ -131,6 +131,7 @@ class StrainResult(BaseModel):
 
 class Strain(BaseModel):
     """A data class representing a cannabis strain."""
+    cultivar: str
     strain_name: str
     first_produced_at: str
     first_produced_by: str

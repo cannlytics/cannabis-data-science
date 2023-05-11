@@ -4,7 +4,7 @@ Copyright (c) 2023 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 5/10/2023
-Updated: 5/10/2023
+Updated: 5/11/2023
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Data Source:
@@ -131,17 +131,25 @@ figure = Basemap(
     resolution='l',
 )
 
-# Read shapefile and draw provinces
+# Shade oceans
+figure.drawlsmask(
+    land_color='#ededed',
+    ocean_color='#add8e6',
+    lakes=True,
+    resolution='l',
+)
+
+# Read shapefile and draw provinces.
 shapefile_path = './south-africa-shapefile/js788dt6134'
 figure.readshapefile(shapefile_path, 'provinces', linewidth=0.5)
 
-# Create a colormap
+# Create a colormap.
 cmap = plt.cm.YlOrRd
 
 # Normalize the counts of licenses.
 norm = plt.Normalize(vmin=counts.min(), vmax=counts.max())
 
-# Iterate through provinces and match with DataFrame, then shade the polygon
+# Iterate through provinces, match with counts, and then shade a polygon.
 provinces, texts = [], []
 for info, shape in zip(figure.provinces_info, figure.provinces):
     province_name = info['name_1'].replace('-', ' ')
@@ -150,7 +158,7 @@ for info, shape in zip(figure.provinces_info, figure.provinces):
     poly = plt.Polygon(shape, facecolor=color, edgecolor='k')
     plt.gca().add_patch(poly)
 
-    # Annotate province names
+    # Annotate province names.
     if province_name not in provinces:
         provinces.append(province_name)
     else:
@@ -169,11 +177,11 @@ for info, shape in zip(figure.provinces_info, figure.provinces):
             boxstyle='round,pad=0.3'
         )
     )
-    if province_name in ['Gauteng', 'Mpumalanga', 'North West']:
+    if province_name in ['North West', 'Mpumalanga', 'Gauteng']:
         texts.append(text)
 
 # Adjust text positions to prevent overlaps
-adjust_text(texts)
+adjust_text(texts, ha='left')
 
 # Add legend
 num_colors = 5
@@ -187,9 +195,6 @@ plt.legend(
     loc='lower right',
     frameon=True,
 )
-
-# Shade oceans
-figure.drawlsmask(land_color='#EDEDED', ocean_color='#add8e6', lakes=True, resolution='l')
 
 # Add footnote
 footnote = """\\textbf{Author}: Cannlytics and the Cannabis Data Science Team (2023).\n
@@ -216,18 +221,20 @@ figure.drawcoastlines(linewidth=1)
 figure.drawcountries(linewidth=0.5)
 
 # Render the map.
-plt.gcf().set_size_inches(20, 10)
+plt.gcf().set_size_inches(30, 10)
 plt.title(
-    'South Africa Cannabis Cultivation Licenses by Province',
+    'South Africa Cannabis Cultivation\nLicenses by Province',
     fontsize=28,
     pad=10,
 )
 
-# Save the figure to a file (change the file path and format as needed)
+# Save the figure to a file.
+plt.axis('off')
 plt.savefig(
-    'south-africa-cannabis-cultivations.png',
+    'south-africa-cannabis-cultivations-no-text.png',
     dpi=300,
     bbox_inches='tight',
-    facecolor='#add8e6'
+    facecolor='#add8e6',
+    edgecolor='none',
 )
 plt.show()

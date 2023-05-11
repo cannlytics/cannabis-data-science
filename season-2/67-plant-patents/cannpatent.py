@@ -37,12 +37,12 @@ from typing import Any, Optional, Union
 
 # External imports.
 from bs4 import BeautifulSoup
-from cannlytics.utils.data import to_excel_with_style
 from cannlytics.utils.utils import (
     camel_to_snake,
     clean_dictionary,
     kebab_case,
     snake_case,
+    to_excel_with_style,
 )
 import math
 import pandas as pd
@@ -342,7 +342,8 @@ def get_patent_details(
     patent['claims'] = [x.replace('\n', ' ').strip() for x in claims]
 
     # TODO: Download the PDF for the patent.
-    # - Upload the PDF to Firebase Storage, saving the ref with the data.
+    # - Upload the PDF to Firebase Storage
+    # - Save the ref and URL with the data.
 
     # Optional: Get plant details.
 

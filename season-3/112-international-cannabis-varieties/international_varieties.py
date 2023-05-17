@@ -272,7 +272,7 @@ mi_results['state'] = 'mi'
 # Re-index results.
 ca_results.set_index('lab_result_id', inplace=True)
 ct_results.set_index('lab_result_id', inplace=True)
-mi_results.set_index('lab_result_id', inplace=True)
+# mi_results.set_index('lab_result_id', inplace=True)
 wa_results.set_index('lab_result_id', inplace=True)
 
 # Hot-fix: Drop duplicate columns.

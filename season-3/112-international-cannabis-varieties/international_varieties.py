@@ -17,12 +17,25 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+# Setup plotting style.
+plt.style.use('fivethirtyeight')
+plt.rcParams.update({
+    'figure.figsize': (6, 4),
+    'font.family': 'Times New Roman',
+    'font.size': 18,
+})
+
 
 #-----------------------------------------------------------------------
 # Get the data.
 #-----------------------------------------------------------------------
 
 METADATA = {
+    'ca': {
+        'columns': {
+            'sample_id': 'lab_result_id',
+        },
+    },
     'ct': {
         'columns': {
             'id': 'lab_result_id',
@@ -42,10 +55,15 @@ METADATA = {
         }
     },
     'ma': {
-        'product_name': 'product_name',
-        'product_type': 'product_type',
-        'date_tested': 'created_at',
-        'results': 'results',
+        'columns': {
+            'date_tested': 'created_at',
+        },
+    },
+    'mi': {
+        'columns': {
+            'sample_id': 'lab_result_id',
+            'date_tested': 'created_at',
+        },
     },
     'wa': {
         'columns': {
@@ -64,35 +82,49 @@ METADATA = {
 }
 
 # Read CT lab results.
-datafile = 'D://data/connecticut/lab_results/ct-results-2023-05-06.xlsx'
+datafile = 'D://data/connecticut/lab_results/ct-results-2023-05-16.xlsx'
 ct_results = pd.read_excel(datafile)
 ct_results.rename(columns=METADATA['ct']['columns'], inplace=True)
 print('CT results:', ct_results.shape)
 
 # Read MA lab results.
-datafile = 'D://data/massachusetts/lab_results/mcr-lab-results-2023-05-06.xlsx'
+datafile = 'D://data/massachusetts/lab_results/mcr-lab-results-2023-05-17.xlsx'
 ma_results = pd.read_excel(datafile)
 print('MA results:', ma_results.shape)
 
 # Read WA lab results.
-datafile = 'D://data/washington/lab_results/wa-lab-results-2022-12-07.xlsx'
+datafile = 'D://data/washington/lab_results/wa-lab-results-2023-04-04.xlsx'
 wa_results = pd.read_excel(datafile)
 wa_results.rename(columns=METADATA['wa']['columns'], inplace=True)
 print('WA results:', wa_results.shape)
+
+# Optional: Add CA lab results.
+datafile = 'D://data/california/lab_results/sc-labs-lab-results-2022-07-13.xlsx'
+ca_results = pd.read_excel(datafile, index_col=0)
+ca_results.rename(columns=METADATA['ca']['columns'], inplace=True)
+print('CA results:', ca_results.shape)
+
+# Optional: Add MI lab results.
+datafile = 'D://data/michigan/lab_results/psi-lab-results-2022-07-12.xlsx'
+mi_results = pd.read_excel(datafile, index_col=0)
+mi_results.rename(columns=METADATA['mi']['columns'], inplace=True)
+mi_results.set_index('lab_result_id', inplace=True)
+print('MI results:', mi_results.shape)
+
 
 
 #-----------------------------------------------------------------------
 # Standardize the data.
 #-----------------------------------------------------------------------
 
-def get_analyte_value(results, analyte):
+def get_analyte_value(results, analyte, key='key', value='value'):
     """Get the value for an analyte from a list of standardized results."""
     for obs in ast.literal_eval(results):
-        if obs['key'] == analyte:
+        if obs[key] == analyte:
             try:
-                return convert_to_numeric(obs['value'], strip=True)
+                return convert_to_numeric(obs[value], strip=True)
             except:
-                return obs['value']
+                return obs[value]
 
 
 # === Standardize MA results ===
@@ -159,19 +191,112 @@ ct_results['alpha_humulene'] = ct_results['alpha_humulene'].apply(
     lambda x: convert_to_numeric(str(x), strip=True)
 )
 
+# === Standardize CA results ===
+
+# Standardize total THC and CBD.
+ca_results['total_thc'] = ca_results['total_thc'].apply(lambda x: convert_to_numeric(str(x), strip=True))
+ca_results['total_cbd'] = ca_results['total_cbd'].apply(lambda x: convert_to_numeric(str(x), strip=True))
+
+# Hot-Fix:
+ca_results['total_thc'] = pd.to_numeric(ca_results['total_thc'], errors='coerce')
+ca_results['total_cbd'] = pd.to_numeric(ca_results['total_cbd'], errors='coerce')
+
+# FIXME: Get terpene values for CA.
+# ca_results['beta_caryophyllene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_caryophyllene', key='compound', value='result-percent')
+# )
+# ca_results['alpha_humulene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'alpha_humulene', key='compound', value='result-percent')
+# )
+# ca_results['beta_myrcene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_myrcene', key='compound', value='result-percent')
+# )
+# ca_results['caryophyllene_oxide'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'caryophyllene_oxide', key='compound', value='result-percent')
+# )
+# ca_results['beta_pinene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_pinene', key='compound', value='result-percent')
+# )
+# ca_results['d_limonene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'd_limonene', key='compound', value='result-percent')
+# )
+# ca_results['terpinolene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'terpinolene', key='compound', value='result-percent')
+# )
+
+# === Standardize MI results ===
+
+# Get THC and CBD values for MA.
+mi_results['thc'] = mi_results['results'].apply(lambda x: get_analyte_value(x, 'Δ9-THC', key='name'))
+mi_results['thca'] = mi_results['results'].apply(lambda x: get_analyte_value(x, 'THCa', key='name'))
+mi_results['cbd'] = mi_results['results'].apply(lambda x: get_analyte_value(x, 'CBD', key='name'))
+mi_results['cbda'] = mi_results['results'].apply(lambda x: get_analyte_value(x, 'CBDa', key='name'))
+
+# Calculate total THC and CBD for MA.
+mi_results['total_thc'] = mi_results['thc'] + mi_results['thca'] * 0.877
+mi_results['total_cbd'] = mi_results['cbd'] + mi_results['cbda'] * 0.877
+
+# FIXME: Get terpene values for MI.
+# mi_results['beta_caryophyllene'] = mi_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_caryophyllene')
+# )
+# mi_results['alpha_humulene'] = mi_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'alpha_humulene')
+# )
+# mi_results['beta_myrcene'] = mi_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_myrcene')
+# )
+# mi_results['caryophyllene_oxide'] = mi_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'caryophyllene_oxide')
+# )
+# mi_results['beta_pinene'] = mi_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_pinene')
+# )
+# mi_results['d_limonene'] = mi_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'd_limonene')
+# )
+# mi_results['terpinolene'] = mi_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'terpinolene')
+# )
+
+
 # === Aggregate the results ===
 
-# Future work: Aggregate all lab results.
+# Assign state IDs.
+ca_results['state'] = 'ca'
 ct_results['state'] = 'ct'
 wa_results['state'] = 'wa'
 ma_results['state'] = 'ma'
-all_results = pd.concat([ct_results, wa_results, ma_results], ignore_index=True)
+mi_results['state'] = 'mi'
+
+# Re-index results.
+ca_results.set_index('lab_result_id', inplace=True)
+ct_results.set_index('lab_result_id', inplace=True)
+mi_results.set_index('lab_result_id', inplace=True)
+wa_results.set_index('lab_result_id', inplace=True)
+
+# Hot-fix: Drop duplicate columns.
+wa_results = wa_results.loc[:,~wa_results.columns.duplicated()].copy()
+
+# Aggregate results.
+aggregate = [
+    ca_results,
+    ct_results,
+    ma_results,
+    mi_results,
+    wa_results,
+]
+all_results = pd.concat(aggregate, ignore_index=True)
 print('Aggregated %i lab results.' % len(all_results))
 
 
 #-----------------------------------------------------------------------
 # Sample the data.
 #-----------------------------------------------------------------------
+
+# Hot-fix: Ensure there are no NaN values.
+all_results['product_name'] = all_results['product_name'].fillna('Unknown')
+all_results['product_type'] = all_results['product_type'].fillna('Unknown')
 
 # Get only results with a valid product type.
 flower_results = all_results.loc[~all_results['product_type'].isna()]
@@ -183,8 +308,8 @@ flower_results = flower_results.loc[
 ]
 
 # Identify international varieties.
-thai_results = flower_results.loc[flower_results[
-    'product_name'].str.contains('thai', case=False)
+thai_results = flower_results.loc[
+    flower_results['product_name'].str.contains('thai', case=False)
 ]
 colombian_results = flower_results.loc[
     flower_results['product_name'].str.contains('colombian', case=False) |
@@ -267,7 +392,6 @@ plt.xlabel('Product Name')
 plt.ylabel('Ratio')
 plt.title('THC to CBD Ratio of Durban Results')
 plt.xticks(rotation=45)
-plt.tight_layout()
 plt.show()
 
 # Look at top ratio for Colombian.
@@ -278,7 +402,6 @@ plt.xlabel('Product Name')
 plt.ylabel('Ratio')
 plt.title('THC to CBD Ratio of Colombian Results')
 plt.xticks(rotation=45)
-plt.tight_layout()
 plt.show()
 
 # Look at top ratio for Durban.
@@ -289,7 +412,6 @@ plt.xlabel('Product Name')
 plt.ylabel('Ratio')
 plt.title('THC to CBD Ratio of Durban Results')
 plt.xticks(rotation=45)
-plt.tight_layout()
 plt.show()
 
 
@@ -302,7 +424,17 @@ def sample_and_plot(results, x, y, label='product_name'):
     """Sample results with valid values and plot."""
     sample = results.loc[(results[x].notna()) & (results[y].notna())]
     sample = sample.replace('', np.nan).dropna(subset=[x, y])
-    sns.scatterplot(x=x, y=y, data=sample)
+    sample['ratio'] = sample[y].div(sample[x]).replace(np.inf, 0)
+    sns.scatterplot(
+        x=x,
+        y=y,
+        data=sample,
+        hue='ratio',
+        size='ratio',
+        sizes=(150, 400),
+        legend='full',
+        palette='viridis',
+    )
     for line in range(0, sample.shape[0]):
         plt.text(
             sample[x].iloc[line],
@@ -310,12 +442,6 @@ def sample_and_plot(results, x, y, label='product_name'):
             sample[label].iloc[line],
             horizontalalignment='left',
             size='medium',
-            # TODO: Add `hue` based on ratio.
-            # hue="size",
-            # size="size",
-            # sizes=(20, 200),
-            # hue_norm=(0, 7),
-            # legend="full",
         )
     plt.xlim(0)
     plt.ylim(0)
@@ -376,13 +502,13 @@ landrace_results = ast.literal_eval(landrace.iloc[0]['results'])
 landrace_terpenes = [x for x in landrace_results if x['analysis'] == 'terpenes']
 
 # Compile the terpene data into a DataFrame.
-df = pd.DataFrame(landrace_terpenes)
-df = df[df['value'].apply(lambda x: isinstance(x, (int, float)))]
-df['value'] = pd.to_numeric(df['value'])
+landrace_data = pd.DataFrame(landrace_terpenes)
+landrace_data = landrace_data[landrace_data['value'].apply(lambda x: isinstance(x, (int, float)))]
+landrace_data['value'] = pd.to_numeric(landrace_data['value'])
 
 # Plot the terpene concentrations.
-df.sort_values(by='value', ascending=False, inplace=True)
-plt.bar(df['key'], df['value'])
+landrace_data.sort_values(by='key', ascending=False, inplace=True)
+plt.bar(landrace_data['key'], landrace_data['value'])
 plt.xlabel('Terpene')
 plt.ylabel('Concentration')
 plt.title('Landrace Durban Terpene Concentrations')
@@ -390,35 +516,10 @@ plt.xticks(rotation=90)
 plt.show()
 
 # Plot by relative concentration.
-total = df['value'].sum()
-df['relative_concentration'] = df['value'] / total
-df.sort_values(by='relative_concentration', ascending=False, inplace=True)
-plt.bar(df['key'], df['relative_concentration'])
-plt.xlabel('Terpene')
-plt.ylabel('Relative Concentration')
-plt.title('Landrace Durban Terpene Concentrations (Relative)')
-plt.xticks(rotation=90)
-plt.show()
-
-# === Exclude `beta_myrcene`.
-df = df[df['key'] != 'beta_myrcene']
-
-# Plot the terpene concentrations.
-df = df[df['value'].apply(lambda x: isinstance(x, (int, float)))]
-df['value'] = pd.to_numeric(df['value'])
-df.sort_values(by='value', ascending=False, inplace=True)
-plt.bar(df['key'], df['value'])
-plt.xlabel('Terpene')
-plt.ylabel('Concentration')
-plt.title('Landrace Durban Terpene Concentrations')
-plt.xticks(rotation=90)
-plt.show()
-
-# Plot by relative concentration.
-total = df['value'].sum()
-df['relative_concentration'] = df['value'] / total
-df.sort_values(by='relative_concentration', ascending=False, inplace=True)
-plt.bar(df['key'], df['relative_concentration'])
+total = landrace_data['value'].sum()
+landrace_data['relative_concentration'] = landrace_data['value'] / total
+landrace_data.sort_values(by='key', ascending=False, inplace=True)
+plt.bar(landrace_data['key'], landrace_data['relative_concentration'])
 plt.xlabel('Terpene')
 plt.ylabel('Relative Concentration')
 plt.title('Landrace Durban Terpene Concentrations (Relative)')
@@ -436,13 +537,13 @@ prophet_results = ast.literal_eval(prophet.iloc[0]['results'])
 prophet_terpenes = [x for x in prophet_results if x['analysis'] == 'terpenes']
 
 # Compile the terpene data into a DataFrame.
-df = pd.DataFrame(prophet_terpenes)
+prophet_data = pd.DataFrame(prophet_terpenes)
 
 # Plot the terpene concentrations.
-df = df[df['value'].apply(lambda x: isinstance(x, (int, float)))]
-df['value'] = pd.to_numeric(df['value'])
-df.sort_values(by='value', ascending=False, inplace=True)
-plt.bar(df['key'], df['value'])
+prophet_data = prophet_data[prophet_data['value'].apply(lambda x: isinstance(x, (int, float)))]
+prophet_data['value'] = pd.to_numeric(prophet_data['value'])
+prophet_data.sort_values(by='key', ascending=False, inplace=True)
+plt.bar(prophet_data['key'], prophet_data['value'])
 plt.xlabel('Terpene')
 plt.ylabel('Concentration')
 plt.title('Colombian Prophet Terpene Concentrations')
@@ -450,35 +551,10 @@ plt.xticks(rotation=90)
 plt.show()
 
 # Plot by relative concentration.
-total = df['value'].sum()
-df['relative_concentration'] = df['value'] / total
-df.sort_values(by='relative_concentration', ascending=False, inplace=True)
-plt.bar(df['key'], df['relative_concentration'])
-plt.xlabel('Terpene')
-plt.ylabel('Relative Concentration')
-plt.title('Colombian Prophet Terpene Concentrations (Relative)')
-plt.xticks(rotation=90)
-plt.show()
-
-# === Exclude `beta_myrcene`.
-df = df[df['key'] != 'beta_myrcene']
-
-# Plot the terpene concentrations.
-df = df[df['value'].apply(lambda x: isinstance(x, (int, float)))]
-df['value'] = pd.to_numeric(df['value'])
-df.sort_values(by='value', ascending=False, inplace=True)
-plt.bar(df['key'], df['value'])
-plt.xlabel('Terpene')
-plt.ylabel('Concentration')
-plt.title('Colombian Prophet Terpene Concentrations')
-plt.xticks(rotation=90)
-plt.show()
-
-# Plot by relative concentration.
-total = df['value'].sum()
-df['relative_concentration'] = df['value'] / total
-df.sort_values(by='relative_concentration', ascending=False, inplace=True)
-plt.bar(df['key'], df['relative_concentration'])
+total = prophet_data['value'].sum()
+prophet_data['relative_concentration'] = prophet_data['value'] / total
+prophet_data.sort_values(by='key', ascending=False, inplace=True)
+plt.bar(prophet_data['key'], prophet_data['relative_concentration'])
 plt.xlabel('Terpene')
 plt.ylabel('Relative Concentration')
 plt.title('Colombian Prophet Terpene Concentrations (Relative)')

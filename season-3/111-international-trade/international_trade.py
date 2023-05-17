@@ -83,6 +83,8 @@ while iterate:
     action.click()
     sleep(3)
 
+# TODO: Get `data_refreshed_at`.
+
 # Close the browser.
 driver.close()
 
@@ -163,6 +165,8 @@ for info, shape in zip(figure.provinces_info, figure.provinces):
         provinces.append(province_name)
     else:
         continue
+    if province_name == 'KwaZulu Natal':
+        province_name = 'KwaZulu-Natal'
     x, y = np.array(shape).mean(axis=0)
     text = plt.text(x, y,
         province_name,
@@ -223,7 +227,7 @@ figure.drawcountries(linewidth=0.5)
 # Render the map.
 plt.gcf().set_size_inches(30, 10)
 plt.title(
-    'South Africa Cannabis Cultivation\nLicenses by Province',
+    'South Africa Cannabis Cultivation\nLicenses by Province in 2023',
     fontsize=28,
     pad=10,
 )
@@ -231,7 +235,7 @@ plt.title(
 # Save the figure to a file.
 plt.axis('off')
 plt.savefig(
-    'south-africa-cannabis-cultivations-no-text.png',
+    'south-africa-cannabis-cultivations.png',
     dpi=300,
     bbox_inches='tight',
     facecolor='#add8e6',

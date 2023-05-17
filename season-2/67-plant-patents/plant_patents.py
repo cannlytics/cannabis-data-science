@@ -145,7 +145,7 @@ for line in range(0, sample.shape[0]):
 
 #-----------------------------------------------------------------------
 
-# Calculate `beta_myrcene` to `d_limonene` ratio.
+# Calculate `beta_pinene` to `d_limonene` ratio.
 sample = results.loc[
     (~results['d_limonene'].isna()) &
     (~results['beta_pinene'].isna())

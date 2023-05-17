@@ -50,7 +50,7 @@ sentences = [[word for word in doc.lower().translate(translator).split()[:max_se
 
 # Train the model.
 corpus = strain_data['strain_name'].tolist()
-model = Word2Vec(sentences, vector_size=24, epochs=100)
+model = Word2Vec(sentences, vector_size=100, epochs=100)
 word_vectors = model.wv
 
 # Save the vectorized data to a file.

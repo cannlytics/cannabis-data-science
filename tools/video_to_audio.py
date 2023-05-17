@@ -1,6 +1,6 @@
 """
-Process Cannabis Data Science Recording
-Copyright (c) 2022 Cannlytics
+Video to Audio
+Copyright (c) 2022-2023 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 4/4/2022
@@ -10,7 +10,7 @@ License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/m
 Command-line example:
 
     ```
-    python tools/video_to_audio.py season-3/cannabis-data-science-93
+    python tools/video_to_audio.py season-3/cannabis-data-science-111
     ```
 """
 # Standard imports:

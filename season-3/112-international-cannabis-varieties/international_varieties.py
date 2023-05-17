@@ -81,36 +81,34 @@ METADATA = {
     },
 }
 
+# Read CA lab results.
+datafile = './data/sc-labs-lab-results-2022-07-13.xlsx'
+ca_results = pd.read_excel(datafile, index_col=0)
+ca_results.rename(columns=METADATA['ca']['columns'], inplace=True)
+print('CA results:', ca_results.shape)
+
 # Read CT lab results.
-datafile = 'D://data/connecticut/lab_results/ct-results-2023-05-16.xlsx'
+datafile = './data/ct-lab-results-2023-05-16.xlsx'
 ct_results = pd.read_excel(datafile)
 ct_results.rename(columns=METADATA['ct']['columns'], inplace=True)
 print('CT results:', ct_results.shape)
 
 # Read MA lab results.
-datafile = 'D://data/massachusetts/lab_results/mcr-lab-results-2023-05-17.xlsx'
+datafile = './data/mcr-lab-results-2023-05-17.xlsx'
 ma_results = pd.read_excel(datafile)
 print('MA results:', ma_results.shape)
 
+# Read MI lab results.
+datafile = './data/psi-lab-results-2022-07-12.xlsx'
+mi_results = pd.read_excel(datafile, index_col=0)
+mi_results.rename(columns=METADATA['mi']['columns'], inplace=True)
+print('MI results:', mi_results.shape)
+
 # Read WA lab results.
-datafile = 'D://data/washington/lab_results/wa-lab-results-2023-04-04.xlsx'
+datafile = './data/wa-lab-results-2023-04-04.xlsx'
 wa_results = pd.read_excel(datafile)
 wa_results.rename(columns=METADATA['wa']['columns'], inplace=True)
 print('WA results:', wa_results.shape)
-
-# Optional: Add CA lab results.
-datafile = 'D://data/california/lab_results/sc-labs-lab-results-2022-07-13.xlsx'
-ca_results = pd.read_excel(datafile, index_col=0)
-ca_results.rename(columns=METADATA['ca']['columns'], inplace=True)
-print('CA results:', ca_results.shape)
-
-# Optional: Add MI lab results.
-datafile = 'D://data/michigan/lab_results/psi-lab-results-2022-07-12.xlsx'
-mi_results = pd.read_excel(datafile, index_col=0)
-mi_results.rename(columns=METADATA['mi']['columns'], inplace=True)
-mi_results.set_index('lab_result_id', inplace=True)
-print('MI results:', mi_results.shape)
-
 
 
 #-----------------------------------------------------------------------
@@ -125,6 +123,69 @@ def get_analyte_value(results, analyte, key='key', value='value'):
                 return convert_to_numeric(obs[value], strip=True)
             except:
                 return obs[value]
+
+
+# === Standardize CA results ===
+
+# Standardize total THC and CBD.
+ca_results['total_thc'] = ca_results['total_thc'].apply(lambda x: convert_to_numeric(str(x), strip=True))
+ca_results['total_cbd'] = ca_results['total_cbd'].apply(lambda x: convert_to_numeric(str(x), strip=True))
+
+# Hot-Fix:
+ca_results['total_thc'] = pd.to_numeric(ca_results['total_thc'], errors='coerce')
+ca_results['total_cbd'] = pd.to_numeric(ca_results['total_cbd'], errors='coerce')
+
+# FIXME: Get terpene values for CA.
+# ca_results['beta_caryophyllene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_caryophyllene', key='compound', value='result-percent')
+# )
+# ca_results['alpha_humulene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'alpha_humulene', key='compound', value='result-percent')
+# )
+# ca_results['beta_myrcene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_myrcene', key='compound', value='result-percent')
+# )
+# ca_results['caryophyllene_oxide'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'caryophyllene_oxide', key='compound', value='result-percent')
+# )
+# ca_results['beta_pinene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'beta_pinene', key='compound', value='result-percent')
+# )
+# ca_results['d_limonene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'd_limonene', key='compound', value='result-percent')
+# )
+# ca_results['terpinolene'] = ca_results['results'].apply(
+#     lambda x: get_analyte_value(x, 'terpinolene', key='compound', value='result-percent')
+# )
+
+
+# === Standardize CT results ===
+
+# Standardize CT results.
+analytes = ['thc', 'thca', 'cbd', 'cbda']
+for analyte in analytes:
+    ct_results[analyte] = pd.to_numeric(ct_results[analyte], errors='coerce')
+
+# Calculate total THC and CBD for MA.
+ct_results['total_thc'] = ct_results['thc'] + ct_results['thca'] * 0.877
+ct_results['total_cbd'] = ct_results['cbd'] + ct_results['cbda'] * 0.877
+
+# Standardize terpene data for CT.
+ct_results['d_limonene'] = ct_results['d_limonene'].apply(
+    lambda x: convert_to_numeric(str(x), strip=True)
+)
+ct_results['beta_pinene'] = ct_results['beta_pinene'].apply(
+    lambda x: convert_to_numeric(str(x), strip=True)
+)
+ct_results['beta_caryophyllene'] = ct_results['beta_caryophyllene'].apply(
+    lambda x: convert_to_numeric(str(x), strip=True)
+)
+ct_results['beta_myrcene'] = ct_results['beta_myrcene'].apply(
+    lambda x: convert_to_numeric(str(x), strip=True)
+)
+ct_results['alpha_humulene'] = ct_results['alpha_humulene'].apply(
+    lambda x: convert_to_numeric(str(x), strip=True)
+)
 
 
 # === Standardize MA results ===
@@ -162,67 +223,6 @@ ma_results['terpinolene'] = ma_results['results'].apply(
     lambda x: get_analyte_value(x, 'terpinolene')
 )
 
-
-# === Standardize CT results ===
-
-# Standardize CT results.
-analytes = ['thc', 'thca', 'cbd', 'cbda']
-for analyte in analytes:
-    ct_results[analyte] = pd.to_numeric(ct_results[analyte], errors='coerce')
-
-# Calculate total THC and CBD for MA.
-ct_results['total_thc'] = ct_results['thc'] + ct_results['thca'] * 0.877
-ct_results['total_cbd'] = ct_results['cbd'] + ct_results['cbda'] * 0.877
-
-# Standardize terpene data for CT.
-ct_results['d_limonene'] = ct_results['d_limonene'].apply(
-    lambda x: convert_to_numeric(str(x), strip=True)
-)
-ct_results['beta_pinene'] = ct_results['beta_pinene'].apply(
-    lambda x: convert_to_numeric(str(x), strip=True)
-)
-ct_results['beta_caryophyllene'] = ct_results['beta_caryophyllene'].apply(
-    lambda x: convert_to_numeric(str(x), strip=True)
-)
-ct_results['beta_myrcene'] = ct_results['beta_myrcene'].apply(
-    lambda x: convert_to_numeric(str(x), strip=True)
-)
-ct_results['alpha_humulene'] = ct_results['alpha_humulene'].apply(
-    lambda x: convert_to_numeric(str(x), strip=True)
-)
-
-# === Standardize CA results ===
-
-# Standardize total THC and CBD.
-ca_results['total_thc'] = ca_results['total_thc'].apply(lambda x: convert_to_numeric(str(x), strip=True))
-ca_results['total_cbd'] = ca_results['total_cbd'].apply(lambda x: convert_to_numeric(str(x), strip=True))
-
-# Hot-Fix:
-ca_results['total_thc'] = pd.to_numeric(ca_results['total_thc'], errors='coerce')
-ca_results['total_cbd'] = pd.to_numeric(ca_results['total_cbd'], errors='coerce')
-
-# FIXME: Get terpene values for CA.
-# ca_results['beta_caryophyllene'] = ca_results['results'].apply(
-#     lambda x: get_analyte_value(x, 'beta_caryophyllene', key='compound', value='result-percent')
-# )
-# ca_results['alpha_humulene'] = ca_results['results'].apply(
-#     lambda x: get_analyte_value(x, 'alpha_humulene', key='compound', value='result-percent')
-# )
-# ca_results['beta_myrcene'] = ca_results['results'].apply(
-#     lambda x: get_analyte_value(x, 'beta_myrcene', key='compound', value='result-percent')
-# )
-# ca_results['caryophyllene_oxide'] = ca_results['results'].apply(
-#     lambda x: get_analyte_value(x, 'caryophyllene_oxide', key='compound', value='result-percent')
-# )
-# ca_results['beta_pinene'] = ca_results['results'].apply(
-#     lambda x: get_analyte_value(x, 'beta_pinene', key='compound', value='result-percent')
-# )
-# ca_results['d_limonene'] = ca_results['results'].apply(
-#     lambda x: get_analyte_value(x, 'd_limonene', key='compound', value='result-percent')
-# )
-# ca_results['terpinolene'] = ca_results['results'].apply(
-#     lambda x: get_analyte_value(x, 'terpinolene', key='compound', value='result-percent')
-# )
 
 # === Standardize MI results ===
 
@@ -272,7 +272,7 @@ mi_results['state'] = 'mi'
 # Re-index results.
 ca_results.set_index('lab_result_id', inplace=True)
 ct_results.set_index('lab_result_id', inplace=True)
-# mi_results.set_index('lab_result_id', inplace=True)
+mi_results.set_index('lab_result_id', inplace=True)
 wa_results.set_index('lab_result_id', inplace=True)
 
 # Hot-fix: Drop duplicate columns.
@@ -418,7 +418,6 @@ plt.show()
 #-----------------------------------------------------------------------
 # Expand analysis to terpenes.
 #-----------------------------------------------------------------------
-
 
 def sample_and_plot(results, x, y, label='product_name'):
     """Sample results with valid values and plot."""

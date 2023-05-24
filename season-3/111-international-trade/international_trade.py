@@ -14,7 +14,6 @@ Data Source:
 Resources:
 
     - [South Africa Cannabis Licensing Press Release](https://www.sahpra.org.za/press-releases/cannabis-licensing/)
-
     - [First-level Administrative Divisions, South Africa, 2015](https://earthworks.stanford.edu/catalog/stanford-js788dt6134)
 
 """

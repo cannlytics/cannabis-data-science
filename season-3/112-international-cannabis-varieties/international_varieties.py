@@ -4,7 +4,7 @@ Copyright (c) 2023 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 5/15/2023
-Updated: 5/16/2023
+Updated: 5/18/2023
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 """
 # Standard imports:
@@ -83,7 +83,7 @@ METADATA = {
 
 # Read CA lab results.
 datafile = './data/sc-labs-lab-results-2022-07-13.xlsx'
-ca_results = pd.read_excel(datafile, index_col=0)
+ca_results = pd.read_excel(datafile)
 ca_results.rename(columns=METADATA['ca']['columns'], inplace=True)
 print('CA results:', ca_results.shape)
 
@@ -100,7 +100,7 @@ print('MA results:', ma_results.shape)
 
 # Read MI lab results.
 datafile = './data/psi-lab-results-2022-07-12.xlsx'
-mi_results = pd.read_excel(datafile, index_col=0)
+mi_results = pd.read_excel(datafile)
 mi_results.rename(columns=METADATA['mi']['columns'], inplace=True)
 print('MI results:', mi_results.shape)
 
@@ -344,6 +344,7 @@ plt.bar(varieties, counts)
 plt.xlabel('Variety')
 plt.ylabel('Observations')
 plt.title('Number of Lab Results of International Varieties')
+plt.savefig('figures/intl-variety-count.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # Visualize THC and CBD by variety.
@@ -351,6 +352,7 @@ sns.scatterplot(data=thai_results, x='total_cbd', y='total_thc')
 sns.scatterplot(data=colombian_results, x='total_cbd', y='total_thc')
 sns.scatterplot(data=durban_results, x='total_cbd', y='total_thc')
 plt.legend(['Thai', 'Colombian', 'Durban'])
+plt.savefig('figures/intl-variety-thc-cbd.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 
@@ -392,6 +394,7 @@ plt.xlabel('Product Name')
 plt.ylabel('Ratio')
 plt.title('THC to CBD Ratio of Durban Results')
 plt.xticks(rotation=45)
+plt.savefig('figures/thai-thc-cbd.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # Look at top ratio for Colombian.
@@ -402,6 +405,7 @@ plt.xlabel('Product Name')
 plt.ylabel('Ratio')
 plt.title('THC to CBD Ratio of Colombian Results')
 plt.xticks(rotation=45)
+plt.savefig('figures/colombian-thc-cbd.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # Look at top ratio for Durban.
@@ -412,6 +416,7 @@ plt.xlabel('Product Name')
 plt.ylabel('Ratio')
 plt.title('THC to CBD Ratio of Durban Results')
 plt.xticks(rotation=45)
+plt.savefig('figures/durban-thc-cbd.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 
@@ -419,7 +424,7 @@ plt.show()
 # Expand analysis to terpenes.
 #-----------------------------------------------------------------------
 
-def sample_and_plot(results, x, y, label='product_name'):
+def sample_and_plot(results, x, y, label='product_name', key=''):
     """Sample results with valid values and plot."""
     sample = results.loc[(results[x].notna()) & (results[y].notna())]
     sample = sample.replace('', np.nan).dropna(subset=[x, y])
@@ -445,36 +450,37 @@ def sample_and_plot(results, x, y, label='product_name'):
     plt.xlim(0)
     plt.ylim(0)
     plt.legend([],[], frameon=False)
+    plt.savefig(f'figures/{key}-{x}-{y}.png', dpi=300, bbox_inches='tight')
     plt.show()
 
 
 # === `beta_caryophyllene` to `alpha_humulene` ratio ===
 
 # Durban.
-sample_and_plot(durban_results, 'beta_caryophyllene', 'alpha_humulene')
+sample_and_plot(durban_results, 'beta_caryophyllene', 'alpha_humulene', key='durban')
 
 # Colombian.
-sample_and_plot(colombian_results, 'beta_caryophyllene', 'alpha_humulene')
+sample_and_plot(colombian_results, 'beta_caryophyllene', 'alpha_humulene', key='colombian')
 
 
 # === `beta_myrcene` to `d_limonene` ratio ===
 
 # Durban.
-sample_and_plot(durban_results, 'd_limonene', 'beta_myrcene')
+sample_and_plot(durban_results, 'd_limonene', 'beta_myrcene', key='durban')
 
 
 # Colombian.
-sample_and_plot(colombian_results, 'd_limonene', 'beta_myrcene')
+sample_and_plot(colombian_results, 'd_limonene', 'beta_myrcene', key='colombian')
 
 
 # === `beta_pinene` to `d_limonene` ratio ===
 
 # Durban.
-sample_and_plot(durban_results, 'd_limonene', 'beta_pinene')
+sample_and_plot(durban_results, 'd_limonene', 'beta_pinene', key='durban')
 
 
 # Colombian.
-sample_and_plot(colombian_results, 'd_limonene', 'beta_pinene')
+sample_and_plot(colombian_results, 'd_limonene', 'beta_pinene', key='colombian')
 
 
 # Calculate ratios.
@@ -512,17 +518,7 @@ plt.xlabel('Terpene')
 plt.ylabel('Concentration')
 plt.title('Landrace Durban Terpene Concentrations')
 plt.xticks(rotation=90)
-plt.show()
-
-# Plot by relative concentration.
-total = landrace_data['value'].sum()
-landrace_data['relative_concentration'] = landrace_data['value'] / total
-landrace_data.sort_values(by='key', ascending=False, inplace=True)
-plt.bar(landrace_data['key'], landrace_data['relative_concentration'])
-plt.xlabel('Terpene')
-plt.ylabel('Relative Concentration')
-plt.title('Landrace Durban Terpene Concentrations (Relative)')
-plt.xticks(rotation=90)
+plt.savefig(f'figures/landrace-durban-terpenes.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 
@@ -547,15 +543,5 @@ plt.xlabel('Terpene')
 plt.ylabel('Concentration')
 plt.title('Colombian Prophet Terpene Concentrations')
 plt.xticks(rotation=90)
-plt.show()
-
-# Plot by relative concentration.
-total = prophet_data['value'].sum()
-prophet_data['relative_concentration'] = prophet_data['value'] / total
-prophet_data.sort_values(by='key', ascending=False, inplace=True)
-plt.bar(prophet_data['key'], prophet_data['relative_concentration'])
-plt.xlabel('Terpene')
-plt.ylabel('Relative Concentration')
-plt.title('Colombian Prophet Terpene Concentrations (Relative)')
-plt.xticks(rotation=90)
+plt.savefig(f'figures/colombian-prophet-terpenes.png', dpi=300, bbox_inches='tight')
 plt.show()

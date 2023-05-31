@@ -193,6 +193,9 @@ coa_df = pd.DataFrame(parsed_coas)
 # Remove any COAs that could not be parsed.
 coa_df.dropna(inplace=True)
 
+# Save the data.
+coa_df.to_csv(os.path.join(DATA_DIR, 'parsed-fl-coas.csv'), index=False)
+
 
 #-----------------------------------------------------------------------
 # Visualize the COA data.
@@ -247,3 +250,13 @@ sample_scatterplot(
     label='product_name',
     outfile='predicted-khalifa-kush-limonene-to-pinene.png',
 )
+
+
+# TODO: Try:
+# - Respond with JSON.
+# - Only return the data
+# - Do not return the question
+# - Do not comment
+# - Do not return the prompt
+
+# TODO: Iterate / retry if failed.

@@ -1,5 +1,4 @@
-# Phenohunting
-
+# Phenohunting with OpenAI's GPT-4 Model
 
 ## COA Lookup Tools
 
@@ -21,7 +20,7 @@
 - [The Flowery](https://support.theflowery.co)
 - [TerpLife Labs](https://www.terplifelabs.com)
 
-## Resources
+## References
 
 - https://www.reddit.com/r/FLMedicalTrees/search/?q=COA
 - https://www.reddit.com/r/FLMedicalTrees/comments/11hfwjl/question_on_dispensaries_and_coas/

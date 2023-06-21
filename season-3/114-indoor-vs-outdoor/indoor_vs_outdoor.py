@@ -178,11 +178,19 @@ group = ca_results.groupby('strain_name', as_index=False)
 group = group[['beta_pinene', 'd_limonene', 'sativa_percentage']].mean()
 group['sativa_indica_ratio'] = group['beta_pinene'] / group['d_limonene']
 ratio = group.sort_values(by='sativa_indica_ratio', ascending=False)
-ratio[['sativa_indica_ratio', 'sativa_percentage']]
+
+def match_strain_type(x, df):
+    """Match the strain type."""
+    return df.loc[df['strain_name'] == x, 'strain_type'].iloc[0]
+
+group['strain_type'] = group['strain_name'].apply(lambda x: match_strain_type(x, ca_results))
+
+
+ratio[['strain_name', 'strain_type', 'sativa_indica_ratio', 'sativa_percentage']]
 
 # Plot a sample of strains.
 sample = group.sample(25, random_state=420)
-sample_and_plot(sample, 'd_limonene', 'beta_pinene', label=None, key='ca-strains')
+sample_and_plot(sample, 'd_limonene', 'beta_pinene', label='strain_name', key='ca-strains')
 
 
 #-----------------------------------------------------------------------
@@ -297,7 +305,6 @@ model = OrderedModel(
     sample[['beta_pinene', 'd_limonene']],
     distr='probit'
 )
-
 fitted_model = model.fit(method='bfgs')
 print(fitted_model.summary())
 

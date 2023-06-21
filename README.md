@@ -482,7 +482,7 @@ You should now be off to the races and able to go through most notebooks, follow
 
 Contributions are always welcome! Please submit issues, questions, bugs, fixes, improved-upon code, or anything at all that you want to be addressed. Anyone is welcome to contribute anything. You can refer to the [Cannlytics contributing guide](https://docs.cannlytics.com/developers/contributing) for more information about contributing to the Cannlytics ecosystem in general. One of the easiest ways that you can help the group is by giving the repository a ⭐
 
-> 💬 Join the [Cannabis Data Science Slack channel](https://join.slack.com/t/cannlytics/shared_invite/zt-1membxp84-pvg9F9pLHWixyYPJxXrzhA) to keep the conversation going!
+> 💬 Join the [Cannabis Data Science Slack channel](https://join.slack.com/t/cannlytics/shared_invite/zt-1wfbpb61s-JyN2Rt0H4xCmNigop4roWg) to keep the conversation going!
 
 ## 💖 Support <a name="support"></a>
 

@@ -232,7 +232,7 @@ details = ['strain_name', 'patent_number', 'patent_title',
            'inventor_name', 'date_published', 'abstract']
 
 # Isolate a sample of patents.
-sample = patents[:5]
+sample = patents[5:10]
 
 # Populate memory.
 for patent_number, obs in sample.iterrows():
@@ -252,7 +252,7 @@ for patent_number, obs in sample.iterrows():
 
 # Add the question.
 messages.append({'role': 'user', 'content': 'READY'})
-question = """Do any of the cannabis plant patents mention aroma?"""
+question = """Do any of the cannabis plant patents mention soil?"""
 messages.append({'role': 'user', 'content': question})
 cost += get_prompt_price(question + 'READY', model=model)
 print('Expected cost of training ≈ $%f' % cost)

@@ -4,17 +4,16 @@ Copyright (c) 2023 Cannlytics
 
 Authors: Keegan Skeate <https://github.com/keeganskeate>
 Created: 7/26/2023
-Updated: 7/26/2023
+Updated: 8/2/2023
 License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 """
-
-
-# Initialize the OpenAi API.
+# Standard imports:
 import os
+
+# External imports:
+from cannlytics.ai import split_into_token_chunks
 from dotenv import dotenv_values
 import openai
-
-from cannlytics.ai import split_into_token_chunks
 
 
 # Initialize the OpenAi API.
@@ -59,7 +58,7 @@ messages.append({
     "content": "Summary:"
 })
 
-# TODO: Talk with ChatGPT to get insights from the videos.
+# Talk with ChatGPT to get insights from the videos.
 response = openai.ChatCompletion.create(
     model=model,
     temperature=temperature,

@@ -111,3 +111,5 @@ if __name__ == "__main__":
     print('Publishing transcript:', episode_name)
     transcript_data = publish_transcript(episode_name)
     print('Transcript published:', transcript_data)
+
+    # TODO: Publish a folder of transcripts.

@@ -10,8 +10,9 @@ License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/m
 Command-line example:
 
     ```
-    python tools/publish_transcript.py season-3/cannabis-data-science-120
+    python tools/publish_transcript.py season-3/cannabis-data-science-123
     ```
+
 """
 # Standard imports:
 import os
@@ -112,4 +113,12 @@ if __name__ == "__main__":
     transcript_data = publish_transcript(episode_name)
     print('Transcript published:', transcript_data)
 
-    # TODO: Publish a folder of transcripts.
+    # # Publish a folder of transcripts.
+    # transcript_dir = ''
+    # season = 'season-3'
+    # episodes = os.listdir(os.path.join(transcript_dir, season))
+    # for episode in episodes:
+    #     episode_name = f'{season}/{episode.replace(".txt", "")}'
+    #     print('Publishing transcript:', episode_name)
+    #     transcript_data = publish_transcript(episode_name)
+    #     print('Transcript published:', transcript_data)

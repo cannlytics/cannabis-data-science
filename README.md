@@ -20,6 +20,8 @@ We would love to see you at an upcoming meetup! Please bring any research that y
 
 Please peruse the Cannabis Data Science archive and see if you can find anything of value!
 
+<!-- FIXME: Turn into link to Google Sheet -->
+
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -523,10 +525,10 @@ SOFTWARE.
 Please cite the following if you use the code examples in your research:
 
 ```bibtex
-@misc{cannlytics2022,
+@misc{cannlytics2023,
   title={Cannabis Data Science},
-  author={Skeate, Keegan and Rice, Charles and O'Sullivan-Sutherland, Candace},
+  author={Skeate, Keegan and O'Sullivan-Sutherland, Candace},
   journal={https://github.com/cannlytics/cannabis-data-science},
-  year={2022}
+  year={2023}
 }
 ```

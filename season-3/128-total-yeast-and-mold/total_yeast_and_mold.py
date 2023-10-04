@@ -79,7 +79,7 @@ sample['total_thc'].describe()
 key = 'Total Yeast and Mold Count'
 sample = flower[flower[key].notna()]
 sample = flower[(flower[key] > 0) & (flower[key] < 50_000)]
-sample[key].hist(bins=100, range=(0, 50_000))
+sample[key].hist(bins=100, range=(0, 100_000))
 plt.title('Total Yeast and Mold in Maryland Cannabis from 2017 to 2023')
 plt.xlabel('CFU/g')
 plt.ylabel('Count')

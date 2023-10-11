@@ -47,10 +47,9 @@ if __name__ == '__main__':
     # Example: Cutout all images in a directory.
     # import os
     # image_dir = r''
-    # output_dir = r''
     # images = os.listdir(image_dir)
     # for image in images:
     #     input_path = os.path.join(image_dir, image)
-    #     output_path = os.path.join(output_dir, image.split('.')[0] + '.png')
+    #     output_path = os.path.join(image_dir, image.split('.')[0] + '-cutout.png')
     #     remove_bg(input_path, output_path)
     #     print('Cutout:', output_path)

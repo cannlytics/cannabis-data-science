@@ -189,23 +189,29 @@ def weighted_avg(df, values, weights, by):
     return (v * w).groupby(by).sum() / w.groupby(by).sum()
 
 
-sample['log_pine_lime_ratio'] = sample['beta_pinene'].apply(sample['d_limonene'])
+sample['pine_lime_ratio'] = sample['beta_pinene'].div(sample['d_limonene'])
 
 # FIXME:
 # Calculate a weighted average using `sentiment_score`.
-user_data = weighted_avg(
-    sample,
-    values='log_pine_lime_ratio',
-    weights='sentiment_score',
-    by='user'
-)
+# user_data = weighted_avg(
+#     sample,
+#     values='pine_lime_ratio',
+#     weights='sentiment_score',
+#     by='user'
+# )
+
 
 # Simple average:
-# user_data = users.mean()
+drop = ['strain_name', 'review', 'category']
+users = sample.drop(columns=drop).groupby('user')
+user_data = users.mean()
+user_data['n_reviews'] = sample.groupby('user')['review'].nunique()
 
 # Determine the unique number of users.
-users = sample.groupby('user', as_index=False)
-user_data['n_reviews'] = sample.groupby('user')['review'].nunique()
+# users = sample.groupby('user', as_index=False)
+# user_data['n_reviews'] = sample.groupby('user')['review'].nunique()
+
+# Remove users with less than 10 reviews.
 user_data = user_data.loc[
     (user_data.index != 'Anonymous') &
     (user_data['n_reviews'] > 10)
@@ -216,26 +222,38 @@ x, y = 'd_limonene', 'beta_pinene'
 ax = sns.scatterplot(
     x=x,
     y=y,
-    data=sample,
-    hue='n_reviews',
+    data=user_data,
+    hue='pine_lime_ratio',
     size='n_reviews',
-    sizes=(100, 1000),
+    sizes=(200, 2000),
+    legend=None,
+    palette='viridis',
+    # alpha=0.7,
+    edgecolor=None,
 )
-for index, row in sample.iterrows():
-    if row['n_reviews'] < 30:
-        continue
-    ax.text(
-        row[x],
-        row[y],
-        row['user'],
-        horizontalalignment='center',
-        verticalalignment='bottom',
-        size='medium',
-        color='#2A8936',
-    )
-plt.xlim(0)
-plt.ylim(0)
-plt.title('Average beta-Pinene to d-Limonene by User')
+# for index, row in user_data.iterrows():
+#     if row['n_reviews'] < 30:
+#         continue
+#     ax.text(
+#         row[x],
+#         row[y],
+#         # row['user'],
+#         index,
+#         horizontalalignment='center',
+#         verticalalignment='bottom',
+#         size='medium',
+#         color='#2A8936',
+#     )
+# plt.xlim(0)
+# plt.ylim(0)
+plt.ylabel('beta-Pinene (%)', labelpad=5)
+plt.xlabel('D-Limonene (%)', labelpad=5)
+plt.title('Average beta-Pinene to D-Limonene Strain Profiles by User')
+fig = plt.gcf()
+notes = 'Notes: Data is from 1,609 reviews by 97 users. Historical strain chemical profile averages we merged with the reviews. The size of each point indicates the number of reviews, ranging from 11 to 56 reviews. The color depicts the beta-pinene to D-limonene ratio, ranging from 0.28 in purple to 0.96 in yellow.'
+fig.text(0, -0.066, notes, ha='left', va='center', fontsize=21, wrap=True, transform=fig.transFigure)
+plt.tight_layout()
+plt.savefig(f'figures/pinene_to_limonene_by_user.png', bbox_inches='tight', dpi=300)
 plt.show()
 
 # Save the ratio for future use.
@@ -301,7 +319,8 @@ for index, row in observations.iterrows():
     try:
         if math.isnan(name): name = row['product_name']
     except TypeError:
-        continue
+        pass
+    print(name)
     ax.text(
         row[x],
         row[y],

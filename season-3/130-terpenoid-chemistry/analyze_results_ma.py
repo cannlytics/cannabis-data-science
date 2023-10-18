@@ -10,6 +10,7 @@ License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/m
 References:
 
     - MA microbe limits: <https://www.mass.gov/doc/exhibit-6-analysis-requirements-for-microbiological-contaminants-and-mycotoxins-in-medical/download>
+    - MA sampling protocol: <https://masscannabiscontrol.com/wp-content/uploads/20200724_Testing-Protocol-for-Comment.pdf>
 
 """
 # External imports:
@@ -115,6 +116,9 @@ pivot_df.columns = ['label', 'date_tested', 'lab', 'delta_9_thc', 'thca', 'yeast
 pivot_df['date'] = pd.to_datetime(pivot_df['date_tested'])
 print(pivot_df)
 
+# Drop duplicates.
+pivot_df.drop_duplicates(subset=['label'], inplace=True)
+
 # What percentage THCA is unreasonable?
 pivot_df['thca'].hist(bins=100)
 print(pivot_df['thca'].quantile(0.99))
@@ -151,7 +155,7 @@ plt.show()
 monthly_thc_by_lab = pivot_df.groupby('lab')['total_thc'].resample('M').mean().unstack('lab')
 sns.set_palette(sns.color_palette('plasma_r', 9))
 ax = monthly_thc_by_lab.plot(alpha=0.7)
-plt.title('Average Total THC by Month by Lab')
+plt.title('Average Total THC by Month by Lab in MA in 2021')
 plt.xlabel('Month')
 plt.ylabel('Average Total THC (%)')
 plt.xticks(rotation=45)
@@ -237,10 +241,52 @@ for i, p in enumerate(ax.patches):
         xytext=(0, 3),
         textcoords='offset points'
     )
-plt.ylabel('Failure Rate (%)')
+plt.ylabel('Failure Rate (%)', fontsize=28, labelpad=10)
 plt.xlabel('')
-plt.title('Total Yeast and Mold Failure Rate by Lab in MA in 2021')
+plt.title('Total Yeast and Mold Failure Rate by Lab in MA in 2021', fontsize=34)
 plt.xticks(rotation=45)
+plt.figtext(
+    0,
+    -0.075,
+    'Note: Statistics are calculated from 31,613 package lab tests for total yeast and mold performed between 4/1/2021 and 12/31/2021 in Massachusetts. The number of tests above the state limit, 10,000 CFU/g, and the total number of tests are shown for each lab.',
+    ha='left',
+    fontsize=24,
+    wrap=True
+)
 plt.tight_layout()
 plt.savefig(f'figures/ma-yeast-and-mold-failure-rate-by-lab-2021.png', bbox_inches='tight', dpi=300)
 plt.show()
+
+
+# === Future work: See if there is a correlation between THC and yeast and mold. ===
+
+import scipy.stats
+
+# Correlate total THC and yeast and mold.
+clean_data = pivot_df.dropna(subset=['total_thc', 'yeast_and_mold'])
+correlation, _ = scipy.stats.pearsonr(clean_data['total_thc'], clean_data['yeast_and_mold'])
+print("Correlation between total THC and total yeast and mold: %.2f" % correlation)
+
+
+import statsmodels.api as sm
+
+# Defining the dependent variable (fail) and the independent variable (total_thc)
+X = clean_data['total_thc']
+X = sm.add_constant(X)  # Adding a constant
+y = clean_data['fail'].astype(int)  # Converting boolean to int
+
+# Performing logistic regression
+model = sm.Logit(y, X).fit()
+print(model.summary())
+
+# Calculate the marginal effect of a 1% increase in total_thc
+params = model.params
+mean_thc = clean_data['total_thc'].mean()
+def calculate_probability(thc, params):
+    return 1 / (1 + np.exp(-(params['const'] + params['total_thc'] * thc)))
+prob_at_mean = calculate_probability(mean_thc, params)
+prob_at_mean_plus_1 = calculate_probability(mean_thc * 1.01, params)
+marginal_effect = prob_at_mean_plus_1 - prob_at_mean
+print(f"Marginal effect of a 1% increase in total THC on the probability of failure is {marginal_effect * 100:.2f}%.")
+
+# === Future work: Estimate cannabinoid consumption in MA ===

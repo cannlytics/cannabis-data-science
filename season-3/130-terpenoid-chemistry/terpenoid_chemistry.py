@@ -212,11 +212,6 @@ def get_result_value(
         return convert_to_numeric(result, strip=True)
     except:
         return result
-    
-
-# from cannlytics.data.coas import CoADoc
-
-# parser = CoADoc()
 
 
 # Identify all unique cannabinoids and terpenes.

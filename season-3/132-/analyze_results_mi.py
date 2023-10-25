@@ -17,6 +17,7 @@ from matplotlib.ticker import StrMethodFormatter
 from matplotlib import cm
 import numpy as np
 import pandas as pd
+import re
 import seaborn as sns
 from scipy import stats
 
@@ -66,11 +67,6 @@ sample = mi_results.loc[
     (mi_results['product_type'] == 'Flower')
 ]
 print('Number of samples:', len(sample))
-
-
-# === Augment the data ===
-
-# TODO: Add strain names.
 
 
 # === Analyze market share. ===
@@ -223,41 +219,32 @@ save_figure('mi-total-thc-by-lab.png')
 plt.show()
 
 
-# === Analyze total THC by strain. ===
+# === Augment strain data. ===
 
-# Visualize the mean THC for individual strains and overall.
-avg_thc_per_strain = sample.groupby('product_name')['total_thc'].mean().sort_values(ascending=False)
-overall_avg_thc = sample['total_thc'].mean()
-print('Overall average THC:', round(overall_avg_thc, 2))
-print('99th percentile THC:', round(sample['total_thc'].quantile(0.99), 2))
-subsample = avg_thc_per_strain.sample(10, random_state=420)
-plt.figure(figsize=(15, 12))
-bar_plot = sns.barplot(
-    x=subsample.index,
-    y=subsample.values,
-    palette="pastel"
-)
-plt.axhline(y=overall_avg_thc, color='red', linestyle='--', label=f'Overall Avg: {overall_avg_thc:.2f}%')
-plt.title('Average THC Percentage by Strain', fontweight='bold')
-plt.ylabel('THC Percentage (%)')
-plt.xlabel('Strain')
-plt.xticks(rotation=45, ha='right')
-plt.legend()
-for p in bar_plot.patches:
-    bar_plot.annotate(format(p.get_height(), '.2f') + '%', 
-                      (p.get_x() + p.get_width() / 2., p.get_height()), 
-                      ha='center', va='center', 
-                      xytext=(0, 9), 
-                      textcoords='offset points')
-plt.tight_layout()
-save_figure('mi-avg-thc-by-strain.png')
-plt.show()
+def extract_strain_name(product_name):
+    """Extract the strain name from the product name."""
+    name = str(product_name)
+    strain_name = re.split(r' - | \| | _ | x | – | — |:|\(|\)|/', name)[0]
+    strain_name = strain_name.split('Buds')[0].strip()
+    strain_name = strain_name.split('Bulk')[0].strip()
+    strain_name = strain_name.split('Flower')[0].strip()
+    strain_name = strain_name.split('Pre-Roll')[0].strip()
+    return strain_name
 
 
-# === Analyze strain counts. ===
+# Augment strain names.
+sample['strain_name'] = sample['product_name'].apply(extract_strain_name)
+print(sample.sample(10)['strain_name'])
+
+
+# === Analyze strains. ===
+
+# Exclude samples with strain_name set to None, '' or 'Unprocessed'
+sample = sample[sample['strain_name'].notna()]
+sample = sample[~sample['strain_name'].isin(['', 'Unprocessed'])]
 
 # Visualize the frequency of each strain
-strain_counts = sample['product_name'].value_counts()
+strain_counts = sample['strain_name'].value_counts()
 subsample = strain_counts.head(20)
 plt.figure(figsize=(12, 10))
 bar_plot = sns.barplot(
@@ -273,3 +260,36 @@ for index, value in enumerate(subsample.values):
 plt.tight_layout()
 save_figure('mi-top-strains.png')
 plt.show()
+
+# Visualize the average THC for the top strains.
+avg_thc_per_strain = sample.groupby('strain_name')['total_thc'].mean().sort_values(ascending=False)
+overall_avg_thc = sample['total_thc'].mean()
+print('Overall average THC:', round(overall_avg_thc, 2))
+print('99th percentile THC:', round(sample['total_thc'].quantile(0.99), 2))
+top_20_strains = strain_counts.head(20).index
+avg_thc_top_20_strains = avg_thc_per_strain[avg_thc_per_strain.index.isin(top_20_strains)]
+avg_thc_top_20_strains = avg_thc_top_20_strains.loc[top_20_strains]
+print('Average THC for top 20 strains:', round(avg_thc_top_20_strains.mean(), 2))
+plt.figure(figsize=(15, 12))
+bar_plot = sns.barplot(
+    x=avg_thc_top_20_strains.index,
+    y=avg_thc_top_20_strains.values,
+    palette="pastel"
+)
+plt.axhline(y=overall_avg_thc, color='red', linestyle='--', label=f'Overall Avg: {overall_avg_thc:.2f}%')
+plt.title('Average Total THC by Top 20 Strains', fontweight='bold')  # Modified the title
+plt.ylabel('THC Percentage (%)')
+plt.xlabel('Strain')
+plt.xticks(rotation=45, ha='right')
+plt.legend()
+for p in bar_plot.patches:
+    bar_plot.annotate(format(p.get_height(), '.2f') + '%', 
+                      (p.get_x() + p.get_width() / 2., p.get_height()), 
+                      ha='center', va='center', 
+                      xytext=(0, 9), 
+                      textcoords='offset points')
+plt.tight_layout()
+save_figure('mi-avg-thc-by-top-20-strains.png')
+plt.show()
+
+# TODO: Look at top adult-use strains vs. top medical strains.

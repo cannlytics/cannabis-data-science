@@ -232,10 +232,10 @@ print('Terpenes:', terpenes)
 # Get the results for each cannabinoid and terpene.
 for a in cannabinoids + terpenes:
     print('Augmenting:', a)
-    ct_results[a] = ct_results['results'].apply(lambda x: get_result_value(x, a))
+    ct_results[a] = ct_results['results'].apply(lambda x: get_result_value(x, a, key='name'))
 
 # Save the widened results to a file.
-outfile = 'data/ct-lab-results-2023-10-05-widened.xlsx'
+outfile = './data/ct-lab-results-2023-10-27-widened.xlsx'
 ct_results.to_excel(outfile, index=False)
 
 # Read the widened results.

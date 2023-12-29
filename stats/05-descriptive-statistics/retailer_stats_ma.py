@@ -149,7 +149,7 @@ avg_retailers_per_capita_2020 = retailers_per_capita.loc[
     (retailers_per_capita.index >= pd.to_datetime('2020-01-01')) &
     (retailers_per_capita.index < pd.to_datetime('2021-01-01'))
 ].mean()
-print('Retailres per capita in MA in 2020: %.2f' % avg_retailers_per_capita_2020)
+print('Retailers per capita in MA in 2020: %.2f' % avg_retailers_per_capita_2020)
 
 #--------------------------------------------------------------------------
 # Estimate the relationship between dispensaries per capita and

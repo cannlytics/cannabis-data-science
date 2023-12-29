@@ -16,436 +16,358 @@ Data Sources:
 
     - Illinois adult use cannabis monthly sales figures
     <https://www.idfpr.com/Forms/AUC/2021%2011%2002%20IDFPR%20monthly%20adult%20use%20cannabis%20sales.pdf>
-        
 
-References:
+Resources:
     
+    - Fed Fred API Keys
+    <https://fred.stlouisfed.org/docs/api/api_key.html>
+    
+Objective:
+    
+    Retrieve Illinois cannabis data, locked in public PDFs,
+    to save the data and calculate interesting statistics,
+    such as retailers per 100,000 people and sales per retailer.
+    
+    You will need a Fed Fred API Key saved in a .env file
+    as a FRED_API_KEY variable. A `data` and `figure` folders
+    are also expected.
+
+    You will also need to install various Python dependencies,
+    including fredapi and pdfplumber.
+    
+    `pip install fredapi pdfplumber`
 
 """
+# Standard imports.
+from datetime import datetime
 
 # External imports.
 from dotenv import dotenv_values
 from fredapi import Fred
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 import pandas as pd
-import PyPDF2
+import pdfplumber
 import requests
+import statsmodels.api as sm
+from statsmodels.graphics.regressionplots import abline_plot
 
 # Internal imports.
-from utils import end_of_period_timeseries, format_millions
-
-
-def clean_text(x, replacements=[]):
-    """Remove certain characters from a given string, x,
-    returning the clean value.
-    Args:
-        x (str): The value to clean.
-        replacements (list): A list of text replacements to make.
-    Returns:
-        (str): The clean value.
-    """
-    for replacement in replacements:
-        x = x.replace(replacement[0], replacement[1])
-    return x.strip()
+from utils import (
+    end_of_period_timeseries,
+    format_thousands,
+)
 
 #-----------------------------------------------------------------------------
-# Download the data.
+# Download and parse the retailer licensee data.
 #-----------------------------------------------------------------------------
 
-# # Download the licensees PDF.
+# Download the licensees PDF.
+licensees_url = 'https://www.idfpr.com/LicenseLookup/AdultUseDispensaries.pdf'
 filename = './data/illinois_retailers.pdf'
-# url = 'https://www.idfpr.com/LicenseLookup/AdultUseDispensaries.pdf'
-# response = requests.get(url)
-# with open(filename, 'wb') as f:
-#     f.write(response.content)
+response = requests.get(licensees_url)
+with open(filename, 'wb') as f:
+    f.write(response.content)
 
+# Read the licensees PDF.
+pdf = pdfplumber.open(filename)
 
-#-----------------------------------------------------------------------------
-# Automated cleaning of the data!
-#-----------------------------------------------------------------------------
+# Get all of the table data.
+table_data = []
+for page in pdf.pages:
+    table = page.extract_table()
+    table_data += table
+    
+# Remove the header.
+table_data = table_data[1:]
 
-# Data to collect.
-licensees = {}
-
-# The fileds in the order that they appear. The order matters.
-fields = [
+# Create a DataFrame from the table data.
+licensee_columns = [
     'organization',
     'trade_name',
-    'street',
-    'city',
-    'state',
-    'zip_code',
-    'phone_number',
+    'address',
     'medical',
     'license_issue_date',
     'license_number', 
 ]
-key = 'license_number'
+licensees = pd.DataFrame(table_data, columns=licensee_columns)
 
-# Open the PDF to get all of the text.
-licensees_pdf_file = open(filename, 'rb')
-pdfReader = PyPDF2.PdfFileReader(licensees_pdf_file)
+# Clean the organization names.
+licensees['organization'] = licensees['organization'].str.replace('\n', '')
 
-# Extract the text from each page.
-for i in range(pdfReader.numPages):
-    
-    # Get the page's text.
-    pageObj = pdfReader.getPage(i)
-    text = pageObj.extractText()
+# Separate address into 'street', 'city', 'state', 'zip_code', 'phone_number'.
+# FIXME: This could probably be done more elegantly and it's not perfect.
+streets, cities, states, zip_codes, phone_numbers = [], [], [], [], []
+for index, row in licensees.iterrows():
+    parts = row.address.split(' \n')
+    streets.append(parts[0])
+    phone_numbers.append(parts[-1])
+    locales = parts[1]
+    city_locales = locales.split(', ')
+    state_locales = city_locales[-1].split(' ')
+    cities.append(city_locales[0])
+    states.append(state_locales[0])
+    zip_codes.append(state_locales[-1])
+licensees['street'] = pd.Series(streets)
+licensees['city'] = pd.Series(cities)
+licensees['state'] = pd.Series(states)
+licensees['zip_code'] = pd.Series(zip_codes)
+licensees['phone_number'] = pd.Series(phone_numbers)
 
-    # Remove title text and column names on the first page.
-    try:
-        text = text.split('\n \n \n \n')[1]
-        text = text.split('\nCredential Number\n \n')[1]
-    except IndexError:
-        pass
+# Save the licensees data.
+licensees.to_excel('./data/licensees_data_il.xlsx', sheet_name='Data')
 
-    # Replace nuisance text.
-    replacements = [
-        (', Illinois ', '\n\nIL\n\n'), # Handle state abbriviations.
-        (', IL ', '\n\nIL\n\n'),
-        (', IL', '\n\nIL\n\n'),
-        ('IL. ', '\n\nIL\n\n'),
-        (')\n', ') '), # Handle split phone numbers
-        ('\n \nN\n.\n \n', ' N. '), # Handle certain street addresses.
-        ('Ste. C ', 'Ste. C\n'),
-        (' \n \nSte.', ' Ste.'),
-        ('\n \nSt.', 'St.'),
-        ('Street \n', 'Street\n\n'),
-        ('Ave.\n \n ', 'Ave. \n\n'),
-        ('Zen\n \nL', 'Zen L'),
-        ('L\ne\naf\n \n', 'Leaf '),
-        ('Chicago, ', 'Chicago\n\n'),
-        ('\n \n', '\n\n'), # Split lines.
-        ('\n\nLLC', ' LLC'),
-        ("’", "'"),
-    ]
-    text = clean_text(text, replacements)
-
-    # Split text into observations.
-    observations = text.split('\n\n')
-
-    # Clean each observation.
-    replacements = [
-        (' \n', ' '),
-        ('\n-\n' , '-'),
-        ('\n*', ''),
-        ('\n', ''),
-        ('  ', ' '),
-    ]
-    observations = [clean_text(x, replacements) for x in observations]
-
-    # Remove empty lines and the footer on the first page.
-    observations = [x for x in observations if x]
-    try:
-        observations.remove('IDFPR -')
-        observations.remove('LICENSED ADULT USE CANNABIS DISPENSARIES')
-    except ValueError:
-        pass
-
-    # Identify each licensee's data.
-    for n in range(0, len(observations), len(fields)):
-        observation = observations[n:n + len(fields)]
-
-        # Record the observation's fields.
-        entry = {}
-        for index, field in enumerate(fields):
-            entry[field] = observation[index]
-        licensees[entry[key]] = entry  
-    
-# Close the file
-licensees_pdf_file.close()
-
-# Turn licensees to dataframe and save as an Excel workbook.
-licensees_data = pd.DataFrame.from_dict(licensees, orient='index')
-licensees_data.to_excel('./data/licensees_il.xlsx')
-
-#----------------
-
-# Replace 'Yes ' with 'Yes\n'
-# Replace 'No ' with 'No\n'
-
-
-
-# Replace '-AUDO' with '-AUDO\n'
-# Replace '\n-AUDO' with '-AUDO'
-
-# Replace ', LLC ' with ', LLC\n'
-# Replace '\nLLC' with ' LLC'
-
-# Replace 'Compassionate\nCare' with 'Compassionate Care'
-
-# Replace 'Sunnyside*' with 'Sunnyside'
-
-# Replace '2019 ' with '2019\n'
-# Replace '2020 ' with '2020\n'
-# Replace '2021 ' with '2021\n'
-
-# Delete 'IDFPR - LICENSED ADULT USE CANNABIS DISPENSARIES\n'
-
-# Replace '\n-' with '-'
-
-# Replace ',\nLLC' with ', LLC'
-
-# Replace 'Tel: (TBD)' with 'None'
-# Replace ' \(' with '\n\('
-
-# Replace '284\n' with '284'
-
-# FIXME:
-    # Handle '2nd Site'
-    # Handle 'Inc.'
-    # 'IL.' with no space.
-    # ' IL '
 
 #-----------------------------------------------------------------------------
-# Parse the licensees data.
+# Download and parse the sales data.
 #-----------------------------------------------------------------------------
 
-# # Specify the fields.
+# Download the sales data PDF.
+sales_url = 'https://www.idfpr.com/Forms/AUC/2021%2011%2002%20IDFPR%20monthly%20adult%20use%20cannabis%20sales.pdf'
+filename = './data/illinois_sales.pdf'
+response = requests.get(sales_url)
+with open(filename, 'wb') as f:
+    f.write(response.content)
 
+# Read the sales data PDF.
+pdf = pdfplumber.open(filename)
 
-# # Parse the licensee data from the text file.
-# licensees = {}
-# with open('./data/illinois_retailers.txt', 'r') as f:
-#     text = f.read()
-#     observations = text.split('\n\n')
-#     for obs in observations:
-#         values = obs.split('\n')
-#         entry = {}
-#         for index, field in enumerate(fields):
-#             entry[field] = values[index]
-#         licensees[entry['license_number']] = entry
+# Get all of the table data.
+table_data = []
+for page in pdf.pages:
+    
+    # Get all of the tables on the page.
+    tables = page.find_tables()
+    for table in tables:
+        data = table.extract()
+        table_data += data
+    
+# Add the year to each observation, assuming reverse chronological order
+# starting at the beginning year, 2020, and adding a year at each beginning
+# of year.
+year = 2020
+for row in reversed(table_data):
+    row.append(year)
+    if row[0] == 'January':
+        year += 1
 
-# # Turn licensees to dataframe and save as an Excel workbook.
-# licensees_data = pd.DataFrame.from_dict(licensees, orient='index')
-# licensees_data.to_excel('./data/illinois_retailers.xlsx')
+# Create a DataFrame from the table data.
+sales_columns = [
+    'month',
+    'items_sold',
+    'in_state_sales',
+    'out_of_state_sales',
+    'total_sales',
+    'year',
+]
+sales_data = pd.DataFrame(table_data, columns=sales_columns)
+
+# Create a time index and only keep rows that start with a month name.
+def month_year_to_date(x):
+    try:
+        return datetime.strptime(x.replace('.0', ''), '%B %Y')
+    except:
+        return pd.NaT
+
+# Set the time index.
+dates = sales_data.month.map(str) + ' ' + sales_data.year.map(str)
+dates = dates.apply(month_year_to_date)
+sales_data.index = dates
+sales_data = sales_data.loc[sales_data.index.notnull()]
+sales_data.sort_index(inplace=True)
+
+# Convert string columns to numeric, handling dollar signs.
+sales_data[sales_data.columns[1:]] = sales_data[sales_data.columns[1:]] \
+    .replace('[\$,]', '', regex=True).astype(float)
+
+# Set the index as the end of the month.
+sales_data = end_of_period_timeseries(sales_data)
+
+# Save the sales data.
+sales_data.to_excel('./data/sales_data_il.xlsx', sheet_name='Data')
 
 #-----------------------------------------------------------------------------
 # Calculate Illinois retailer statistics.
 #-----------------------------------------------------------------------------
 
-# Read in the sales data.
-# production = pd.read_excel('./data/retailer_data_il.xlsx')
-# production.index = pd.to_datetime(production.month)
+# Format the `license_issue_date`.
+licensees['issue_date'] = pd.to_datetime(licensees['license_issue_date'])
 
-# # Get the Illinois population data.
-# config = dotenv_values('../.env')
-# fred_api_key = config.get('FRED_API_KEY')
-# fred = Fred(api_key=fred_api_key)
-# observation_start = production.index.min().isoformat()
-# population = fred.get_series('ILPOP', observation_start=observation_start)
-# population = end_of_period_timeseries(population, 'Y')
-# population = population.multiply(1000) # thousands of people
-# new_row = pd.DataFrame([population[-1]], index=[pd.to_datetime('2021-12-31')])
-# population = pd.concat([population, pd.DataFrame(new_row)], ignore_index=False)
+# Create total retailers by month series.
+total_retailers = []
+for index, _ in sales_data.iterrows():
+    licensed_retailers = licensees.loc[licensees['issue_date'] <= index]
+    count = len(licensed_retailers)
+    total_retailers.append(count)
+sales_data['total_retailers'] = pd.Series(total_retailers, index=sales_data.index)
 
-# # Format the license_issue_date.
-# licensees_data['issue_date'] = pd.to_datetime(licensees_data['license_issue_date'])
+# Get the Illinois population data.
+config = dotenv_values('../.env')
+fred_api_key = config.get('FRED_API_KEY')
+fred = Fred(api_key=fred_api_key)
+observation_start = sales_data.index.min().isoformat()
+population = fred.get_series('ILPOP', observation_start=observation_start)
+population = population.multiply(1000) # thousands of people
 
-# # Create total retailers by month series.
-# production['total_retailers'] = 0
-# for index, _ in production.iterrows():
-#     production.at[index, 'total_retailers'] = len(licensees_data.loc[
-#         (licensees_data['issue_date'] <= index)
-#     ])
+# Conjecture that the population remains constant in 2021.
+new_row = pd.DataFrame([population[-1]], index=[pd.to_datetime('2021-12-31')])
+population = pd.concat([population, pd.DataFrame(new_row)], ignore_index=False)
 
+# Project monthly population.
+monthly_population = population.resample('M').mean().pad()
+monthly_population = monthly_population.loc[monthly_population.index <= sales_data.index.max()]
 
-# # Calculate retailers per capita.
-# monthly_retailers = end_of_period_timeseries(production['total_retailers'])
-# monthly_population = population[0].resample('M').mean().pad()
-# retailers_per_capita = monthly_retailers / (monthly_population.iloc[0] / 100_000)
-# retailers_per_capita.plot()
-# plt.show()
+# Calculate retailers per capita.
+capita = monthly_population / 100_000
+retailers_per_capita = sales_data['total_retailers'] / capita[0]
+retailers_per_capita.plot(title='Retailers per 100,000 People')
+plt.show()
 
-# # Calculate sales per retailer.
-# total_sales = end_of_period_timeseries(production['total_sales'])
-# sales_per_retailer = total_sales / production['total_retailers']
-# sales_per_retailer.plot()
-# plt.show()
+# Calculate sales per retailer.
+sales_per_retailer = sales_data['total_sales'] / sales_data['total_retailers']
+sales_per_retailer.plot(title='Sales per Retailer')
+plt.show()
 
-# avg_2020_sales = total_sales.loc[
-#     (total_sales.index >= pd.to_datetime('2020-01-01')) &
-#     (total_sales.index < pd.to_datetime('2021-01-01'))
-# ].sum()
-# print('Sales per retailer in IL in 2020: %.2fM' % (avg_2020_sales / 1_000_000))
+# Save the retail statistics.
+stats = pd.concat([retailers_per_capita, sales_per_retailer], axis=1)
+stats.columns = ['retailers_per_capita', 'sales_per_retailer']
+stats.to_excel('./data/retail_stats_il.xlsx')
 
+#-----------------------------------------------------------------------------
+# Wahoo! We have all of the data, let's calculate even more stats.
+#-----------------------------------------------------------------------------
 
-# TODO: Save retail statistics.
+# Calculate average retailers per capita in 2020.
+avg_2020_retailers_per_capita = retailers_per_capita.loc[
+    (retailers_per_capita.index >= pd.to_datetime('2020-01-01')) &
+    (retailers_per_capita.index < pd.to_datetime('2021-01-01'))
+].mean()
+print('Retailres per capita in IL in 2020: %.2f' % avg_2020_retailers_per_capita)
+
+# Calculate average revenue per retailer in 2020.
+avg_2020_sales = sales_per_retailer.loc[
+    (sales_per_retailer.index >= pd.to_datetime('2020-01-01')) &
+    (sales_per_retailer.index < pd.to_datetime('2021-01-01'))
+].sum()
+print('Sales per retailer in IL in 2020: %.2fM' % (avg_2020_sales / 1_000_000))
+
+# Calculate average retailers per capita in 2021.
+avg_2021_retailers_per_capita = retailers_per_capita.loc[
+    (retailers_per_capita.index >= pd.to_datetime('2021-01-01')) &
+    (retailers_per_capita.index < pd.to_datetime('2022-01-01'))
+].mean()
+print('Retailres per capita in IL in 2021: %.2f' % avg_2021_retailers_per_capita)
+
+# Calculate average revenue per retailer in 2021.
+avg_2021_sales = sales_per_retailer.loc[
+    (sales_per_retailer.index >= pd.to_datetime('2021-01-01')) &
+    (sales_per_retailer.index < pd.to_datetime('2022-01-01'))
+].sum()
+print('Sales per retailer in IL in 2021: %.2fM' % (avg_2021_sales / 1_000_000))
+
 
 #--------------------------------------------------------------------------
 # Estimate the relationship between dispensaries per capita and
 # sales per dispensary.
 #--------------------------------------------------------------------------
-# import statsmodels.api as sm
-# from utils import format_thousands
-# from statsmodels.graphics.regressionplots import abline_plot
 
-# # Run a regression of sales per retailer on retailers per 100,000 adults.
-# Y = sales_per_retailer
-# X = retailers_per_capita
-# X = sm.add_constant(X)
-# regression = sm.OLS(Y, X).fit()
-# print(regression.summary())
+# Run a regression of sales per retailer on retailers per 100,000 people.
+Y = sales_per_retailer
+X = retailers_per_capita
+X = sm.add_constant(X)
+regression = sm.OLS(Y, X).fit()
+print(regression.summary())
 
-# # Interpret the relationship.
-# beta = regression.params.values[1]
-# statement = """If retailers per 100,000 adults increases by 1,
-# then everything else held constant one would expect
-# revenue per retailer to change by {}.
-# """.format(format_thousands(beta))
-# print(statement)
+# Interpret the relationship.
+beta = regression.params.values[1]
+statement = """If retailers per 100,000 people increases by 1,
+then everything else held constant one would expect
+revenue per retailer to change by {}.
+""".format(format_thousands(beta))
+print(statement)
 
-# stats = pd.DataFrame([sales_per_retailer, retailers_per_capita])
+# Visualize the regression.
+ax = stats.plot(
+    x='retailers_per_capita',
+    y='sales_per_retailer',
+    kind='scatter'
+)
+abline_plot(
+    model_results=regression,
+    ax=ax
+)
+plt.show()
 
-# # Visualize the regression.
-# ax = stats.plot(
-#     x='retailers_per_100_000',
-#     y='revenue_per_retailer',
-#     kind='scatter'
-# )
-# abline_plot(
-#     model_results=regression,
-#     ax=ax
-# )
-# plt.show()
+#--------------------------------------------------------------------------
+# Create a beautiful visualization.
+#--------------------------------------------------------------------------
 
+# Set chart defaults.
+plt.style.use('fivethirtyeight')
+plt.rcParams['font.family'] = 'Times New Roman'
 
+# Create the figure. 
+fig, ax = plt.subplots(figsize=(15, 5))
 
+# Write the text.
+title = """The Relationship Between
+Dispensaries per Capita and
+Sales per Dispensary
+in Illinois"""
+notes = """Data: Monthly number of retailers and total sales in Illinois from
+{start} through {stop}. Annual population to 2020 is used and projected forward.
+Data Source: Illinois Department of Financial and Professional Regulation."""
+notes = notes.format(
+    start=sales_data.iloc[0]['month'] + ' ' + str(int(sales_data.iloc[0]['year'])),
+    stop=sales_data.iloc[-1]['month'] + ' ' + str(int(sales_data.iloc[-1]['year'])),
+)
 
+# Plot the points.
+stats.plot(
+    x='retailers_per_capita',
+    y='sales_per_retailer',
+    kind='scatter',
+    ax=ax
+)
 
+# Annotate each point.
+for index, row in stats.iterrows():
+    point = (
+        row['retailers_per_capita'],
+        row['sales_per_retailer']
+    )
+    text = index.strftime('%#m/%y')
+    ax.annotate(text, point, fontsize=11)
+    
+# Plot the regression line.
+abline_plot(model_results=regression, ax=ax)
 
+# Format the Y-axis.
+yaxis_format = FuncFormatter(format_thousands)
+ax.yaxis.set_major_formatter(yaxis_format)
 
+# Plot the title, labels, and notes.
+plt.ylabel('Monthly Revenue per Dispensary ($)', fontsize=16)
+plt.xlabel('Retailers per 100,000 People', fontsize=16)
+plt.title(title, fontsize=21, pad=10)
+plt.figtext(0.05, -0.15, notes, ha='left', fontsize=12)
 
+# Format the plot by removing unnecessary ink.
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(True)
+ax.spines['left'].set_visible(True)
 
-
-#-----------------------------------------------------------------------------
-# SCRAP
-#-----------------------------------------------------------------------------
-
-
-# TODO: Upload licensees PDF to cloud storage.
-
-# Extract the licensees data.
-# import re
-
-# from google.cloud import documentai_v1beta2 as documentai
-# from google.cloud import storage
-
-
-# # def batch_parse_table(
-# #     project_id="YOUR_PROJECT_ID",
-# #     input_uri="gs://cloud-samples-data/documentai/form.pdf",
-# #     destination_uri="gs://your-bucket-id/path/to/save/results/",
-# #     timeout=90,
-# # ):
-# #     """Parse a form"""
-
-# # Set credentials.
-# import os
-# import environ
-# env = environ.Env()
-# env.read_env('../.env')
-# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = env('GOOGLE_APPLICATION_CREDENTIALS')
-
-# project_id =  env('PROJECT_ID')
-# storage_bucket = env('STORAGE_BUCKET')
-# input_uri = f'gs://{storage_bucket}/data/state_data/illinois_retailers.pdf'
-# destination_uri = f'gs://{storage_bucket}/data/state_data/parsed_'
-# timeout = 90
-
-# client = documentai.DocumentUnderstandingServiceClient()
-
-# gcs_source = documentai.types.GcsSource(uri=input_uri)
-
-# # mime_type can be application/pdf, image/tiff,
-# # and image/gif, or application/json
-# input_config = documentai.types.InputConfig(
-#     gcs_source=gcs_source,
-#     mime_type='application/pdf',
-# )
-
-# # where to write results
-# output_config = documentai.types.OutputConfig(
-#     gcs_destination=documentai.types.GcsDestination(uri=destination_uri),
-#     pages_per_shard=1,  # Map one doc page to one output page
-# )
-
-# # Improve table parsing results by providing bounding boxes
-# # specifying where the box appears in the document (optional)
-# table_bound_hints = [
-#     documentai.types.TableBoundHint(
-#         page_number=1,
-#         bounding_box=documentai.types.BoundingPoly(
-#             # Define a polygon around tables to detect
-#             # Each vertice coordinate must be a number between 0 and 1
-#             normalized_vertices=[
-#                 # Top left
-#                 documentai.types.geometry.NormalizedVertex(x=0, y=0),
-#                 # Top right
-#                 documentai.types.geometry.NormalizedVertex(x=1, y=0),
-#                 # Bottom right
-#                 documentai.types.geometry.NormalizedVertex(x=1, y=1),
-#                 # Bottom left
-#                 documentai.types.geometry.NormalizedVertex(x=0, y=1),
-#             ]
-#         ),
-#     )
-# ]
-
-# # Setting enabled=True enables form extraction
-# table_extraction_params = documentai.types.TableExtractionParams(
-#     enabled=True,
-#     table_bound_hints=table_bound_hints,
-# )
-
-# # Location can be 'us' or 'eu'
-# parent = "projects/{}/locations/us".format(project_id)
-# request = documentai.types.ProcessDocumentRequest(
-#     input_config=input_config,
-#     output_config=output_config,
-#     table_extraction_params=table_extraction_params,
-# )
-
-# api_requests = []
-# api_requests.append(request)
-
-# batch_request = documentai.types.BatchProcessDocumentsRequest(
-#     parent=parent,
-#     requests=api_requests,
-# )
-
-# operation = client.batch_process_documents(batch_request)
-
-# # Wait for the operation to finish.
-# operation.result(timeout)
-
-# # Results are written to GCS. Use a regex to find output files.
-# match = re.match(r"gs://([^/]+)/(.+)", destination_uri)
-# output_bucket = match.group(1)
-# prefix = match.group(2)
-
-# storage_client = storage.client.Client()
-# bucket = storage_client.get_bucket(output_bucket)
-# blob_list = list(bucket.list_blobs(prefix=prefix))
-# print('Output files:')
-# for blob in blob_list:
-#     print(blob.name)
-
-
-# # TODO: Download created JSON.
-
-
-# # Read in the JSON files.
-# import json
-# data_files = [
-#     './data/parsed_illinois_retailers-output-page-1-to-1.json',
-# ]
- 
-# # Opening JSON file
-# f = open('./data/parsed_illinois_retailers-output-page-1-to-1.json')
-# data = json.load(f)
- 
-
-# Parse the JSON.
+# Save and show the figure.
+plt.margins(1, 1)
+plt.savefig(
+    'figures/revenue_per_retailer_to_retailers_per_100_000_il.png',
+    dpi=300,
+    bbox_inches='tight',
+    pad_inches=0.75,
+    transparent=False,
+)
+plt.show()
 

@@ -84,14 +84,14 @@ sns.despine(trim=True)
 plt.vlines(
     pd.to_datetime('2021-12-06'),
     0,
-    500,
+    525,
     lw=2,
     linestyles='--',
     colors=['black'],
 )
 plt.text(
     pd.to_datetime('2021-12-06'),
-    500,
+    525,
     'News story about AltaSci Labs',
     verticalalignment='center',
     color='black'

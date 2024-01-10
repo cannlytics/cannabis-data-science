@@ -44,6 +44,11 @@ if __name__ == '__main__':
     output_file = sys.argv[2]
     remove_bg(input_file, output_file)
 
+    # Example: Cutout a single image.
+    # input_file = 'example.jpg'
+    # output_file = 'example-cutout.png'
+    # remove_bg(input_file, output_file)
+
     # Example: Cutout all images in a directory.
     # import os
     # image_dir = r''

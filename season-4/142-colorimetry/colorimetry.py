@@ -54,7 +54,13 @@ def remove_bg(input_path: str, output_path: str) -> None:
 # Read SC lab's flower results.
 results = pd.read_excel('data/augmented-ca-lab-results-sclabs-2024-01-03-15-26-35.xlsx')
 # emerald_cup = results.loc[results['producer'].str.contains('Emerald Cup')]
-flower = results.loc[results['product_type'] == 'Flower, Inhalable']
+flower_types = [
+    'Flower, Inhalable',
+    'Flower, Inhaled Product',
+    'Flower, Product Inhalable',
+]
+flower = results.loc[results['product_type'].isin(flower_types)]
+emerald_cup = flower.loc[flower['producer'].astype(str).str.contains('Emerald Cup')]
 
 # Read Glass House flower results.
 
@@ -102,17 +108,30 @@ for image_file in image_files:
 
 
 # DEV:
-cropped_images = [os.path.join(image_dir, x) for x in os.listdir(image_dir) if x.endswith('-cropped.png')]
+# cropped_images = [os.path.join(image_dir, x) for x in os.listdir(image_dir) if x.endswith('-cropped.png')]
 
 
 # === Color Analysis ===
 
-def calculate_purpleness(rgb):
+def calculate_purpleness(rgb, how='scale'):
     """Purple is dominant in red and blue channels, and low in green.
-    You might need to adjust the formula depending on your specific
-    shade of purple.
+    Args:
+        rgb (list): A list of RGB values.
+        how (str): How to calculate purpleness. Options are 'scale' and 'normalized'.
+        Scale will return a value between 0 and 1. Normalized will return a value between -1 and 1.
+    
+    Returns:
+        float: The purpleness score.
+    
+    Note: Adjust the formula for other shades of purple.
     """
-    return (rgb[0] + rgb[2]) - 2*rgb[1]
+    purpleness = (rgb[0] + rgb[2]) - 2*rgb[1]
+    if how == 'scale':
+        purpleness = purpleness + 510
+        purpleness = purpleness / 1020
+    elif how == 'normalized':
+        purpleness = purpleness / 510
+    return purpleness
 
 
 def calculate_colorfulness(image):
@@ -328,72 +347,73 @@ def plot_histogram(image, mask=None):
         ax.set_title(f'{color} Histogram')
     plt.show()
 
-# Load the image
-image = cv2.imread(image_file)
 
-# Check if there's an alpha channel
-if image.shape[-1] == 4:
-    # Create a mask for pixels where the alpha channel is not transparent
-    mask = image[:, :, 3] > 0
-    image = image[:, :, :3]  # Drop the alpha channel for color analysis
-else:
-    mask = None
+# === DEV ===
 
-# Plot the histogram
-plot_histogram(image, mask)
+# # Load the image
+# image = cv2.imread(image_file)
 
-# Calculate the dominant color
-dominant_color = get_dominant_color(image, mask=mask)
-print("Dominant color (BGR):", dominant_color)
+# # Check if there's an alpha channel
+# if image.shape[-1] == 4:
+#     # Create a mask for pixels where the alpha channel is not transparent
+#     mask = image[:, :, 3] > 0
+#     image = image[:, :, :3]  # Drop the alpha channel for color analysis
+# else:
+#     mask = None
+
+# # Plot the histogram
+# plot_histogram(image, mask)
+
+# # Calculate the dominant color
+# dominant_color = get_dominant_color(image, mask=mask)
+# print("Dominant color (BGR):", dominant_color)
 
 
 # Replace 'image_path' with the path of your image
 # dominant_color = find_dominant_color(image_file)
 
+# DEV:
+# # Assuming cropped_images is a list of image file paths
+# for image_file in cropped_images[30:100]:  # Just taking first 3 for demonstration
 
-# Assuming cropped_images is a list of image file paths
-for image_file in cropped_images[30:100]:  # Just taking first 3 for demonstration
-
-    # image = cv2.imread(image_file, cv2.IMREAD_UNCHANGED)  # Read the image with alpha channel
-    # # Check if there is an alpha channel
-    # if image.shape[-1] == 4:
-    #     # Split the image into RGBA channels
-    #     b_channel, g_channel, r_channel, alpha_channel = cv2.split(image)
+#     # image = cv2.imread(image_file, cv2.IMREAD_UNCHANGED)  # Read the image with alpha channel
+#     # # Check if there is an alpha channel
+#     # if image.shape[-1] == 4:
+#     #     # Split the image into RGBA channels
+#     #     b_channel, g_channel, r_channel, alpha_channel = cv2.split(image)
         
-    #     # Create a mask where the alpha channel is not transparent
-    #     mask = alpha_channel > 0
+#     #     # Create a mask where the alpha channel is not transparent
+#     #     mask = alpha_channel > 0
         
-    #     # Use the mask to select only the non-transparent pixels
-    #     non_transparent_pixels = image[mask]
+#     #     # Use the mask to select only the non-transparent pixels
+#     #     non_transparent_pixels = image[mask]
 
-    #     # Compute the mean color of the non-transparent pixels
-    #     mean_color = cv2.mean(image[:, :, :3], mask=mask.astype(np.uint8))[:3]
-    # else:
-    #     # No alpha channel, so just compute the mean color directly
-    #     cropped_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    #     mean_color = cropped_img_rgb.mean(axis=(0, 1))
+#     #     # Compute the mean color of the non-transparent pixels
+#     #     mean_color = cv2.mean(image[:, :, :3], mask=mask.astype(np.uint8))[:3]
+#     # else:
+#     #     # No alpha channel, so just compute the mean color directly
+#     #     cropped_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+#     #     mean_color = cropped_img_rgb.mean(axis=(0, 1))
 
-    # print(f"Mean color (ignoring transparency): {mean_color}")
-    color = find_dominant_color(image_file)
+#     # print(f"Mean color (ignoring transparency): {mean_color}")
+#     color = find_dominant_color(image_file)
 
-    # Normalize the RGB values to the range [0, 1] for Matplotlib
-    mean_color_normalized = np.array(color) / 255
+#     # Normalize the RGB values to the range [0, 1] for Matplotlib
+#     mean_color_normalized = np.array(color) / 255
 
-    # Create a figure and a subplot with a title
-    fig, ax = plt.subplots()
-    ax.set_title('Mean Color of the Image')
-    ax.add_patch(plt.Rectangle((0, 0), 1, 1, color=mean_color_normalized))
-    ax.axis('off')  # Hide the axes
-    plt.show()
+#     # Create a figure and a subplot with a title
+#     fig, ax = plt.subplots()
+#     ax.set_title('Mean Color of the Image')
+#     ax.add_patch(plt.Rectangle((0, 0), 1, 1, color=mean_color_normalized))
+#     ax.axis('off')  # Hide the axes
+#     plt.show()
 
-    # FIXME:
-    # image = cv2.imread(image_path)
-    # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
-    # xyz = rgb_to_xyz(image)
-    # x, y = xyz_to_chromaticity(xyz)
-    # plot_chromaticity_diagram(x.flatten(), y.flatten())
-
-
+#     # FIXME:
+#     # image = cv2.imread(image_path)
+#     # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
+#     # xyz = rgb_to_xyz(image)
+#     # x, y = xyz_to_chromaticity(xyz)
+#     # plot_chromaticity_diagram(x.flatten(), y.flatten())
 
 
 
@@ -402,8 +422,13 @@ for image_file in cropped_images[30:100]:  # Just taking first 3 for demonstrati
 purple_scores = {}
 for image_file in cropped_images:
     coa_id = os.path.split(image_file)[-1].split('-')[0]
+    if coa_id in purple_scores:
+        continue
     image = cv2.imread(image_file)
-    cropped_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    try:
+        cropped_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    except:
+        continue
     mean_color = cropped_img_rgb.mean(axis=0).mean(axis=0)
     # color_scores[coa_id] = mean_color
     purple_scores[coa_id] = calculate_purpleness(mean_color)
@@ -413,24 +438,62 @@ for image_file in cropped_images:
 colorfulness_scores = {}
 for image_file in cropped_images:
     coa_id = os.path.split(image_file)[-1].split('-')[0]
+    if coa_id in colorfulness_scores:
+        continue
     image = cv2.imread(image_file)
-    cropped_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    try:
+        cropped_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    except:
+        continue
     colorfulness = calculate_colourfulness(cropped_img_rgb)
     # colorfulness = calculate_colorfulness(cropped_img_rgb)
     colorfulness_scores[coa_id] = colorfulness
     print(f'Color score for {coa_id}: {colorfulness_scores[coa_id]}')
-
-
-# === Color Analysis Visualizations ===
 
 # Merge color scores with the data.
 flower['id'] = flower['coa_id'].apply(lambda x: x.split('-')[0].strip())
 flower['purpleness'] = flower['id'].map(purple_scores)
 flower['colorfulness_score'] = flower['id'].map(colorfulness_scores)
 
+
+# === Color Analysis Visualizations ===
+
+# === The Cannlytics Most Purple Flower Award ===
+
+# Top 10 most purple products in 2022.
+emerald_cup_2022 = flower.loc[flower['producer'].astype(str).str.contains('Emerald Cup 2022')]
+purple = emerald_cup_2022.sort_values(by='purpleness', ascending=False)
+purple = purple.loc[purple['purpleness'] < 5]
+print('Top 10 Most Purple Flowers 2022')
+print(purple.head(10)[['coa_id', 'product_name', 'purpleness']])
+most_purple = purple.loc[purple['purpleness'] == purple['purpleness'].max()]
+print(f'Most Purple Flower 2022: {most_purple.iloc[0]["product_name"]}, {most_purple.iloc[0]["purpleness"]}')
+
+# Top 10 most purple products in 2023.
+emerald_cup_2023 = flower.loc[flower['producer'].astype(str).str.contains('Emerald Cup 2023')]
+purple = emerald_cup_2023.sort_values(by='purpleness', ascending=False)
+purple = purple.loc[purple['purpleness'] < 5]
+print('Top 10 Most Purple Flowers 2023')
+print(purple.head(10)[['coa_id', 'product_name', 'purpleness']])
+most_purple = purple.loc[purple['purpleness'] == purple['purpleness'].max()]
+print(f'Most Purple Flower 2023: {most_purple.iloc[0]["product_name"]}, {most_purple.iloc[0]["purpleness"]}')
+
 # Visualize the purpleness scores.
 plt.figure(figsize=(15, 8))
-plt.hist(flower['purpleness'], bins=30, alpha=0.7, label='2022', color='violet')
+plt.hist(
+    emerald_cup_2022['purpleness'].loc[emerald_cup_2022['purpleness'] < 5],
+    bins=30,
+    alpha=0.7,
+    label='2022',
+    color='violet',
+)
+plt.hist(
+    emerald_cup_2023['purpleness'].loc[emerald_cup_2023['purpleness'] < 5],
+    bins=30,
+    alpha=0.55,
+    label='2023',
+    color='darkviolet',
+)
 plt.xlabel('Purpleness Score')
 plt.ylabel('Count')
 plt.title('Flower Purpleness (Emerald Cup 2022 vs 2023)')
@@ -438,13 +501,22 @@ plt.legend()
 # plt.savefig('./presentation/images/emerald-cup-purple-scores.pdf', dpi=300, bbox_inches='tight', transparent=True)
 plt.show()
 
-# The Cannlytics Most Purple Flower Award
-most_purple = flower.loc[flower['purpleness'] == flower['purpleness'].max()]
-print(f'Most Purple Flower: {most_purple.iloc[0]["product_name"]}, {most_purple.iloc[0]["purpleness"]}')
-
 # Visualize the colorfulness scores.
 plt.figure(figsize=(15, 8))
-plt.hist(flower['colorfulness_score'], bins=30, alpha=0.7, label='2022', color='darkviolet')
+plt.hist(
+    emerald_cup_2022['colorfulness_score'],
+    bins=30,
+    alpha=0.7,
+    label='2022',
+    color='green',
+)
+plt.hist(
+    emerald_cup_2023['colorfulness_score'],
+    bins=30,
+    alpha=0.7,
+    label='2023',
+    color='orangered',
+)
 plt.xlabel('Colorfulness Score')
 plt.ylabel('Count')
 plt.title('Flower Colorfulness (Emerald Cup 2022 vs 2023)')
@@ -452,6 +524,27 @@ plt.legend()
 # plt.savefig('./presentation/images/emerald-cup-colorfulness-scores.pdf', dpi=300, bbox_inches='tight', transparent=True)
 plt.show()
 
-# The Cannlytics Most Colorful Flower Award
-most_colorful = flower.loc[flower['colorfulness_score'] == flower['colorfulness_score'].max()]
-print(f'Most Colorful Flower 2022: {most_colorful.iloc[0]["product_name"]}, Colorfulness Score: {most_colorful.iloc[0]["colorfulness_score"]}')
+# Top 10 most colorful products in 2022.
+emerald_cup_2022 = flower.loc[flower['producer'].astype(str).str.contains('Emerald Cup 2022')]
+colorful_2022 = emerald_cup_2022.sort_values(by='colorfulness_score', ascending=False)
+print('Top 10 Most Colorful Flowers 2022')
+print(colorful_2022.head(10)[['coa_id', 'product_name', 'colorfulness_score']])
+most_colorful_2022 = colorful_2022.iloc[0]
+print(f'Most Colorful Flower 2022: {most_colorful_2022["product_name"]}, Colorfulness Score: {most_colorful_2022["colorfulness_score"]}')
+
+# Top 10 most colorful products in 2023.
+emerald_cup_2023 = flower.loc[flower['producer'].astype(str).str.contains('Emerald Cup 2023')]
+colorful_2023 = emerald_cup_2023.sort_values(by='colorfulness_score', ascending=False)
+print('Top 10 Most Colorful Flowers 2023')
+print(colorful_2023.head(10)[['coa_id', 'product_name', 'colorfulness_score']])
+most_colorful_2023 = colorful_2023.iloc[0]
+print(f'Most Colorful Flower 2023: {most_colorful_2023["product_name"]}, Colorfulness Score: {most_colorful_2023["colorfulness_score"]}')
+
+# # The Cannlytics Most Colorful Flower Award (Assuming flower includes data from both 2022 and 2023)
+# most_colorful_overall = flower.loc[flower['colorfulness_score'] == flower['colorfulness_score'].max()]
+# print(f'Most Colorful Flower Overall: {most_colorful_overall.iloc[0]["product_name"]}, Colorfulness Score: {most_colorful_overall.iloc[0]["colorfulness_score"]}')
+
+# # Top 10 most colorful products overall.
+# colorful_overall = flower.sort_values(by='colorfulness_score', ascending=False).head(10)
+# print('Top 10 Most Colorful Flowers Overall')
+# print(colorful_overall[['coa_id', 'product_name', 'colorfulness_score']])

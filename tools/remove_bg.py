@@ -40,9 +40,19 @@ def remove_bg(input_path: str, output_path: str) -> None:
 if __name__ == '__main__':
 
     # Get the input video path and output video path
-    input_file = sys.argv[1]
-    output_file = sys.argv[2]
+    # input_file = sys.argv[1]
+    # output_file = sys.argv[2]
+    # remove_bg(input_file, output_file)
+
+    # Example: Cutout a single image.
+    input_file = 'example.jpg'
+    output_file = 'example-cutout.png'
     remove_bg(input_file, output_file)
+
+    # Example: Cutout a single image.
+    # input_file = 'example.jpg'
+    # output_file = 'example-cutout.png'
+    # remove_bg(input_file, output_file)
 
     # Example: Cutout all images in a directory.
     # import os

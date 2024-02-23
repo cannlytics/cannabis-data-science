@@ -45,8 +45,8 @@ from cannlytics.firebase import (
     upload_file,
 )
 from cannlytics.utils import kebab_case, snake_case
-from cannlytics.utils.data import nonzero_columns, nonzero_keys
-from cannlytics.utils.files import download_file_from_url, unzip_files
+from cannlytics.utils.utils import nonzero_columns, nonzero_rows
+from cannlytics.utils import download_file_from_url, unzip_files
 import pandas as pd
 # from sklearn.metrics import confusion_matrix
 import statsmodels.api as sm
@@ -424,7 +424,7 @@ if __name__ == '__main__':
 
     # Use the model for prediction!
     predictions = predict_effects(models, X, model_stats['thresholds'])
-    predicted_effects = predictions.apply(nonzero_keys, axis=1)
+    predicted_effects = predictions.apply(nonzero_rows, axis=1)
 
     # Save the predictions!
     strain_effects = predicted_effects.to_frame()

@@ -1,0 +1,41 @@
+%---------------------------------%
+%	Cover
+%---------------------------------%
+\documentclass[../article.tex, 12pt]{subfiles}
+
+\begin{document}
+\newgeometry{
+  top=1.0in,
+  bottom=1.0in,
+  right=1.0in,
+  left=1.0in
+}
+{\parindent0pt
+
+% Background
+\tikz[remember picture, overlay]
+\node[opacity=1.0, inner sep=0pt] at (current page.center){
+  \includegraphics[width=\paperwidth, height=\paperheight]{cover.pdf}
+};
+
+% Title
+\vspace*{11\baselineskip}
+\begin{spacing}{0.5}
+  \includegraphics[width=\textwidth]{title.pdf}\\
+\end{spacing}
+\begin{center}
+  {\huge Prepared by Keegan Skeate}
+\end{center}
+
+% Author
+\vfill
+%\vspace*{10.5\baselineskip}
+%{\Huge Cannabis Data Science}\vspace{1\baselineskip}\\
+%{\Large Issue 1, Volume 1}\vspace{1\baselineskip}\\
+{\Large \monthname~\the\year{}}\vspace{1\baselineskip}\\
+{\Large Published by}\\
+\includegraphics[scale=0.6]{logo.pdf}\\
+
+
+} % End of no indent.
+\end{document}

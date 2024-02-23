@@ -1,12 +1,13 @@
 """
-Pharming | Cannabis Cultivation, Chemical Extraction, and Data Science
-Copyright (c) 2022 Cannlytics
+Artificial Selection
+Cannabis Cultivation, Chemical Extraction, and Data Science
+Copyright (c) 2022-2024 Cannlytics
 
 Authors:
     Keegan Skeate <https://github.com/keeganskeate>
     Candace O'Sullivan-Sutherland <https://github.com/candy-o>
 Created: 9/21/2022
-Updated: 9/21/2022
+Updated: 1/9/2024
 License: <https://github.com/cannlytics/cannabis-data-science/blob/main/LICENSE>
 
 Description: 
@@ -79,8 +80,9 @@ mi_data = parser.standardize(mi)
 data_dir = '../../.datasets/lab_results'
 
 # Get MA lab result values.
-parser.save(ma, outfile=f'{data_dir}/ma.xlsx')
+# parser.save(ma, outfile=f'{data_dir}/ma.xlsx')
 ma_values = pd.read_excel(f'{data_dir}/ma.xlsx', sheet_name='Values')
+# ma_values = parser.standardize(ma, how='wide')
 
 # FIXME: Get CA lab result values.
 # parser.save(ca, outfile=f'{data_dir}/ca.xlsx')
@@ -100,12 +102,14 @@ ca_sample = ca_data.loc[ca_data['total_cannabinoids'] < 100]
 ma_sample = ma_data.loc[ma_data['total_cannabinoids'] < 100]
 
 # Plot the distribution of THC in the various states.
-ca_sample.total_cannabinoids.hist(bins=100, alpha=0.6, label='CA')
-ma_sample.total_cannabinoids.hist(bins=100, alpha=0.6, label='MA')
-plt.title('Distribution of Total Cannabinoids in CA and MA')
-plt.xlabel('Total Cannabinoids')
+plt.figure(figsize=(15, 8))
+ca_sample.total_cannabinoids.hist(bins=100, alpha=0.45, label='CA', color='red')
+ma_sample.total_cannabinoids.hist(bins=100, alpha=0.45, label='MA', color='blue')
+plt.title('Total Cannabinoids Observed in Cannabis Products in CA and MA in 2022')
+plt.xlabel('Total Cannabinoids (%)')
 plt.ylabel('Observations')
 plt.legend()
+plt.savefig('figures/total-cannabinoids-ca-ma-2022', dpi=300, bbox_inches='tight', transparent=False)
 plt.show()
 
 
@@ -121,24 +125,66 @@ ca_flower = ca_sample.loc[ca_sample['product_type'].isin(CA_FLOWER)]
 ma_flower = ma_sample.loc[ma_sample['product_type'].isin(['flower'])]
 
 # Plot the distribution of THC in the various states.
-ca_flower.total_cannabinoids.hist(bins=100, alpha=0.6, label='CA')
-ma_flower.total_cannabinoids.hist(bins=100, alpha=0.6, label='MA')
-plt.vlines(
-    [
-        ca_flower.total_cannabinoids.mean(),
-        ma_flower.total_cannabinoids.mean(),
-    ],
+ca_color = 'red'
+ma_color = 'blue'
+plt.figure(figsize=(15, 8))
+ca_flower.total_cannabinoids.hist(bins=100, alpha=0.45, label='CA', color=ca_color)
+ma_flower.total_cannabinoids.hist(bins=100, alpha=0.45, label='MA', color=ma_color)
+plt.axvline(
+    ca_flower.total_cannabinoids.mean(),
     ymin=0,
-    ymax=200,
-    linestyles='dotted',
-    color=[colors[0], colors[1]],
+    ymax=1,
+    linestyle='dotted',
+    color=ca_color,
 )
-plt.title('Total Cannabinoids  in Cannabis Flower in CA and MA')
-plt.xlabel('Total Cannabinoids')
+plt.text(
+    ca_flower.total_cannabinoids.mean(),
+    211,
+    f"{round(ca_flower.total_cannabinoids.mean(), 1)}%",
+    ha='center',
+    color=ca_color,
+    weight='bold',
+)
+plt.axvline(
+    ma_flower.total_cannabinoids.mean(),
+    ymin=0,
+    ymax=0.95,
+    linestyle='dotted',
+    color=ma_color,
+)
+plt.text(
+    ma_flower.total_cannabinoids.mean(),
+    200,
+    f"{round(ma_flower.total_cannabinoids.mean(), 1)}%",
+    ha='center',
+    color=ma_color,
+    weight='bold'
+)
+difference = ca_flower.total_cannabinoids.mean() - ma_flower.total_cannabinoids.mean()
+arrow_y = 0.5 * (plt.ylim()[1] + plt.ylim()[0])
+midpoint_x = (ca_flower.total_cannabinoids.mean() + ma_flower.total_cannabinoids.mean()) / 2
+plt.annotate(
+    '',
+    xy=(ca_flower.total_cannabinoids.mean(), arrow_y),
+    xytext=(ma_flower.total_cannabinoids.mean(), arrow_y),
+    arrowprops=dict(arrowstyle='<|-|>', lw=2, color='black')
+)
+plt.text(
+    midpoint_x, 
+    arrow_y + 5, 
+    f"{round(abs(difference), 1)}%", 
+    ha='center', 
+    weight='bold',
+)
+plt.title('Total Cannabinoids Observed in Cannabis Flower in CA and MA in 2022\n',
+          pad=20)
+plt.xlabel('Total Cannabinoids (%)')
 plt.ylabel('Observations')
 plt.xlim(right=45)
 plt.legend()
+plt.savefig('figures/total-cannabinoids-flower-ca-ma-2022', dpi=300, bbox_inches='tight', transparent=False)
 plt.show()
+
 print('CA average:', round(ca_flower.total_cannabinoids.mean(), 2))
 print('MA average:', round(ma_flower.total_cannabinoids.mean(), 2))
 
@@ -149,22 +195,33 @@ print('MA average:', round(ma_flower.total_cannabinoids.mean(), 2))
 
 # Isolate a sample.
 ma_values_sample = ma_values.loc[
-    (ma_values['thc-a'] > 0.001) &
+    (ma_values['thc-a'] > 0.1) &
     (ma_values['thc-a'] < 100) &
-    (ma_values['cbd-a'] > 0.001) &
+    (ma_values['cbd-a'] > 0.1) &
     (ma_values['cbd-a'] < 100)
 ]
 
 # Plot a histogram of the compounds.
-sns.scatterplot(
+ma_values_sample['cbda_to_thca_ratio'] = ma_values_sample['cbd-a'] / ma_values_sample['thc-a']
+cmap = sns.color_palette("coolwarm_r", as_cmap=True)
+plt.figure(figsize=(15, 8))
+scatterplot = sns.scatterplot(
     data=ma_values_sample,
     x='thc-a',
     y='cbd-a',
+    hue='cbda_to_thca_ratio',
+    palette=cmap,
     s=400,
-    palette='viridis_r',
+    alpha=0.7,
+    legend=None,
 )
-plt.xlim(0)
-plt.ylim(0)
+plt.xlim(0, 100)
+plt.ylim(0, 100)
+plt.title('CBDA to THCA Observed in Cannabis Products in MA in 2022', pad=20)
+plt.xlabel('THCA (%)')
+plt.ylabel('CBDA (%)')
+plt.grid(True)
+plt.savefig('figures/cbda-to-thca-ma-2022', dpi=300, bbox_inches='tight', transparent=False)
 plt.show()
 
 

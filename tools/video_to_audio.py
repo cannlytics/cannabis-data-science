@@ -10,7 +10,7 @@ License: MIT License <https://github.com/cannlytics/cannabis-data-science/blob/m
 Command-line example:
 
     ```
-    python tools/video_to_audio.py cannabis-statistics/cannabis-statistics-05
+    python tools/video_to_audio.py season-4/cannabis-data-science-146
     ```
 """
 # Standard imports:
